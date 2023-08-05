@@ -5,15 +5,12 @@ import { getDatabase } from 'firebase/database';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyDJWbPZWZL0eHKJlXqrIdrFqNYqmNHmucI',
-  authDomain: '1st-react-project.firebaseapp.com',
-  projectId: '1st-react-project',
-  storageBucket: '1st-react-project.appspot.com',
-  messagingSenderId: '421846175867',
-  appId: '1:421846175867:web:4baf4e718bd175751c92de',
-  measurementId: 'G-JDXRN06FKF',
-  databaseURL:
-    'https://st-react-project-d2c31-default-rtdb.europe-west1.firebasedatabase.app',
+  apiKey: "AIzaSyBob-bKa3R-FoxcSSViMMSD735VTZ77NRM",
+  authDomain: "react-project-8-756ce.firebaseapp.com",
+  projectId: "react-project-8-756ce",
+  storageBucket: "react-project-8-756ce.appspot.com",
+  messagingSenderId: "894765322672",
+  appId: "1:894765322672:web:7f57779917aeb18bbec675"
 };
 
 // Initialize Firebase
