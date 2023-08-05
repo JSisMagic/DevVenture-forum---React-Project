@@ -1,10 +1,13 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import './App.css';
+import { db } from './services/database-services.js';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const myFunc = async () => {
+    console.log('test button clicked');
+  };
 
   return (
     <>
@@ -17,13 +20,9 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <h1 className="text-3xl font-bold underline">
-      Hello Gergana!
-    </h1>
+      <h1 className="text-3xl font-bold underline">Hello Gergana!</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+        <button onClick={myFunc}>Test it!</button>
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
@@ -32,7 +31,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
