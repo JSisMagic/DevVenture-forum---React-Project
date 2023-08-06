@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 import { db } from './services/database-services.js';
+import SignIn from './components/Authenthication/SignIn';
 
 function App() {
   const myFunc = async () => {
@@ -11,6 +12,8 @@ function App() {
 
   return (
     <>
+
+      <SignIn/>
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
