@@ -5,10 +5,10 @@ import './App.css';
 import * as ReactRouterDOM from 'react-router-dom';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import { db } from './services/database-services.js';
-import SignIn from './components/Authenthication/SignIn';
 import { NewPost } from './views/NewPostForm/NewPostForm';
 import { PostList } from './components/PostList/PostList';
 import Home from './Pages/Home';
+import SignIn from './components/Authenthication/SignIn';
 
 function App() {
 
@@ -25,6 +25,7 @@ function App() {
   return (
     <> 
     <Home/>
+    <SignIn/>
     <h1 className="text-3xl font-bold underline">
       Welcome to DevVentureJungle !
     </h1>
@@ -35,6 +36,7 @@ function App() {
         </Routes>
       </ReactRouterDOM.BrowserRouter>
         <button onClick={forTest}>Test for adding post!</button>
+        
     </>
   );
 }
