@@ -27,9 +27,8 @@ function App() {
   return (
     <>
     <ChakraProvider>
-    <Nav/>
-      </ChakraProvider> 
-  
+      <Nav/>
+    </ChakraProvider> 
     <nav>
       <ul>
         <li>
