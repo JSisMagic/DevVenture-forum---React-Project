@@ -9,6 +9,7 @@ import { NewPost } from './views/NewPostForm/NewPostForm';
 import { PostList } from './components/PostList/PostList';
 import Home from './Pages/Home';
 import SignIn from './components/Authenthication/SignIn';
+import SignUp from './components/Authenthication/SignUp';
 
 function App() {
 
@@ -38,6 +39,9 @@ function App() {
         <li>
           <Link className='nav-links' to="/sign-in">Sign In</Link>
         </li>
+        <li>
+          <Link className='nav-links' to="/sign-up">Sign Up</Link>
+        </li>
       </ul>
     </nav>
       <Routes>
@@ -45,6 +49,7 @@ function App() {
         <Route exact path="/new-post" element={<NewPost/>} />
         <Route exact path="/post-list" element={<PostList/>} />
         <Route exact path="/sign-in" element={<SignIn/>} />
+        <Route exact path="/sign-up" element={<SignUp/>} />
       </Routes>
      
     {/* <button onClick={forTest}>Test for adding post!</button> */}
