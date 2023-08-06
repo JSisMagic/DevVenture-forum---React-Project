@@ -16,11 +16,24 @@ export function NewPost() {
     };
   
     const handleSubmit = async () => {
-      // Save the new post to Firebase Firestore using push
-      const postId = await db.push('posts', { title, content });
-  
-      // Redirect to the home page after submitting the new post
-      navigate('/post-list');
+        try {
+            // Save the new post to Firebase Firestore using push
+            const postId = await db.push('posts', {
+              title: title,
+              content: content,
+              date: new Date().toISOString(),
+              likes: 0,
+            });
+      
+            // Add the post's key as 'id' in the database
+            await db.update(`posts/${postId}`, { id: postId });
+      
+            // Redirect to the home page after submitting the new post
+            navigate('/post-list');
+          } catch (error) {
+            console.log(error.message);
+            alert('Error submitting post. Please try again later.');
+          }
     };
   
     return (

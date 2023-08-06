@@ -31,8 +31,12 @@ export function PostList() {
       <ul>
         {posts.map((post) => (
           <li key={post.id}>
-            <h3>{post.title}</h3>
+            <Link to={`/post-list/${post.id}`}>
+              <h3>{post.title}</h3>
+            </Link>
             <p>{post.content}</p>
+            <p>{new Date(post.date).toLocaleString()}</p>
+            <p>{post.likes}</p>
           </li>
         ))}
       </ul>

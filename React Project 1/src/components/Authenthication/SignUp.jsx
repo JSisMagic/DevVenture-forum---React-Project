@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import { createUserWithEmailAndPassword} from "firebase/auth";
+import { auth } from '../../config/firebase-config';
 
 
 
@@ -13,7 +14,7 @@ const SignUp = () => {
   const signUp = (e) => {
     e.preventDefault();
     
-    const auth = getAuth();
+
   createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
