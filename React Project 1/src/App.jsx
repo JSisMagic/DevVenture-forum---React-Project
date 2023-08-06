@@ -10,7 +10,8 @@ import { PostList } from './components/PostList/PostList';
 import Home from './Pages/Home';
 import SignIn from './components/Authenthication/SignIn';
 import SignUp from './components/Authenthication/SignUp';
-
+import Nav from './components/NavBar/NavBar';
+import { ChakraProvider } from '@chakra-ui/react'
 function App() {
 
   async function forTest() {
@@ -24,7 +25,11 @@ function App() {
   }
 
   return (
-    <> 
+    <>
+    <ChakraProvider>
+    <Nav/>
+      </ChakraProvider> 
+  
     <nav>
       <ul>
         <li>
@@ -35,12 +40,6 @@ function App() {
         </li>
         <li>
           <Link className='nav-links' to="/post-list">Post List</Link>
-        </li>
-        <li>
-          <Link className='nav-links' to="/sign-in">Sign In</Link>
-        </li>
-        <li>
-          <Link className='nav-links' to="/sign-up">Sign Up</Link>
         </li>
       </ul>
     </nav>
