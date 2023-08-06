@@ -20,7 +20,7 @@ export function NewPost() {
       const postId = await db.push('posts', { title, content });
   
       // Redirect to the home page after submitting the new post
-      navigate('/');
+      navigate('/post-list');
     };
   
     return (

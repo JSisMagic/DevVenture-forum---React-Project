@@ -36,7 +36,6 @@ export function PostList() {
           </li>
         ))}
       </ul>
-      <Link to="/new">New Post</Link>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 import * as ReactRouterDOM from 'react-router-dom';
-import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import { Route, Routes, Link} from 'react-router-dom';
 import { db } from './services/database-services.js';
 import { NewPost } from './views/NewPostForm/NewPostForm';
 import { PostList } from './components/PostList/PostList';
@@ -24,19 +24,30 @@ function App() {
 
   return (
     <> 
-    <Home/>
-    <SignIn/>
-    <h1 className="text-3xl font-bold underline">
-      Welcome to DevVentureJungle !
-    </h1>
-    <ReactRouterDOM.BrowserRouter>
-        <Routes>
-        <Route exact path="/" element={<PostList/>} />
-        <Route exact path="/new" element={<NewPost/>} />
-        </Routes>
-      </ReactRouterDOM.BrowserRouter>
-        <button onClick={forTest}>Test for adding post!</button>
-        
+    <nav>
+      <ul>
+        <li>
+          <Link className='nav-links' to="/">Home</Link>
+        </li>
+        <li>
+          <Link className='nav-links' to="/new-post">New Post</Link>
+        </li>
+        <li>
+          <Link className='nav-links' to="/post-list">Post List</Link>
+        </li>
+        <li>
+          <Link className='nav-links' to="/sign-in">Sign In</Link>
+        </li>
+      </ul>
+    </nav>
+      <Routes>
+        <Route index element={<Home/>} />
+        <Route exact path="/new-post" element={<NewPost/>} />
+        <Route exact path="/post-list" element={<PostList/>} />
+        <Route exact path="/sign-in" element={<SignIn/>} />
+      </Routes>
+     
+    {/* <button onClick={forTest}>Test for adding post!</button> */}
     </>
   );
 }
