@@ -2,37 +2,33 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
+import * as ReactRouterDOM from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import { db } from './services/database-services.js';
+import { NewPost } from './views/NewPostForm/NewPostForm';
+import { PostList } from './components/PostList/PostList';
 
 function App() {
-  const myFunc = async () => {
-    console.log('test button clicked');
-  };
+
+  async function forTest() {
+    const newPost = {
+      title: "New Post",
+      content: "This is the content of the new post."
+    };
+  
+    // The 'push' method generates a unique key and stores the new post under that key
+    await db.push('posts', newPost);
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-      <h1 className="text-3xl font-bold underline">Hello Gergana!</h1>
-      <div className="card">
-        <button onClick={myFunc}>Test it!</button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <ReactRouterDOM.BrowserRouter>
+        <Routes>
+        <Route exact path="/" element={<PostList/>} />
+        <Route exact path="/new" element={<NewPost/>} />
+        </Routes>
+      </ReactRouterDOM.BrowserRouter>
+        <button onClick={forTest}>Test for adding post!</button>
     </>
   );
 }
