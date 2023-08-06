@@ -7,6 +7,7 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import { db } from './services/database-services.js';
 import { NewPost } from './views/NewPostForm/NewPostForm';
 import { PostList } from './components/PostList/PostList';
+import Home from './Pages/Home';
 
 function App() {
 
@@ -21,7 +22,11 @@ function App() {
   }
 
   return (
-    <>
+    <> 
+    <Home/>
+    <h1 className="text-3xl font-bold underline">
+      Welcome to DevVentureJungle !
+    </h1>
     <ReactRouterDOM.BrowserRouter>
         <Routes>
         <Route exact path="/" element={<PostList/>} />
