@@ -82,7 +82,7 @@ export default function Nav() {
                   <MenuItem as={Link} to="/sign-up">SignUp</MenuItem>
                   <MenuItem as={Link} to="/sign-in" >SignIn</MenuItem>
                   <MenuItem as={Link} to="/edit"  >Edit User</MenuItem>
-                  <MenuItem>Logout</MenuItem>
+                  <MenuItem as={Link} to="/sign-out" >Logout</MenuItem>
                 </MenuList>
               </Menu>
             </Stack>
