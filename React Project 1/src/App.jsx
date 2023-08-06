@@ -12,6 +12,7 @@ import SignIn from './components/Authenthication/SignIn';
 import SignUp from './components/Authenthication/SignUp';
 import Nav from './components/NavBar/NavBar';
 import { ChakraProvider } from '@chakra-ui/react'
+import Edit from './components/Authenthication/EditUser';
 function App() {
 
   async function forTest() {
@@ -28,7 +29,7 @@ function App() {
     <>
     <ChakraProvider>
     <Nav/>
-      </ChakraProvider> 
+    {/* <SignUp/> */}
   
     <nav>
       <ul>
@@ -49,8 +50,10 @@ function App() {
         <Route exact path="/post-list" element={<PostList/>} />
         <Route exact path="/sign-in" element={<SignIn/>} />
         <Route exact path="/sign-up" element={<SignUp/>} />
+        <Route exact path="/edit" element={<Edit/>} />
       </Routes>
      
+      </ChakraProvider> 
     {/* <button onClick={forTest}>Test for adding post!</button> */}
     </>
   );
