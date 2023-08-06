@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import {auth} from '../../firebase';
+// import {auth} from '../../firebase';
 import {signInWithEmailAndPassword} from "firebase/auth";
 
 const SignIn=()=>{
@@ -24,5 +24,7 @@ signInWithEmailAndPassword(auth,email,password).then((userCredential) => {
       </form>
     </div>
   )
+  }
 }
+
 export default SignIn;
