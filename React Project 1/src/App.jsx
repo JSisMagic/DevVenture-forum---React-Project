@@ -33,20 +33,6 @@ function App() {
     <Nav/>
     <AuthenticationVer/>
     {/* <SignUp/> */}
-  
-    <nav>
-      <ul>
-        <li>
-          <Link className='nav-links' to="/">Home</Link>
-        </li>
-        <li>
-          <Link className='nav-links' to="/new-post">New Post</Link>
-        </li>
-        <li>
-          <Link className='nav-links' to="/post-list">Post List</Link>
-        </li>
-      </ul>
-    </nav>
       <Routes>
         <Route index element={<Home/>} />
         <Route exact path="/new-post" element={<NewPost/>} />

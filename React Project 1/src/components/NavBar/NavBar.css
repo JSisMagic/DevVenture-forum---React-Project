@@ -1,0 +1,21 @@
+.menu-button{
+    z-index: 1;
+    flex: 1;
+    font-size: 1.3rem;
+    border: none;
+    height: 52px;
+    min-width: 120px;
+    max-width: 120px;
+    color: var(--text-color-upload);
+    border-radius: 6px;
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease,
+      color 0.3s ease;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-right: 3px;
+    padding-left: 3px;
+    cursor: pointer;
+    box-shadow: 2px 2px 8px var(--color-black-SGF);
+    transform: scale(1);
+  }

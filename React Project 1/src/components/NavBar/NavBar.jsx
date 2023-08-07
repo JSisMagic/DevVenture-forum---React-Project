@@ -24,6 +24,7 @@ import {
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { auth } from '../../config/firebase-config';
 import { useNavigate } from 'react-router-dom/dist';
+import './NavBar.css';
 
 const NavLink = (props) => {
   const { children } = props;
@@ -70,16 +71,21 @@ export default function Nav() {
     <React.Fragment>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-          <Box>Logo</Box>
-          <Button colorScheme='teal' variant='outline'>
-    Button
-  </Button>
-  <Button colorScheme='teal' variant='outline'>
-    Button
-  </Button>
-  <Button colorScheme='teal' variant='outline'>
-    Button
-  </Button>
+          <Flex alignItems={'center'}>
+
+            <ButtonGroup spacing={4}>
+              <Button as={Link} to="/" colorScheme="teal" variant="outline" className='menu-button'>
+                Home
+              </Button>
+              <Button as={Link} to="/new-post" colorScheme="teal" variant="outline" className='menu-button'>
+                New Post
+              </Button>
+              <Button as={Link} to="/post-list" colorScheme="teal" variant="outline" className='menu-button'>
+                Post List
+              </Button>
+            </ButtonGroup>
+          </Flex>
+
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
               <Button onClick={toggleColorMode}>
