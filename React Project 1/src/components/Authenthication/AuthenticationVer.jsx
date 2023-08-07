@@ -25,7 +25,7 @@ const userSignOut=()=>{
     <div>
       {
       authenticationUser ?( <>
-      <p>{`Signed in as${authenticationUser.username}`}</p>
+      <p>{`Signed in as ${authenticationUser.email}`}</p>
       <button onClick={userSignOut}>Sign Out</button>
       </>
       ):(

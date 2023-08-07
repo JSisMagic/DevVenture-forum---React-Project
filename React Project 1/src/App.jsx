@@ -31,6 +31,7 @@ function App() {
     <>
     <ChakraProvider>
     <Nav/>
+    <AuthenticationVer/>
     {/* <SignUp/> */}
   
     <nav>
@@ -54,7 +55,7 @@ function App() {
         <Route exact path="/sign-up" element={<SignUp/>} />
         <Route exact path="/edit" element={<Edit/>} />
         <Route exact path="/post-list/:id" element={<PostPage/>} />
-        <Route exact path="/sign-out" element={<AuthenticationVer/>} />
+        {/* <Route exact path="/sign-out" element={<AuthenticationVer/>} /> */}
       </Routes>
      
       </ChakraProvider> 
