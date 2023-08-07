@@ -12,7 +12,6 @@ const SignUp = () => {
 
   const signUp = (e) => {
     e.preventDefault();
-    
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -22,8 +21,9 @@ const SignUp = () => {
           username: username,
         };
 
-        console.log(userCredential);
-        console.log(userData);
+        // Create a new user document in the database using the user's UID as the key
+        db.set(`users/${user.uid}`, userData);
+        console.log('User data stored in the database:', userData);
       })
       .catch((error) => {
         console.log(error);
