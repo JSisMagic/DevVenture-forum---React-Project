@@ -7,6 +7,7 @@ export function PostPage() {
   const [post, setPost] = useState(null);
   const [reply, setReply] = useState('');
   const [replies, setReplies] = useState([]);
+  const [likes, setLikes] = useState(0);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -14,6 +15,7 @@ export function PostPage() {
         const postData = await db.get(`posts/${id}`);
         setPost(postData);
         setReplies(postData.replies || []);
+        setLikes(postData.likes || 0);
       } catch (error) {
         console.log(error.message);
       }
@@ -47,6 +49,24 @@ export function PostPage() {
     }
   };
 
+  const handleLike = async () => {
+    try {
+      // Increment the likes count in the state
+      setLikes((prevLikes) => prevLikes + 1);
+
+      // Update the likes count in the database
+      await db.update(`posts/${id}`, { likes: likes + 1 });
+
+      // Update the local state with the new likes count
+      setPost((prevPost) => ({
+        ...prevPost,
+        likes: prevPost.likes + 1,
+      }));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   if (!post) {
     return <div>Loading...</div>;
   }
@@ -55,6 +75,8 @@ export function PostPage() {
     <div>
       <h2>{post.title}</h2>
       <p>{post.content}</p>
+      <p>Likes: {post.likes}</p>
+      <button onClick={handleLike}>Like button</button>
       <h3>Replies:</h3>
       <ul>
         {replies.map((reply, index) => (
