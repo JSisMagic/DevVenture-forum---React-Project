@@ -47,6 +47,9 @@ export function PostList() {
             <Text fontSize="sm" color="gray.400" mb="10px">
               {new Date(post.date).toLocaleString()}
             </Text>
+            <Text fontSize="sm" color="blue.500" mb="10px">
+              Posted by: {post.user}
+          </Text>
             <HStack spacing="10px">
               <Button colorScheme="teal" onClick={() => handleLike(post.id)}>
                 Like ({post.likes})
