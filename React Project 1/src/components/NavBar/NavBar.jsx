@@ -19,7 +19,10 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbSeparator,
-  ButtonGroup 
+  ButtonGroup,
+  InputGroup,
+  Input,
+  InputRightElement,
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { auth } from '../../config/firebase-config';
@@ -49,7 +52,7 @@ export default function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentUser, setCurrentUser] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check if the user is signed in when the component mounts
@@ -62,25 +65,23 @@ export default function Nav() {
   }, []);
 
   const userSignOut = () => {
-        auth.signOut()
-        navigate('/');
+    auth.signOut();
+    navigate('/');
   };
-
 
   return (
     <React.Fragment>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <Flex alignItems={'center'}>
-
             <ButtonGroup spacing={4}>
-              <Button as={Link} to="/" colorScheme="teal" variant="outline" className='menu-button'>
+              <Button as={Link} to="/" colorScheme="teal" variant="outline" className="menu-button">
                 Home
               </Button>
-              <Button as={Link} to="/new-post" colorScheme="teal" variant="outline" className='menu-button'>
+              <Button as={Link} to="/new-post" colorScheme="teal" variant="outline" className="menu-button">
                 New Post
               </Button>
-              <Button as={Link} to="/post-list" colorScheme="teal" variant="outline" className='menu-button'>
+              <Button as={Link} to="/post-list" colorScheme="teal" variant="outline" className="menu-button">
                 Post List
               </Button>
             </ButtonGroup>
@@ -88,6 +89,20 @@ export default function Nav() {
 
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
+              <InputGroup display={{ base: 'none', md: 'block' }} maxWidth="300px">
+                <Input
+                  type="text"
+                  placeholder="Search"
+                  _placeholder={{ color: 'gray.500' }}
+                  size="sm"
+                  borderRadius="full"
+                  bgColor={useColorModeValue('white', 'gray.800')}
+                />
+                {/* <InputRightElement>
+                  <SunIcon color="gray.500" />
+                </InputRightElement> */}
+              </InputGroup>
+
               <Button onClick={toggleColorMode}>
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
