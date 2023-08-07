@@ -15,6 +15,11 @@ import {
   Stack,
   useColorMode,
   Center,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  ButtonGroup 
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { auth } from '../../config/firebase-config';
@@ -66,7 +71,15 @@ export default function Nav() {
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <Box>Logo</Box>
-
+          <Button colorScheme='teal' variant='outline'>
+    Button
+  </Button>
+  <Button colorScheme='teal' variant='outline'>
+    Button
+  </Button>
+  <Button colorScheme='teal' variant='outline'>
+    Button
+  </Button>
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
               <Button onClick={toggleColorMode}>
