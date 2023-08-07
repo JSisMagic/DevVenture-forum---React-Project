@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -17,6 +17,8 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { auth } from '../../config/firebase-config';
+import { useNavigate } from 'react-router-dom/dist';
 
 const NavLink = (props) => {
   const { children } = props;
@@ -40,7 +42,25 @@ const NavLink = (props) => {
 export default function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  
+  const [currentUser, setCurrentUser] = useState(null);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    // Check if the user is signed in when the component mounts
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+    });
+
+    // Unsubscribe from the listener when the component unmounts
+    return () => unsubscribe();
+  }, []);
+
+  const userSignOut = () => {
+        auth.signOut()
+        navigate('/');
+  };
+
+
   return (
     <React.Fragment>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
@@ -53,38 +73,51 @@ export default function Nav() {
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
 
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  rounded={'full'}
-                  variant={'link'}
-                  cursor={'pointer'}
-                  minW={0}>
-                  <Avatar
-                    size={'sm'}
-                    src={'https://avatars.dicebear.com/api/male/username.svg'}
-                  />
-                </MenuButton>
-                <MenuList alignItems={'center'}>
-                  <br />
-                  <Center>
+              {!currentUser ? (
+                // User is not signed in, show "Join Us" and "Sign In" buttons
+                <>
+                  <Button as={Link} to="/sign-up">
+                    Join Us
+                  </Button>
+                  <Button as={Link} to="/sign-in">
+                    Sign In
+                  </Button>
+                </>
+              ) : (
+                // User is signed in, show user menu
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded={'full'}
+                    variant={'link'}
+                    cursor={'pointer'}
+                    minW={0}>
                     <Avatar
-                      size={'2xl'}
+                      size={'sm'}
                       src={'https://avatars.dicebear.com/api/male/username.svg'}
                     />
-                  </Center>
-                  <br />
-                  <Center>
-                    <p>Username</p>
-                  </Center>
-                  <br />
-                  <MenuDivider />
-                  <MenuItem as={Link} to="/sign-up">SignUp</MenuItem>
-                  <MenuItem as={Link} to="/sign-in" >SignIn</MenuItem>
-                  <MenuItem as={Link} to="/edit"  >Edit User</MenuItem>
-                  <MenuItem as={Link} to="/sign-out" >Logout</MenuItem>
-                </MenuList>
-              </Menu>
+                  </MenuButton>
+                  <MenuList alignItems={'center'}>
+                    <br />
+                    <Center>
+                      <Avatar
+                        size={'2xl'}
+                        src={'https://avatars.dicebear.com/api/male/username.svg'}
+                      />
+                    </Center>
+                    <br />
+                    <Center>
+                      <p>Username</p>
+                    </Center>
+                    <br />
+                    <MenuDivider />
+                    <MenuItem as={Link} to="/edit">
+                      Edit User
+                    </MenuItem>
+                    <MenuItem onClick={userSignOut}>Logout</MenuItem>
+                  </MenuList>
+                </Menu>
+              )}
             </Stack>
           </Flex>
         </Flex>

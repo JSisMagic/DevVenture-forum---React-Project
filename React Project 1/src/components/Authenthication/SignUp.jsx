@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { createUserWithEmailAndPassword} from "firebase/auth";
 import { auth } from '../../config/firebase-config';
 import { db } from '../../services/database-services';
+import { useNavigate } from 'react-router-dom';
 
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const navigate = useNavigate();
 
   const signUp = (e) => {
     e.preventDefault();
@@ -24,6 +26,8 @@ const SignUp = () => {
         // Create a new user document in the database using the user's UID as the key
         db.set(`users/${user.uid}`, userData);
         console.log('User data stored in the database:', userData);
+
+        navigate('/');
       })
       .catch((error) => {
         console.log(error);
