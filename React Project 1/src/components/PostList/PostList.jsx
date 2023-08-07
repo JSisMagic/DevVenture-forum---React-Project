@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { db } from '../../services/database-services';
+import { Box, Heading, Text, Button, HStack, VStack, IconButton } from '@chakra-ui/react';
+import { FaThumbsUp } from 'react-icons/fa';
+
 
 export function PostList() {
   const [posts, setPosts] = useState([]);
@@ -26,20 +29,38 @@ export function PostList() {
   }, []);
 
   return (
-    <div>
-      <h1>Post List</h1>
-      <ul>
+    <Box maxW="600px" mx="auto" p="20px">
+      <Heading as="h1" textAlign="center" mb="20px">
+        Post List
+      </Heading>
+      <VStack spacing="20px">
         {posts.map((post) => (
-          <li key={post.id}>
-            <Link to={`/post-list/${post.id}`}>
-              <h3>{post.title}</h3>
+          <Box key={post.id} borderWidth="1px" borderRadius="md" p="20px">
+            <Link to={`/post-list/${post.id}`} style={{ textDecoration: 'none', color: 'black' }}>
+              <Heading as="h3" size="lg" mb="10px">
+                {post.title}
+              </Heading>
             </Link>
-            <p>{post.content}</p>
-            <p>{new Date(post.date).toLocaleString()}</p>
-            <p>{post.likes}</p>
-          </li>
+            <Text fontSize="lg" color="gray.600" mb="10px">
+              {post.content}
+            </Text>
+            <Text fontSize="sm" color="gray.400" mb="10px">
+              {new Date(post.date).toLocaleString()}
+            </Text>
+            <HStack spacing="10px">
+              <Button colorScheme="teal" onClick={() => handleLike(post.id)}>
+                Like ({post.likes})
+              </Button>
+              <IconButton
+                aria-label="Upvote"
+                icon={<FaThumbsUp />}
+                colorScheme="blue"
+                onClick={() => handleUpvote(post.id)}
+              />
+            </HStack>
+          </Box>
         ))}
-      </ul>
-    </div>
+      </VStack>
+    </Box>
   );
 }
