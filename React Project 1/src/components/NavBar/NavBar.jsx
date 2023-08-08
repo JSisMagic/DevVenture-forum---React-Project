@@ -28,6 +28,7 @@ import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { auth } from '../../config/firebase-config';
 import { useNavigate } from 'react-router-dom/dist';
 import './NavBar.css';
+import { TagSearch } from '../TagSearch/TagSearch';
 
 const NavLink = (props) => {
   const { children } = props;
@@ -48,7 +49,7 @@ const NavLink = (props) => {
   );
 };
 
-export default function Nav() {
+export function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentUser, setCurrentUser] = useState(null);
@@ -87,10 +88,10 @@ export default function Nav() {
             </ButtonGroup>
           </Flex>
 
-          {/* SEARCH */}
+
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
-              <InputGroup display={{ base: 'none', md: 'block' }} maxWidth="300px">
+              {/* <InputGroup display={{ base: 'none', md: 'block' }} maxWidth="300px">
                 <Input
                   type="text"
                   placeholder="Search"
@@ -99,10 +100,11 @@ export default function Nav() {
                   borderRadius="full"
                   bgColor={useColorModeValue('white', 'gray.800')}
                 />
-                {/* <InputRightElement>
+                <InputRightElement>
                   <SunIcon color="gray.500" />
-                </InputRightElement> */}
-              </InputGroup>
+                </InputRightElement>
+              </InputGroup> */}
+              <TagSearch/>
 
               <Button onClick={toggleColorMode}>
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
