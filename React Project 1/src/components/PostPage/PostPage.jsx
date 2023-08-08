@@ -68,7 +68,7 @@ export function PostPage() {
   };
 
   if (!post) {
-    return <div>Loading...</div>;
+    return <h1>There is no such post!</h1>;
   }
 
   return (
