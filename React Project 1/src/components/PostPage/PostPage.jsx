@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../../services/database-services';
+import { auth } from '../../config/firebase-config';
+import { useNavigate } from 'react-router-dom/dist';
 
 export function PostPage() {
   const { id } = useParams();
@@ -8,6 +10,7 @@ export function PostPage() {
   const [reply, setReply] = useState('');
   const [replies, setReplies] = useState([]);
   const [likes, setLikes] = useState(0);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -32,22 +35,39 @@ export function PostPage() {
     e.preventDefault();
 
     if (reply.trim() !== '') {
-      const newReply = {
-        content: reply,
-        date: new Date().toISOString(),
-        user: 'Anonymous', // You can change this to the user's username if you have user authentication.
-      };
+      try {
+        const user = auth.currentUser;
+        
+        if (user) {
+        const userUID = user.uid;
+        const userData = await db.get(`users/${userUID}`);
+        const username = userData.username;
+        
+        const newReply = {
+            content: reply,
+            date: new Date().toISOString(),
+            user: username, // Use the authenticated user's display name
+          };
 
-      // Update the post with the new reply
-      await db.update(`posts/${id}`, { replies: [...replies, newReply] });
+          // Update the post with the new reply
+          await db.update(`posts/${id}`, { replies: [...replies, newReply] });
 
-      // Update the local state with the new reply
-      setReplies([...replies, newReply]);
+          // Update the local state with the new reply
+          setReplies([...replies, newReply]);
 
-      // Clear the reply input
-      setReply('');
+          // Clear the reply input
+          setReply('');
+        } else {
+
+          navigate('/sign-up')
+        }
+
+      } catch (error) {
+        console.log(error.message);
+      }
     }
   };
+
 
   const handleLike = async () => {
     try {
@@ -73,14 +93,20 @@ export function PostPage() {
 
   return (
     <div>
+      <h1>{post.user}</h1>
       <h2>{post.title}</h2>
+      <p>{post.description}</p>
       <p>{post.content}</p>
       <p>Likes: {post.likes}</p>
       <button onClick={handleLike}>Like button</button>
       <h3>Replies:</h3>
       <ul>
-        {replies.map((reply, index) => (
-          <li key={index}>{reply.content}</li>
+      {replies.map((reply, index) => (
+        <li key={index}>
+          <p>{`User: ${reply.user}`}</p>
+          <p>{`Date: ${new Date(reply.date).toLocaleString()}`}</p>
+          <p>{`Content: ${reply.content}`}</p>
+        </li>
         ))}
       </ul>
       <form onSubmit={handleSubmitReply}>
