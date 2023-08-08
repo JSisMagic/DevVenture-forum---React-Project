@@ -6,6 +6,8 @@ import { useNavigate, Link } from 'react-router-dom';
 export function NewPost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [tags, setTags] = useState('');
+  const [description, setDescription] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
@@ -27,6 +29,14 @@ export function NewPost() {
     setContent(e.target.value);
   };
 
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const handleTagsChange = (e) => {
+    setTags(e.target.value);
+  };
+
   const handleSubmit = async () => {
     try {
       if (!currentUser) {
@@ -43,6 +53,8 @@ export function NewPost() {
       const postId = await db.push('posts', {
         title: title,
         content: content,
+        description: description,
+        tags: tags.split(' ').map(tag => tag.trim()), // Convert comma-separated tags to an array
         date: new Date().toISOString(),
         likes: 0,
         userUID: currentUser.uid,
@@ -51,6 +63,12 @@ export function NewPost() {
 
       // Add the post's key as 'id' in the database
       await db.update(`posts/${postId}`, { id: postId });
+
+       // Associate post IDs with tags
+      const tagArray = tags.split(' ').map(tag => tag.trim());
+      for (const tag of tagArray) {
+        await db.set(`tags/${tag}/${postId}`, true);
+      }
 
       // Redirect to the home page after submitting the new post
       navigate('/post-list');
@@ -68,8 +86,16 @@ export function NewPost() {
         <input type="text" value={title} onChange={handleTitleChange} />
       </div>
       <div>
+        <label>Description:</label>
+        <textarea value={description} onChange={handleDescriptionChange} />
+      </div>
+      <div>
         <label>Content:</label>
         <textarea value={content} onChange={handleContentChange} />
+      </div>
+      <div>
+        <label>Tags:</label>
+        <input placeholder= "Split by space" type="text" value={tags} onChange={handleTagsChange} />
       </div>
       <button onClick={handleSubmit}>Submit</button>
       {!currentUser && (

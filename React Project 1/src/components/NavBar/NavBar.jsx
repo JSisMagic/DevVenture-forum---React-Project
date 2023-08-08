@@ -87,6 +87,7 @@ export default function Nav() {
             </ButtonGroup>
           </Flex>
 
+          {/* SEARCH */}
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
               <InputGroup display={{ base: 'none', md: 'block' }} maxWidth="300px">
