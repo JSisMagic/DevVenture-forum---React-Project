@@ -1,36 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { auth } from '../../config/firebase-config';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
 
-const AuthenticationVer = () => {
-  const [authenticationUser, setAuthenticationUser] = useState(null);
-  const navigate = useNavigate();
 
+export const AuthenticationVer = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setAuthenticationUser(user);
+        logAuthenticationStatus(`User ${user.email} logged in`);
       } else {
-        setAuthenticationUser(null);
+        logAuthenticationStatus('User logged out');
       }
     });
+
+    const logAuthenticationStatus = (message) => {
+      console.log(message);
+    };
 
     return () => unsubscribe();
   }, []);
 
 
-  return (
-    <div>
-      {authenticationUser ? (
-        <>
-          <p>{`Signed in as ${authenticationUser.email}`}</p>
-        </>
-      ) : (
-        <p>Signed Out</p>
-      )}
-    </div>
-  );
+  return null; // This is an empty JSX element
 };
-
-export default AuthenticationVer;

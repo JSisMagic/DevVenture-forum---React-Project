@@ -14,8 +14,8 @@ import { PostPage } from './components/PostPage/PostPage';
 import {Nav} from './components/NavBar/NavBar';
 import { ChakraProvider } from '@chakra-ui/react'
 import Edit from './components/Authenthication/EditUser';
-import AuthenticationVer from './components/Authenthication/AuthenticationVer';
 import { TagSearchResults } from './components/TagSearchResults/TagSearchResults';
+import { AuthenticationVer } from './components/Authenthication/AuthenticationVer';
 
 function App() {
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../../config/firebase-config';
 import { useNavigate } from 'react-router-dom';
+import { AuthenticationVer } from './AuthenticationVer';
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -11,7 +13,6 @@ const SignIn = () => {
   const signIn = (e) => {
     e.preventDefault();
     
-    const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
@@ -23,12 +24,22 @@ const SignIn = () => {
   };
 
   return (
-    <div className='sign-in-container'>
+    <div className="sign-in-container">
       <form onSubmit={signIn}>
         <h1>Log in</h1>
-        <input type='email' placeholder='Enter your email' value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type='password' placeholder='Enter your password' value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button type='submit'>Log In</button>
+        <input
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Log In</button>
       </form>
     </div>
   );
