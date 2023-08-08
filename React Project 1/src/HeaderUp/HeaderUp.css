@@ -8,9 +8,8 @@
 
 .headerContainer {
   display: flex;
-  margin-top: 50px;
   justify-content: center;
-  margin-bottom: 100px;
+  margin-bottom: 80px;
 }
 
 
