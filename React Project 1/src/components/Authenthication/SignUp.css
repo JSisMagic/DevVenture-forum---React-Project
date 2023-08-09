@@ -4,6 +4,10 @@ height: 100vh;
 display: flex;
 justify-content: center;
 }
+.Title-header{
+  text-align: center;
+  }
+  
 .sign-up-container{
   position:absolute;
   min-height: 50%;

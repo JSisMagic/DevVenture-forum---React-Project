@@ -1,0 +1,110 @@
+.create-web{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  }
+  .create-container{
+    position:absolute;
+    min-height: 80%;
+    min-width: 80%;
+    max-width: 70%;
+    min-height: 80%;
+    width: 25%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding: 15px;
+    box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 0.8;
+    backdrop-filter: blur(16px);
+    border-radius: 5px;
+    color: white;
+    }
+  .Title-header{
+    text-align: center;
+    margin-top: 16px;
+    margin-bottom: 38px;
+    }
+  .Title-container{
+  }
+  .Description-container{
+    }
+    .tex-container{
+    width: 100%;
+    height: 68px;
+    padding:6px;
+    outline: none;
+    border-radius: 5px;
+    border-color: white;
+    border-style: solid;
+    background-color: transparent;
+    color: white;
+    border-width: 1px;
+    resize: none;
+  }
+  .tex-container:is(:valid,){
+
+  }
+  
+  .sign-up-header{
+  position: relative;
+  padding-bottom: 12px;
+  font-size: 22px;
+  margin-bottom: 22px;
+  
+  }
+  .sign-up-header::after{
+   content:"";
+   position: absolute;
+   height: 3px;
+   border-radius: 3px;
+   background-color: white;
+   width: 300px;
+   font-weight: bold;
+   left:0;
+   bottom: 0;
+  }
+  
+  input{
+    display: block;
+    width: 100%;
+    height: 50px;
+    padding: 5px 6px;
+    margin-bottom: 16px;
+    border: none;
+    outline: none;
+    border-radius: 1px;
+    background-color: transparent;
+    color: white;
+  }
+  .create-button{
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 38px;
+    background-color:transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 30px;
+    font-size: 28px;
+    color: white;
+    margin-top: 138px;
+  margin-bottom: 16px;
+  }
+  .create-button:hover{
+  background-color: rgba(62, 116, 185, 0.3);
+   color:white;
+  
+   transition: opacity 0.30s;
+  
+  }
+  .sign-up-button:active{
+  
+  
+  }
+  .create-tex{
+  text-align: center;
+  }
+  

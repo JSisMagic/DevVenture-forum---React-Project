@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../services/database-services';
 import { auth } from '../../config/firebase-config';
 import { useNavigate, Link } from 'react-router-dom';
+import './NewPostForm.css';
 
 export function NewPost() {
   const [title, setTitle] = useState('');
@@ -79,30 +80,32 @@ export function NewPost() {
   };
 
   return (
-    <div>
-      <h1>New Post</h1>
-      <div>
+    <div className="create-web">
+       <div className="create-container">
+      <h1 className='Title-header' >New Post</h1>
+      <div className='Title-container'>
         <label>Title:</label>
-        <input type="text" value={title} onChange={handleTitleChange} />
+        <input type="text"  placeholder="Enter your PostName" value={title} onChange={handleTitleChange} />
       </div>
-      <div>
+      <div className='Description-container'>
         <label>Description:</label>
-        <textarea value={description} onChange={handleDescriptionChange} />
+        <input  type="text"  placeholder="Enter your PostName" value={description} onChange={handleDescriptionChange} />
       </div>
-      <div>
+      <div className='Content-container' >
         <label>Content:</label>
-        <textarea value={content} onChange={handleContentChange} />
+        <textarea className='tex-container' value={content} onChange={handleContentChange} />
       </div>
-      <div>
+      <div className='tag-container'>
         <label>Tags:</label>
         <input placeholder= "Split by space" type="text" value={tags} onChange={handleTagsChange} />
       </div>
-      <button onClick={handleSubmit}>Submit</button>
+      <button className='create-button'  onClick={handleSubmit}>Submit</button>
       {!currentUser && (
-        <p>
+        <p className='create-tex' >
           You need to <Link to="/sign-up">sign up</Link> to create a new post.
         </p>
       )}
+      </div>  
     </div>
   );
 }
