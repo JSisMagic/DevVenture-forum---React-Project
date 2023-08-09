@@ -17,7 +17,7 @@ export function TagSearch() {
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               // Navigate to the search results page with the entered tag
-              navigate(`/searchedTag/${searchTag}`);
+              navigate(`/searched-tag/${searchTag}`);
             }
           }}
         />
