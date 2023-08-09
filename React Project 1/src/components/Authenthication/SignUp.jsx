@@ -49,7 +49,7 @@ const SignUp = () => {
         <input type='email' placeholder='Enter your email' value={email} onChange={(e) => setEmail(e.target.value)} />
         <input type='password' placeholder='Enter your password' value={password} onChange={(e) => setPassword(e.target.value)} />
         <button className='sign-up-button' type='submit'>Sign Up</button>
-        <p className='sign-up-tex'>Already have an account? Sign in</p>
+        <p className='sign-up-tex'>Already have an account? Sign in!</p>
       </form>
     </div>
   )

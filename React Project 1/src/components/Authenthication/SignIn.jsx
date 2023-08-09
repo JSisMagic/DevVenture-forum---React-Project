@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../config/firebase-config';
 import { useNavigate } from 'react-router-dom';
 import { AuthenticationVer } from './AuthenticationVer';
+import './SignIn.css';
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -24,9 +25,9 @@ const SignIn = () => {
   };
 
   return (
-    <div className="sign-in-container">
-      <form onSubmit={signIn}>
-        <h1>Log in</h1>
+    <div className="sign-in-web">
+      <form className='sign-in-container'  onSubmit={signIn}>
+        <h1 className='sign-in-header'>Log in</h1>
         <input
           type="email"
           placeholder="Enter your email"
@@ -39,7 +40,8 @@ const SignIn = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Log In</button>
+        <button className='sign-in-button'   type="submit">LogIn</button>
+        <p className='sign-in-tex'>Don`t have an account? Sign up!</p>
       </form>
     </div>
   );
