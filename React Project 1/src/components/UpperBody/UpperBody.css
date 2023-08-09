@@ -15,15 +15,20 @@
 
 body::before,
 body::after {
-  content: "";
-  position: fixed;
-  left: 0;
-  z-index: -1;
-  top: 0;
-  height: 100%;
-  width: 100%;
+z-index: -1;
+background: #0F2027;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+content: "";
+position: fixed;
+left: 0;
+z-index: -1;
+top: 0;
+height: 100%;
+width: 100%;
 }
-body::before {
+
+/* body::before {
   clip-path: circle(80% at left 20%);
   opacity: 0.4;
   background-image: linear-gradient(135deg, #f6416c 10%, #ff9a9e 100%);
@@ -32,7 +37,7 @@ body::after {
   opacity: 0.4;
   clip-path: circle(50% at right 80%);
   background-image: linear-gradient(135deg, #FFA07A 10%, #FF5733 100%);
-}
+} */
 /* header {
   height: 85vh;
   width: 90%;
