@@ -1,26 +1,30 @@
 
   .menu-button{
-    background-color: white;
-  
-
-    border-width: 1px;
-     color:white;
+    background-color:red;
+       color:white;
      /* height: 36px;
      width: 60px; */
      padding-top: 7px;
      padding-bottom: 7px;
      padding-right: 16px;
      padding-left: 16px;
-     border-radius: 3px;
+     border:none;
      cursor: pointer;
      transition:background-color 1s,color 1s;
      vertical-align: top;
   }
   .menu-button:hover{
-    box-shadow: 8px 8px 8px rgba(62, 116, 185, 0.3);
-    background-color:rgb(62, 116, 185);
-    color: 
+    opacity: 0.1;
+    color: #000;;
+
   } 
   .menu-button:active{
     opacity: 0.3;
   } 
+  .right-button:hover{
+    opacity: 0.1;
+    color: #000;;
+  }
+  .right-button:active{
+    opacity: 0.3;
+  }

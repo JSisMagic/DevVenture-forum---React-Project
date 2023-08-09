@@ -72,7 +72,7 @@ export function Nav() {
 
   return (
     <React.Fragment>
-      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+      <Box>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <Flex alignItems={'center'}>
             <ButtonGroup spacing={5}>
@@ -113,10 +113,10 @@ export function Nav() {
               {!currentUser ? (
                 // User is not signed in, show "Join Us" and "Sign In" buttons
                 <>
-                  <Button as={Link} to="/sign-up">
+                  <Button className="right-button"  as={Link} to="/sign-up">
                     Join Us
                   </Button>
-                  <Button as={Link} to="/sign-in">
+                  <Button className="right-button"as={Link} to="/sign-in">
                     Sign In
                   </Button>
                 </>
