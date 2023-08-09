@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword} from "firebase/auth";
 import { auth } from '../../config/firebase-config';
 import { db } from '../../services/database-services';
 import { useNavigate } from 'react-router-dom';
-
+import './SignUp.css';
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -36,13 +36,16 @@ const SignUp = () => {
 
 
   return (
-    <div className='sign-in-container'>
-      <form onSubmit={signUp}>
-        <h1>Create account</h1>
+    <div className='sign-up-web'>
+      <form className='sign-up-container'onSubmit={signUp}>
+        <h1 className='sign-up-header'  >Create account</h1>
+        <input type='text' placeholder='Enter your firstname' />
+        <input type='text' placeholder='Enter your lastname'  />
+        <input type='text' placeholder='Enter your username' value={username} onChange={(e) => setUsername(e.target.value)} />
         <input type='email' placeholder='Enter your email' value={email} onChange={(e) => setEmail(e.target.value)} />
         <input type='password' placeholder='Enter your password' value={password} onChange={(e) => setPassword(e.target.value)} />
-        <input type='text' placeholder='Enter your username' value={username} onChange={(e) => setUsername(e.target.value)} />
-        <button type='submit'>Sign Up</button>
+        <button className='sign-up-button' type='submit'>Sign Up</button>
+        <p className='sign-up-tex'>Already have an account? Sign in</p>
       </form>
     </div>
   )

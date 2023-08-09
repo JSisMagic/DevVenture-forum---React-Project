@@ -76,13 +76,13 @@ export function Nav() {
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <Flex alignItems={'center'}>
             <ButtonGroup spacing={5}>
-              <Button as={Link} to="/" colorScheme="teal" variant="outline" className="menu-button">
+              <Button as={Link} to="/" className="menu-button">
                 Home
               </Button>
-              <Button as={Link} to="/new-post" colorScheme="teal" variant="outline" className="menu-button">
+              <Button as={Link} to="/new-post" className="menu-button">
                 New Post
               </Button>
-              <Button as={Link} to="/post-list" colorScheme="teal" variant="outline" className="menu-button">
+              <Button as={Link} to="/post-list" className="menu-button">
                 Post List
               </Button>
             </ButtonGroup>
