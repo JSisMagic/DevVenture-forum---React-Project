@@ -43,7 +43,8 @@ function App() {
         <Route exact path="/sign-up" element={<SignUp/>} />
         <Route exact path="/edit" element={<Edit/>} />
         <Route exact path="/post-list/:id" element={<PostPage/>} />
-        <Route path="/searchedTag/:tag" element={<TagSearchResults />} />
+        <Route exact path="/searched-tag/:tag/:id" element={<PostPage />} />
+        <Route exact path="/searched-tag/:tag" element={<TagSearchResults />} />
         {/* <Route exact path="/sign-out" element={<AuthenticationVer/>} /> */}
       </Routes>
      

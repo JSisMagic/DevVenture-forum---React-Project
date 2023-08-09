@@ -1,14 +1,15 @@
 import React from "react";
+import "./Home.css";
+import { UpperBody } from "../components/UpperBody/UpperBody";
+import { PostList } from "../components/PostList/PostList";
 
 function Home() {
-    return (
-        <>
-        <div> Home </div>
-        <h1 className="text-3xl font-bold underline">
-        Welcome to DevVentureJungle !
-        </h1>
-      </>
-    )
+  return (
+    <>
+      <UpperBody />
+      <PostList />
+    </>
+  );
 }
 
-export default Home
+export default Home;

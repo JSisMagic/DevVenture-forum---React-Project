@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { db } from '../../services/database-services';
-import { Box, Heading, Text, Button, HStack, VStack, IconButton } from '@chakra-ui/react';
-import { FaThumbsUp } from 'react-icons/fa';
-
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { db } from "../../services/database-services";
+import {
+  Box,
+  Heading,
+  Text,
+  Button,
+  HStack,
+  VStack,
+  IconButton,
+} from "@chakra-ui/react";
+import { FaThumbsUp } from "react-icons/fa";
+import { GlassContainer } from "../GlassContainer/GlassContainer";
 
 export function PostList() {
   const [posts, setPosts] = useState([]);
@@ -11,15 +19,15 @@ export function PostList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const postsData = await db.get('posts');
+        const postsData = await db.get("posts");
         if (postsData) {
-            // Convert the postsData object to an array of posts
-            const postsArray = Object.keys(postsData).map((postId) => ({
-              id: postId,
-              ...postsData[postId],
-            }));
-            setPosts(postsArray);
-          }
+          // Convert the postsData object to an array of posts
+          const postsArray = Object.keys(postsData).map((postId) => ({
+            id: postId,
+            ...postsData[postId],
+          }));
+          setPosts(postsArray);
+        }
       } catch (error) {
         console.log(error.message);
       }
@@ -28,15 +36,36 @@ export function PostList() {
     fetchPosts();
   }, []);
 
+  const handleLike = async (postId) => {
+    try {
+      // Increment the likes count in the state
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === postId ? { ...post, likes: post.likes + 1 } : post
+        )
+      );
+
+      // Update the likes count in the database
+      await db.update(`posts/${postId}`, {
+        likes: posts.find((post) => post.id === postId).likes + 1,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
-    <Box maxW="600px" mx="auto" p="20px">
+    <>
       <Heading as="h1" textAlign="center" mb="20px">
         Post List
       </Heading>
       <VStack spacing="20px">
         {posts.map((post) => (
-          <Box key={post.id} borderWidth="1px" borderRadius="md" p="20px">
-            <Link to={`/post-list/${post.id}`} style={{ textDecoration: 'none', color: 'black' }}>
+          <GlassContainer key={post.id} height="auto">
+            <Link
+              to={`/post-list/${post.id}`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
               <Heading as="h3" size="lg" mb="10px">
                 {post.title}
               </Heading>
@@ -49,7 +78,7 @@ export function PostList() {
             </Text>
             <Text fontSize="sm" color="blue.500" mb="10px">
               Posted by: {post.user}
-          </Text>
+            </Text>
             <HStack spacing="10px">
               <Button colorScheme="teal" onClick={() => handleLike(post.id)}>
                 Like ({post.likes})
@@ -61,9 +90,9 @@ export function PostList() {
                 onClick={() => handleUpvote(post.id)}
               />
             </HStack>
-          </Box>
+          </GlassContainer>
         ))}
       </VStack>
-    </Box>
+    </>
   );
 }

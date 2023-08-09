@@ -75,7 +75,7 @@ export function Nav() {
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <Flex alignItems={'center'}>
-            <ButtonGroup spacing={4}>
+            <ButtonGroup spacing={5}>
               <Button as={Link} to="/" colorScheme="teal" variant="outline" className="menu-button">
                 Home
               </Button>
@@ -90,7 +90,7 @@ export function Nav() {
 
 
           <Flex alignItems={'center'}>
-            <Stack direction={'row'} spacing={7}>
+            <Stack direction={'row'} spacing={5}>
               {/* <InputGroup display={{ base: 'none', md: 'block' }} maxWidth="300px">
                 <Input
                   type="text"
