@@ -5,10 +5,13 @@ import { GlassContainer } from '../GlassContainer/GlassContainer';
 export function UpperBody() {
   return (
     <div className='headerContainer'>
-
-        <GlassContainer>
-          <h1>ZA SNIMKA ILI VIDEO</h1>
-        </GlassContainer>
+      <GlassContainer className='fullImageContainer'>
+        <img
+          src="/src/assets/test_photo.jpg"
+          alt="Image Description"
+          className='fullImage'
+        />
+      </GlassContainer>
     </div>
-  )
+  );
 }
