@@ -46,6 +46,22 @@ export function TagSearchResults() {
     handleSearch();
   }, [tag]);
 
+  const handleLike = async (postId) => {
+    try {
+      // Update the likes count in the state
+      setPost((prevPost) =>
+        prevPost.map((postData) =>
+          postData.id === postId ? { ...postData, likes: postData.likes + 1 } : postData
+        )
+      );
+
+      // Update the likes count in the database
+      await db.update(`posts/${postId}`, { likes: post.find((postData) => postData.id === postId).likes + 1 });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div>
       <h3>Search Results for Tag: {tag}</h3>

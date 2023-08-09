@@ -36,6 +36,24 @@ export function PostList() {
     fetchPosts();
   }, []);
 
+  const handleLike = async (postId) => {
+    try {
+      // Increment the likes count in the state
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === postId ? { ...post, likes: post.likes + 1 } : post
+        )
+      );
+
+      // Update the likes count in the database
+      await db.update(`posts/${postId}`, {
+        likes: posts.find((post) => post.id === postId).likes + 1,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <>
       <Heading as="h1" textAlign="center" mb="20px">
