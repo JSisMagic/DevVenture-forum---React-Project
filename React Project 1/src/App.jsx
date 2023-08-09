@@ -16,9 +16,9 @@ import { ChakraProvider } from '@chakra-ui/react'
 import Edit from './components/Authenthication/EditUser';
 import { TagSearchResults } from './components/TagSearchResults/TagSearchResults';
 import { AuthenticationVer } from './components/Authenthication/AuthenticationVer';
+import { ParticlesBackground } from './components/ParticlesBackground/ParticlesBackground';
 
 function App() {
-
   async function forTest() {
     const newPost = {
       title: "New Post",
@@ -34,6 +34,7 @@ function App() {
     <ChakraProvider>
     <Nav/>
     <AuthenticationVer/>
+    <ParticlesBackground/>
     {/* <SignUp/> */}
       <Routes>
         <Route index element={<Home/>} />
