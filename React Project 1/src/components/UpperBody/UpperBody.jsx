@@ -1,8 +1,8 @@
 import React from 'react';
-import './HeaderUp.css';
-import { GlassContainer } from './GlassContainer';
+import './UpperBody.css';
+import { GlassContainer } from '../GlassContainer/GlassContainer';
 
-export function HeaderUp() {
+export function UpperBody() {
   return (
     <div className='headerContainer'>
 
