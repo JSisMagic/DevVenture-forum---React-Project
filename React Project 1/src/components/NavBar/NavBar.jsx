@@ -51,7 +51,6 @@ const NavLink = (props) => {
 
 export function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
@@ -91,19 +90,6 @@ export function Nav() {
 
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={5}>
-              {/* <InputGroup display={{ base: 'none', md: 'block' }} maxWidth="300px">
-                <Input
-                  type="text"
-                  placeholder="Search"
-                  _placeholder={{ color: 'gray.500' }}
-                  size="sm"
-                  borderRadius="full"
-                  bgColor={useColorModeValue('white', 'gray.800')}
-                />
-                <InputRightElement>
-                  <SunIcon color="gray.500" />
-                </InputRightElement>
-              </InputGroup> */}
               <TagSearch/>
 
               <Button onClick={toggleColorMode}>

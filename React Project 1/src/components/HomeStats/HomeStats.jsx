@@ -1,16 +1,19 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
-import { getAllPosts } from "../../services/posts.services"
-import { getAllUsers } from "../../services/users.services"
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { getAllPosts } from "../../services/posts.services";
+import { getAllUsers } from "../../services/users.services";
+import { getTotalCommentCount } from "../../services/comments.services"; 
 
 const HomeStats = () => {
-  const [usersCount, setUsersCount] = useState(0)
-  const [postsCount, setPostsCount] = useState(0)
+  const [usersCount, setUsersCount] = useState(0);
+  const [postsCount, setPostsCount] = useState(0);
+  const [commentsCount, setCommentsCount] = useState(0); 
 
   useEffect(() => {
-    getAllUsers().then(data => setUsersCount(data.length))
-    getAllPosts().then(data => setPostsCount(data.length))
-  }, [])
+    getAllUsers().then(data => setUsersCount(data.length));
+    getAllPosts().then(data => setPostsCount(data.length));
+    getTotalCommentCount().then(count => setCommentsCount(count)); 
+  }, []);
 
   return (
     <Flex
@@ -31,8 +34,13 @@ const HomeStats = () => {
         <Text>Posts</Text>
         <Heading>{postsCount}</Heading>
       </Box>
+      <Box>
+        <Text>Comments</Text>
+        <Heading>{commentsCount}</Heading>
+      </Box>
     </Flex>
-  )
+  );
 }
 
-export default HomeStats
+export default HomeStats;
+
