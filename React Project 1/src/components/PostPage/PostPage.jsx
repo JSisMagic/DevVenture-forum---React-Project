@@ -4,6 +4,7 @@ import { db } from '../../services/database-services';
 import { auth } from '../../config/firebase-config';
 import { useNavigate } from 'react-router-dom/dist';
 import { Button, IconButton } from '@chakra-ui/react';
+import './PostPage.css';
 import { Link } from 'react-router-dom';
 import { DeleteIcon } from '@chakra-ui/icons';
 
@@ -120,20 +121,27 @@ export function PostPage() {
   }
 
   return (
-    <div>
-      <h1>{post.user}</h1>
-      <h2>{post.title}</h2>
-      <p>{post.description}</p>
-      <p>{post.content}</p>
-      <p>Likes: {post.likes}</p>
-      <button onClick={handleLike}>Like button</button>
-      <h3>Replies:</h3>
+    <div className="create-viw">
+       <div className="viw-container">
+      <h1 className='viw-header'>{post.user}</h1>
+      <h2 className='viw-Title' >{post.title}</h2>
+      <p className='viw-description'>{post.description}</p>
+      <p className='viw-count'>Likes: {post.likes}</p>
+      <p className='viw-content'>{post.content}</p>
+      <div className='viw-button-div' >
+      <button className='viw-button' onClick={handleLike}>Like button</button>
+      </div>
+<h3 className='viw-comment'>Replies:</h3>
       <ul>
       {replies.map((reply, index) => (
-        <li key={index}>
-          <p>{`User: ${reply.user}`}</p>
-          <p>{`Date: ${new Date(reply.date).toLocaleString()}`}</p>
-          <p>{`Content: ${reply.content}`}</p>
+        <li className='viw-comment-box' key={index}>
+          <div className='viw-ere' >
+          <p className='viw-user'>{`Created by:${reply.user}`}</p>
+          <span className='onn'>/</span>
+          <p className='viw-dating' >{`Date: ${new Date(reply.date).toLocaleString()}`}</p>
+         </div>
+          <div className='viw-rep' >
+          <p >{`${reply.content}`}</p>
           {user && (user.uid === post.userUID || user.uid === reply.userUID) &&
           <IconButton
           icon={<DeleteIcon />}
@@ -143,12 +151,12 @@ export function PostPage() {
           onClick={() => handleDeleteComment(index)}
           />
         }
-        </li>
+          </div></li>
         ))}
       </ul>
       <form onSubmit={handleSubmitReply}>
         <textarea value={reply} onChange={handleReplyChange} />
-        <button type="submit">Submit Reply</button>
+        <button type="submit">Reply</button>
       </form>
       {user && user.uid === post.userUID && (
         <Button as={Link} to={`/edit/${post.id}`} colorScheme="blue">
@@ -156,5 +164,6 @@ export function PostPage() {
         </Button>
       )}
     </div>
+    </div>
   );
-}
+      }
