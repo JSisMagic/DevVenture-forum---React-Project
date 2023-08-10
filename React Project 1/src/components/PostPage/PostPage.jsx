@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { db } from '../../services/database-services';
 import { auth } from '../../config/firebase-config';
 import { useNavigate } from 'react-router-dom/dist';
+import { Button } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 export function PostPage() {
   const { id } = useParams();
@@ -11,6 +13,7 @@ export function PostPage() {
   const [replies, setReplies] = useState([]);
   const [likes, setLikes] = useState(0);
   const navigate = useNavigate()
+  const user = auth.currentUser;
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -36,8 +39,6 @@ export function PostPage() {
 
     if (reply.trim() !== '') {
       try {
-        const user = auth.currentUser;
-        
         if (user) {
         const userUID = user.uid;
         const userData = await db.get(`users/${userUID}`);
@@ -113,6 +114,11 @@ export function PostPage() {
         <textarea value={reply} onChange={handleReplyChange} />
         <button type="submit">Submit Reply</button>
       </form>
+      {user && user.uid === post.userUID && (
+        <Button as={Link} to={`/edit/${post.id}`} colorScheme="blue">
+          Edit
+        </Button>
+      )}
     </div>
   );
 }

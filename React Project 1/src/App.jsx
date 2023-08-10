@@ -17,6 +17,7 @@ import Edit from './components/Authenthication/EditUser';
 import { TagSearchResults } from './components/TagSearchResults/TagSearchResults';
 import { AuthenticationVer } from './components/Authenthication/AuthenticationVer';
 import { ParticlesBackground } from './components/ParticlesBackground/ParticlesBackground';
+import { EditPostPage } from './components/EditPostPage/EditPostPage';
 
 function App() {
   async function forTest() {
@@ -46,6 +47,7 @@ function App() {
         <Route exact path="/post-list/:id" element={<PostPage/>} />
         <Route exact path="/searched-tag/:tag/:id" element={<PostPage />} />
         <Route exact path="/searched-tag/:tag" element={<TagSearchResults />} />
+        <Route exact path="/edit/:id" element={<EditPostPage />} />
         {/* <Route exact path="/sign-out" element={<AuthenticationVer/>} /> */}
       </Routes>
      
