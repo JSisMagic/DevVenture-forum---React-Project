@@ -79,6 +79,23 @@ export function EditPostPage() {
       console.log(error.message);
     }
   };
+  
+  const handleDelete = async () => {
+    try {
+      // Remove the post from the database
+      await db.remove(`posts/${id}`);
+
+      // Remove the post from tags in the database
+      for (const tag of oldTags) {
+        await db.remove(`tags/${tag}/${id}`);
+      }
+
+      // Redirect back to the post list page after deleting
+      navigate('/post-list');
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div>
@@ -116,6 +133,7 @@ export function EditPostPage() {
         />
       </div>
       <button onClick={handleSubmit}>Save Changes</button>
+      <button onClick={handleDelete}>Delete Post</button>
     </div>
   );
 }
