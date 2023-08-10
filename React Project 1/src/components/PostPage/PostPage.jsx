@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 import { db } from '../../services/database-services';
 import { auth } from '../../config/firebase-config';
 import { useNavigate } from 'react-router-dom/dist';
-import { Button } from '@chakra-ui/react';
+import { Button, IconButton } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import { DeleteIcon } from '@chakra-ui/icons';
 
 export function PostPage() {
   const { id } = useParams();
@@ -47,7 +48,8 @@ export function PostPage() {
         const newReply = {
             content: reply,
             date: new Date().toISOString(),
-            user: username, // Use the authenticated user's display name
+            user: username,
+            userUID: userUID 
           };
 
           // Update the post with the new reply
@@ -88,6 +90,31 @@ export function PostPage() {
     }
   };
 
+  const handleDeleteComment = async (commentIndex) => {
+    try {
+      // Check if the comment index is valid
+      if (commentIndex >= 0 && commentIndex < replies.length) {
+        // Clone the current replies array
+        const updatedReplies = [...replies];
+
+        // Remove the comment from the cloned array
+        updatedReplies.splice(commentIndex, 1);
+
+        // Update the post's replies in the database
+        await db.update(`posts/${id}`, { replies: updatedReplies });
+
+        // Update the local state with the updated replies
+        setReplies(updatedReplies);
+
+        console.log('Comment deleted successfully.');
+      } else {
+        console.log('Invalid comment index.');
+      }
+    } catch (error) {
+      console.error('Error deleting comment:', error.message);
+    }
+  };
+
   if (!post) {
     return <h1>There is no such post!</h1>;
   }
@@ -107,6 +134,15 @@ export function PostPage() {
           <p>{`User: ${reply.user}`}</p>
           <p>{`Date: ${new Date(reply.date).toLocaleString()}`}</p>
           <p>{`Content: ${reply.content}`}</p>
+          {user && (user.uid === post.userUID || user.uid === reply.userUID) &&
+          <IconButton
+          icon={<DeleteIcon />}
+          colorScheme="red"
+          variant="ghost"
+          aria-label="Delete"
+          onClick={() => handleDeleteComment(index)}
+          />
+        }
         </li>
         ))}
       </ul>
