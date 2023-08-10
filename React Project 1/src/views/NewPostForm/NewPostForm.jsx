@@ -51,11 +51,14 @@ export function NewPost() {
       const userData = await db.get(`users/${currentUserUid}`);
       const username = userData && userData.username ? userData.username : '';
       
+      const tagArray = tags.split(' ').map(tag => tag.trim());
+      const uniqueTagsArray = Array.from(new Set(tagArray));
+
       const postId = await db.push('posts', {
         title: title,
         content: content,
         description: description,
-        tags: tags.split(' ').map(tag => tag.trim()), // Convert comma-separated tags to an array
+        tags: uniqueTagsArray, // Convert comma-separated tags to an array
         date: new Date().toISOString(),
         likes: 0,
         userUID: currentUser.uid,
@@ -66,8 +69,7 @@ export function NewPost() {
       await db.update(`posts/${postId}`, { id: postId });
 
        // Associate post IDs with tags
-      const tagArray = tags.split(' ').map(tag => tag.trim());
-      for (const tag of tagArray) {
+      for (const tag of uniqueTagsArray) {
         await db.set(`tags/${tag}/${postId}`, true);
       }
 

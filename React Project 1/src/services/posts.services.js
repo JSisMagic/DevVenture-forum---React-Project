@@ -1,8 +1,8 @@
 import { get, ref } from "firebase/database"
 import { database } from "../config/firebase-config"
 
-export const getAllUsers = async () => {
-  const snapshot = await get(ref(database, "users"))
+export const getAllPosts = async () => {
+  const snapshot = await get(ref(database, "posts"))
 
   if (!snapshot.exists()) {
     return []

@@ -27,7 +27,7 @@ const Edit = () => {
       minH={'100vh'}
       align={'center'}
       justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
+      >
       <Stack
         spacing={4}
         w={'full'}
