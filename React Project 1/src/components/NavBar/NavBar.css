@@ -28,10 +28,3 @@
   .right-button:active{
     opacity: 0.3;
   }
-  .men-container{
-    background-color: red;
-    opacity: 0.8;
-    backdrop-filter: blur(16px);
-    border-radius: 5px;
-    
-  }

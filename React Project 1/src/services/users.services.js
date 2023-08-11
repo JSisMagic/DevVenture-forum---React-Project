@@ -1,4 +1,4 @@
-import { get, ref } from "firebase/database"
+import { equalTo, get, orderByKey, query, ref } from "firebase/database"
 import { database } from "../config/firebase-config"
 
 export const getAllUsers = async () => {
@@ -7,6 +7,21 @@ export const getAllUsers = async () => {
   if (!snapshot.exists()) {
     return []
   }
+  const data = snapshot.val();
+  return Object.keys(data).map(key => ({
+    uid: key,
+    ...data[key]
+  }))
+}
 
-  return Object.values(snapshot.val())
+export const getUserById = async uid => {
+  const snapshot = await get(query(ref(database, "users"), orderByKey("uid"), equalTo(uid)));
+  const value = snapshot.val();
+  return value ? {
+    ...Object.values(value)[0],
+    comments: Object.values(value)[0]?.comments ?
+      Object.keys(Object.values(value)[0].comments) : [],
+    posts: Object.values(value)[0]?.posts ?
+      Object.keys(Object.values(value)[0].posts) : [],
+  } : value;
 }

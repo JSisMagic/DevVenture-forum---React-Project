@@ -63,6 +63,7 @@ export const db = {
       const reference = ref(database, path);
 
       await update(reference, newData);
+
       console.log('Data updated successfully.');
     } catch (error) {
       console.log(error.message);

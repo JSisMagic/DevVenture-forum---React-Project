@@ -1,28 +1,30 @@
-import React from 'react';
-import { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../../config/firebase-config';
-import { useNavigate } from 'react-router-dom';
-import { AuthenticationVer } from './AuthenticationVer';
-import { AuthContext } from '../../context/AuthContext';
-import { useContext } from 'react';
-import './SignIn.css';
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../../config/firebase-config";
+import { AuthContext } from "../../context/AuthContext";
+import "./SignIn.css";
 
 const SignIn = () => {
+  const { setContext, ...appState } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext);
 
-    
   const signIn = (e) => {
     e.preventDefault();
-      
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
-        setUser(userCredential.user); 
-        navigate('/');
+        console.log("USER CRED:", userCredential);
+        setContext({
+          ...appState,
+          user: {
+            email: userCredential.email,
+            uid: userCredential.uid,
+          },
+        });
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);
@@ -31,8 +33,8 @@ const SignIn = () => {
 
   return (
     <div className="sign-in-web">
-      <form className='sign-in-container'  onSubmit={signIn}>
-        <h1 className='sign-in-header'>Log in</h1>
+      <form className="sign-in-container" onSubmit={signIn}>
+        <h1 className="sign-in-header">Log in</h1>
         <input
           type="email"
           placeholder="Enter your email"
@@ -45,8 +47,10 @@ const SignIn = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className='sign-in-button'   type="submit">LogIn</button>
-        <p className='sign-in-tex'>Don`t have an account? Sign up!</p>
+        <button className="sign-in-button" type="submit">
+          LogIn
+        </button>
+        <p className="sign-in-tex">Don`t have an account? Sign up!</p>
       </form>
     </div>
   );

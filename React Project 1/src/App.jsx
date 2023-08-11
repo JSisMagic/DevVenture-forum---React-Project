@@ -1,26 +1,48 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { ChakraProvider } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import * as ReactRouterDOM from "react-router-dom";
-import { Route, Routes, Link } from "react-router-dom";
-import { db } from "./services/database-services.js";
-import { NewPost } from "./views/NewPostForm/NewPostForm";
-import { PostList } from "./components/PostList/PostList";
 import Home from "./Pages/Home";
+import { AuthenticationVer } from "./components/Authenthication/AuthenticationVer";
+import Edit from "./components/Authenthication/EditUser";
 import SignIn from "./components/Authenthication/SignIn";
 import SignUp from "./components/Authenthication/SignUp";
-import { PostPage } from "./components/PostPage/PostPage";
-import { Nav } from "./components/NavBar/NavBar";
-import { ChakraProvider } from "@chakra-ui/react";
-import Edit from "./components/Authenthication/EditUser";
-import { TagSearchResults } from "./components/TagSearchResults/TagSearchResults";
-import { AuthenticationVer } from "./components/Authenthication/AuthenticationVer";
-import { ParticlesBackground } from "./components/ParticlesBackground/ParticlesBackground";
 import { EditPostPage } from "./components/EditPostPage/EditPostPage";
 import Members from "./components/Members/Members";
-
+import { Nav } from "./components/NavBar/NavBar";
+import { ParticlesBackground } from "./components/ParticlesBackground/ParticlesBackground";
+import { PostList } from "./components/PostList/PostList";
+import { PostPage } from "./components/PostPage/PostPage";
+import { TagSearchResults } from "./components/TagSearchResults/TagSearchResults";
+import { auth } from "./config/firebase-config";
+import { AuthContext } from "./context/AuthContext";
+import { db } from "./services/database-services.js";
+import { getUserById } from "./services/users.services";
+import { NewPost } from "./views/NewPostForm/NewPostForm";
+auth;
 function App() {
+  const [user, loading] = useAuthState(auth);
+
+  const [appState, setAppState] = useState({
+    user: user ? { email: user.email, uid: user.uid } : null,
+    userData: null,
+  });
+
+  useEffect(() => {
+    setAppState((state) => ({
+      ...state,
+      user: user ? { email: user.email, uid: user.uid } : null,
+    }));
+  }, [user]);
+
+  useEffect(() => {
+    if (appState.user !== null) {
+      getUserById(appState.user.uid)
+        .then((userData) => setAppState((prev) => ({ ...prev, userData })))
+        .catch(console.log);
+    }
+  }, [appState.user]);
   async function forTest() {
     const newPost = {
       title: "New Post",
@@ -33,30 +55,32 @@ function App() {
 
   return (
     <>
-      <ChakraProvider>
-        <Nav />
-        <AuthenticationVer />
-        <ParticlesBackground />
-        {/* <SignUp/> */}
-        <Routes>
-          <Route index element={<Home />} />
-          <Route exact path="/new-post" element={<NewPost />} />
-          <Route exact path="/post-list" element={<PostList />} />
-          <Route exact path="/sign-in" element={<SignIn />} />
-          <Route exact path="/sign-up" element={<SignUp />} />
-          <Route exact path="/edit" element={<Edit />} />
-          <Route exact path="/post-list/:id" element={<PostPage />} />
-          <Route exact path="/searched-tag/:tag/:id" element={<PostPage />} />
-          <Route
-            exact
-            path="/searched-tag/:tag"
-            element={<TagSearchResults />}
-          />
-          <Route exact path="/edit/:id" element={<EditPostPage />} />
-          <Route exact path="/members" element={<Members />} />
-          {/* <Route exact path="/sign-out" element={<AuthenticationVer/>} /> */}
-        </Routes>
-      </ChakraProvider>
+      <AuthContext.Provider value={{ ...appState, setContext: setAppState }}>
+        <ChakraProvider>
+          <Nav />
+          <AuthenticationVer />
+          <ParticlesBackground />
+          {/* <SignUp/> */}
+          <Routes>
+            <Route index element={<Home />} />
+            <Route exact path="/new-post" element={<NewPost />} />
+            <Route exact path="/post-list" element={<PostList />} />
+            <Route exact path="/sign-in" element={<SignIn />} />
+            <Route exact path="/sign-up" element={<SignUp />} />
+            <Route exact path="/edit" element={<Edit />} />
+            <Route exact path="/post-list/:id" element={<PostPage />} />
+            <Route exact path="/searched-tag/:tag/:id" element={<PostPage />} />
+            <Route
+              exact
+              path="/searched-tag/:tag"
+              element={<TagSearchResults />}
+            />
+            <Route exact path="/edit/:id" element={<EditPostPage />} />
+            <Route exact path="/members" element={<Members />} />
+            {/* <Route exact path="/sign-out" element={<AuthenticationVer/>} /> */}
+          </Routes>
+        </ChakraProvider>
+      </AuthContext.Provider>
       {/* <button onClick={forTest}>Test for adding post!</button> */}
     </>
   );

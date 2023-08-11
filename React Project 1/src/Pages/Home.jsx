@@ -1,8 +1,7 @@
-import React from "react"
-import "./Home.css"
-import { UpperBody } from "../components/UpperBody/UpperBody"
-import { PostList } from "../components/PostList/PostList"
-import HomeStats from "../components/HomeStats/HomeStats"
+import React from "react";
+import HomeStats from "../components/HomeStats/HomeStats";
+import { UpperBody } from "../components/UpperBody/UpperBody";
+import "./Home.css";
 
 function Home() {
   return (
@@ -10,7 +9,7 @@ function Home() {
       <UpperBody />
       <HomeStats />
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;

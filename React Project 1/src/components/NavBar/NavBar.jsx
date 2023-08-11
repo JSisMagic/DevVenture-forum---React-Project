@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
-  Box,
-  Flex,
   Avatar,
+  Box,
   Button,
+  ButtonGroup,
+  Center,
+  Flex,
   Menu,
   MenuButton,
-  MenuList,
-  MenuItem,
   MenuDivider,
-  useColorModeValue,
+  MenuItem,
+  MenuList,
   Stack,
   useColorMode,
-  Center,
-  ButtonGroup,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { auth } from "../../config/firebase-config";
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom/dist";
-import "./NavBar.css";
+import { auth } from "../../config/firebase-config";
+import { AuthContext } from "../../context/AuthContext";
 import { TagSearch } from "../TagSearch/TagSearch";
+import "./NavBar.css";
 
-const NavLink = (props) => {
-  const { children } = props;
+const NavLink = ({ children }) => {
   return (
     <Box
       as="a"
@@ -45,24 +45,23 @@ export function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
-const user=auth.currentUser;
+  const { userData, setContext } = useContext(AuthContext);
+  useEffect(() => {
+    // Check if the user is signed in when the component mounts
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+    });
 
-useEffect(() => {
-  // Check if the user is signed in when the component mounts
-  const unsubscribe = auth.onAuthStateChanged((user) => {
-    setCurrentUser(user);
-  });
+    // Unsubscribe from the listener when the component unmounts
+    return () => unsubscribe();
+  }, []);
 
-  // Unsubscribe from the listener when the component unmounts
-  return () => unsubscribe();
-}, []);
-  
   const userSignOut = () => {
     auth.signOut();
+    setContext({ user: null, userData: null });
     navigate("/");
   };
 
-  // const user=auth.currentUser;
   return (
     <React.Fragment>
       <Box>
@@ -104,11 +103,9 @@ useEffect(() => {
                 </>
               ) : (
                 // User is signed in, show user menu
-
-    <Menu className="men-container"> 
+                <Menu>
                   <MenuButton
-                
-              as={Button}
+                    as={Button}
                     rounded={"full"}
                     variant={"link"}
                     cursor={"pointer"}
@@ -116,24 +113,42 @@ useEffect(() => {
                   >
                     <Avatar
                       size={"sm"}
-                      src={""}
+                      src={"https://avatars.dicebear.com/api/male/username.svg"}
                     />
                   </MenuButton>
-                  <MenuList  alignItems={"center"}>
+                  <MenuList alignItems={"center"}>
                     <br />
                     <Center>
                       <Avatar
                         size={"2xl"}
                         src={
-                          ""
+                          "https://avatars.dicebear.com/api/male/username.svg"
                         }
                       />
                     </Center>
                     <br />
                     <Center>
-                    <p>{user.email}</p>
+                      <p>{userData?.username}</p>
                     </Center>
                     <br />
+                    {userData?.isAdmin && (
+                      <>
+                        <Center>
+                          <p>ADMIN</p>
+                          <br />
+                        </Center>
+                        <br />
+                      </>
+                    )}
+                    {userData?.isBlock && (
+                      <>
+                        <Center>
+                          <p>BLOCKED ACCOUNT</p>
+                          <br />
+                        </Center>
+                        <br />
+                      </>
+                    )}
                     <MenuDivider />
                     <MenuItem as={Link} to="/edit">
                       Edit User

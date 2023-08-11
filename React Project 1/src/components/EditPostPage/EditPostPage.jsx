@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../services/database-services';
 
 export function EditPostPage() {
-  const { id } = useState();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');

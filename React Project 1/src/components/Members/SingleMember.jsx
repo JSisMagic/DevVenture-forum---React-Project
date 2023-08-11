@@ -1,53 +1,83 @@
-import React from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { db } from "../../services/database-services";
 
-const SingleMember = ({ firstName, lastName, userName, email }) => {
+const SingleMember = ({
+  uid,
+  firstName,
+  lastName,
+  userName,
+  email,
+  isBlock = false,
+  setBlocked,
+}) => {
+  const { userData } = useContext(AuthContext);
+
+  const blockUser = async (user, currentStatus) => {
+    await db.update(`users/${uid}`, {
+      isBlock: !currentStatus,
+    });
+    setBlocked((blocked) => [...blocked, user]);
+  };
   return (
     <div>
       <div className="px-4 sm:px-0">
         <h3 className="text-base font-semibold leading-7 text-gray-900">
           Applicant Information
         </h3>
-        <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+        {userData?.isAdmin && (
+          <button
+            onClick={() => blockUser(userName, isBlock)}
+            type="button"
+            className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          >
+            {isBlock ? "Unblock" : "Block"}
+          </button>
+        )}
+
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
           Personal details and application.
         </p>
       </div>
-      <div class="mt-6 border-t border-gray-100">
-        <dl class="divide-y divide-gray-100">
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">
+      <div className="mt-6 border-t border-gray-100">
+        <dl className="divide-y divide-gray-100">
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
               {`${firstName} ${lastName}`}
             </dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+            <dd className="mt-1 text-sm leading-6 text-whit sm:col-span-2 sm:mt-0">
               Margot Foster
             </dd>
           </div>
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
               Application for
             </dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+            <dd className="mt-1 text-sm leading-6 text-whit sm:col-span-2 sm:mt-0">
               Backend Developer
             </dd>
           </div>
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
               Email address
             </dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              margotfoster@example.com
+            <dd className="mt-1 text-sm leading-6 text-white sm:col-span-2 sm:mt-0">
+              {email}
             </dd>
           </div>
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
               Salary expectation
             </dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+            <dd className="mt-1 text-sm leading-6 text-whit sm:col-span-2 sm:mt-0">
               $120,000
             </dd>
           </div>
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">About</dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
+              About
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-whit sm:col-span-2 sm:mt-0">
               Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
               incididunt cillum culpa consequat. Excepteur qui ipsum aliquip
               consequat sint. Sit id mollit nulla mollit nostrud in ea officia
@@ -55,70 +85,70 @@ const SingleMember = ({ firstName, lastName, userName, email }) => {
               reprehenderit deserunt qui eu.
             </dd>
           </div>
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
               Attachments
             </dt>
-            <dd class="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
               <ul
                 role="list"
-                class="divide-y divide-gray-100 rounded-md border border-gray-200"
+                className="divide-y divide-gray-100 rounded-md border border-gray-200"
               >
-                <li class="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                  <div class="flex w-0 flex-1 items-center">
+                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                  <div className="flex w-0 flex-1 items-center">
                     <svg
-                      class="h-5 w-5 flex-shrink-0 text-gray-400"
+                      className="h-5 w-5 flex-shrink-0 text-gray-400"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       aria-hidden="true"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.5a.75.75 0 011.064 1.057l-.498.501-.002.002a4.5 4.5 0 01-6.364-6.364l7-7a4.5 4.5 0 016.368 6.36l-3.455 3.553A2.625 2.625 0 119.52 9.52l3.45-3.451a.75.75 0 111.061 1.06l-3.45 3.451a1.125 1.125 0 001.587 1.595l3.454-3.553a3 3 0 000-4.242z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       />
                     </svg>
-                    <div class="ml-4 flex min-w-0 flex-1 gap-2">
-                      <span class="truncate font-medium">
+                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
+                      <span className="truncate font-medium">
                         resume_back_end_developer.pdf
                       </span>
-                      <span class="flex-shrink-0 text-gray-400">2.4mb</span>
+                      <span className="flex-shrink-0 text-gray-400">2.4mb</span>
                     </div>
                   </div>
-                  <div class="ml-4 flex-shrink-0">
+                  <div className="ml-4 flex-shrink-0">
                     <a
                       href="#"
-                      class="font-medium text-indigo-600 hover:text-indigo-500"
+                      className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
                       Download
                     </a>
                   </div>
                 </li>
-                <li class="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                  <div class="flex w-0 flex-1 items-center">
+                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                  <div className="flex w-0 flex-1 items-center">
                     <svg
-                      class="h-5 w-5 flex-shrink-0 text-gray-400"
+                      className="h-5 w-5 flex-shrink-0 text-gray-400"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       aria-hidden="true"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.5a.75.75 0 011.064 1.057l-.498.501-.002.002a4.5 4.5 0 01-6.364-6.364l7-7a4.5 4.5 0 016.368 6.36l-3.455 3.553A2.625 2.625 0 119.52 9.52l3.45-3.451a.75.75 0 111.061 1.06l-3.45 3.451a1.125 1.125 0 001.587 1.595l3.454-3.553a3 3 0 000-4.242z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       />
                     </svg>
-                    <div class="ml-4 flex min-w-0 flex-1 gap-2">
-                      <span class="truncate font-medium">
+                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
+                      <span className="truncate font-medium">
                         coverletter_back_end_developer.pdf
                       </span>
-                      <span class="flex-shrink-0 text-gray-400">4.5mb</span>
+                      <span className="flex-shrink-0 text-gray-400">4.5mb</span>
                     </div>
                   </div>
-                  <div class="ml-4 flex-shrink-0">
+                  <div className="ml-4 flex-shrink-0">
                     <a
                       href="#"
-                      class="font-medium text-indigo-600 hover:text-indigo-500"
+                      className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
                       Download
                     </a>
