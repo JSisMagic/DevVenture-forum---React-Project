@@ -16,6 +16,8 @@ export function PostPage() {
   const [likes, setLikes] = useState(0);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedReplyContent, setEditedReplyContent] = useState('');
+  const [likedBy, setLikedBy] = useState([]);
+
   const navigate = useNavigate();
   const user = auth.currentUser;
 
@@ -74,21 +76,50 @@ export function PostPage() {
 
   const handleLike = async () => {
     try {
-      // Increment the likes count in the state
-      setLikes((prevLikes) => prevLikes + 1);
+      if (!user){
+        navigate('/sign-up');
+        return;
+      }
 
-      // Update the likes count in the database
-      await db.update(`posts/${id}`, { likes: likes + 1 });
+      const currentUserUID = user.uid
 
-      // Update the local state with the new likes count
-      setPost((prevPost) => ({
-        ...prevPost,
-        likes: prevPost.likes + 1,
-      }));
+      // Check if the user has already liked the post
+      const userLiked = likedBy.includes(currentUserUID); // Replace with the appropriate value
+  
+      if (userLiked) {
+        // User has already liked, so remove the like
+        const updatedLikedBy = likedBy.filter((uid) => uid !== currentUserUID);
+        setLikedBy(updatedLikedBy);
+  
+        // Decrement the likes count in the state and local state
+        setLikes((prevLikes) => prevLikes - 1);
+        setPost((prevPost) => ({
+          ...prevPost,
+          likes: prevPost.likes - 1,
+        }));
+  
+        // Update the likes count in the database
+        await db.update(`posts/${id}`, { likes: likes - 1, likedBy: updatedLikedBy });
+      } else {
+        // User has not liked, so add the like
+        const updatedLikedBy = [...likedBy, currentUserUID];
+        setLikedBy(updatedLikedBy);
+  
+        // Increment the likes count in the state and local state
+        setLikes((prevLikes) => prevLikes + 1);
+        setPost((prevPost) => ({
+          ...prevPost,
+          likes: prevPost.likes + 1,
+        }));
+  
+        // Update the likes count and likedBy array in the database
+        await db.update(`posts/${id}`, { likes: likes + 1, likedBy: updatedLikedBy });
+      }
     } catch (error) {
       console.log(error.message);
     }
   };
+
 
   const handleDeleteComment = async (commentIndex) => {
     try {

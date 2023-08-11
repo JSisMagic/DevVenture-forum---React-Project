@@ -12,9 +12,14 @@ import {
 } from "@chakra-ui/react";
 import { FaThumbsUp } from "react-icons/fa";
 import { GlassContainer } from "../GlassContainer/GlassContainer";
+import { auth } from "../../config/firebase-config";
+import { useNavigate } from "react-router-dom";
 
 export function PostList() {
   const [posts, setPosts] = useState([]);
+
+  const navigate = useNavigate()
+  const user = auth.currentUser
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -38,17 +43,48 @@ export function PostList() {
 
   const handleLike = async (postId) => {
     try {
-      // Increment the likes count in the state
-      setPosts((prevPosts) =>
-        prevPosts.map((post) =>
-          post.id === postId ? { ...post, likes: post.likes + 1 } : post
-        )
-      );
+      if (!user){
+        navigate('/sign-up');
+        return;
+      }
 
-      // Update the likes count in the database
-      await db.update(`posts/${postId}`, {
-        likes: posts.find((post) => post.id === postId).likes + 1,
-      });
+      const currentUserUID = user.uid
+
+      // Find the post by ID
+      const likedPost = posts.find((post) => post.id === postId);
+  
+      if (likedPost) {
+        // Check if the post has a likedBy array and if the current user liked it
+        const userLiked =
+          likedPost.likedBy && likedPost.likedBy.includes(currentUserUID);
+  
+        // Update the likedBy array based on userLiked
+        const updatedLikedBy = userLiked
+          ? likedPost.likedBy.filter((uid) => uid !== currentUserUID)
+          : likedPost.likedBy
+          ? [...likedPost.likedBy, currentUserUID]
+          : [currentUserUID]; // Initialize likedBy if it doesn't exist
+  
+        // Increment or decrement the likes count based on userLiked
+        const updatedLikes = userLiked
+          ? likedPost.likes - 1
+          : likedPost.likes + 1;
+  
+        // Update the likes count and likedBy array in the state
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post.id === postId
+              ? { ...post, likes: updatedLikes, likedBy: updatedLikedBy }
+              : post
+          )
+        );
+  
+        // Update the likes count and likedBy array in the database
+        await db.update(`posts/${postId}`, {
+          likes: updatedLikes,
+          likedBy: updatedLikedBy,
+        });
+      }
     } catch (error) {
       console.log(error.message);
     }
