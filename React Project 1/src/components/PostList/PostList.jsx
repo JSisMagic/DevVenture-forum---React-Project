@@ -70,7 +70,10 @@ export function PostList() {
                 {post.title}
               </Heading>
             </Link>
-            <Text fontSize="lg" color="gray.600" mb="10px">
+            <Text fontSize="lg" color="white.600" mb="10px">
+                  {post.description}
+              </Text>
+            <Text fontSize="lg" color="white.600" mb="10px">
               {post.content}
             </Text>
             <Text fontSize="sm" color="gray.400" mb="10px">
