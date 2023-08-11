@@ -10,19 +10,11 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  useDisclosure,
   useColorModeValue,
   Stack,
   useColorMode,
   Center,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
   ButtonGroup,
-  InputGroup,
-  Input,
-  InputRightElement,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { auth } from "../../config/firebase-config";
@@ -32,7 +24,6 @@ import { TagSearch } from "../TagSearch/TagSearch";
 
 const NavLink = (props) => {
   const { children } = props;
-
   return (
     <Box
       as="a"
@@ -54,22 +45,24 @@ export function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
+const user=auth.currentUser;
 
-  useEffect(() => {
-    // Check if the user is signed in when the component mounts
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-    });
+useEffect(() => {
+  // Check if the user is signed in when the component mounts
+  const unsubscribe = auth.onAuthStateChanged((user) => {
+    setCurrentUser(user);
+  });
 
-    // Unsubscribe from the listener when the component unmounts
-    return () => unsubscribe();
-  }, []);
-
+  // Unsubscribe from the listener when the component unmounts
+  return () => unsubscribe();
+}, []);
+  
   const userSignOut = () => {
     auth.signOut();
     navigate("/");
   };
 
+  // const user=auth.currentUser;
   return (
     <React.Fragment>
       <Box>
@@ -111,9 +104,11 @@ export function Nav() {
                 </>
               ) : (
                 // User is signed in, show user menu
-                <Menu>
+
+    <Menu className="men-container"> 
                   <MenuButton
-                    as={Button}
+                
+              as={Button}
                     rounded={"full"}
                     variant={"link"}
                     cursor={"pointer"}
@@ -121,22 +116,22 @@ export function Nav() {
                   >
                     <Avatar
                       size={"sm"}
-                      src={"https://avatars.dicebear.com/api/male/username.svg"}
+                      src={""}
                     />
                   </MenuButton>
-                  <MenuList alignItems={"center"}>
+                  <MenuList  alignItems={"center"}>
                     <br />
                     <Center>
                       <Avatar
                         size={"2xl"}
                         src={
-                          "https://avatars.dicebear.com/api/male/username.svg"
+                          ""
                         }
                       />
                     </Center>
                     <br />
                     <Center>
-                      <p>Username</p>
+                    <p>{user.email}</p>
                     </Center>
                     <br />
                     <MenuDivider />

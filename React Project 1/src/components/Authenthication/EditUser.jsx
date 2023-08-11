@@ -8,7 +8,6 @@ import {
   Input,
   Stack,
   useColorModeValue,
-  HStack,
   Avatar,
   AvatarBadge,
   IconButton,
@@ -16,12 +15,23 @@ import {
 } from '@chakra-ui/react'
 import { SmallCloseIcon } from '@chakra-ui/icons'
 import { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import { useParams, useNavigate } from 'react-router-dom';
+import { db } from '../../services/database-services';
+import { auth } from '../../config/firebase-config';
+import { onAuthStateChanged } from 'firebase/auth';
+import {database} from  '../../config/firebase-config';
 
-
+// const user = auth.currentUser;
+//   const idWeNeed=user.uid
 
 
 const Edit = () => {
+  // const [editbox,setEditbox] = useState(false);
+  // const user = auth.currentUser;
+  // const idWeNeed=user.uid
+
+  // console.log(user)
+  // console.log(idWeNeed)
   return (
  <Flex
       minH={'100vh'}
@@ -62,7 +72,7 @@ const Edit = () => {
           </Stack>
         </FormControl>
         <FormControl id="userName" isRequired>
-          <FormLabel>User name</FormLabel>
+          <FormLabel></FormLabel>
           <Input
             placeholder="UserName"
             _placeholder={{ color: 'gray.500' }}
@@ -107,6 +117,7 @@ const Edit = () => {
         </Stack>
       </Stack>
     </Flex>
+    // {editbox===true&&<Edi}
   )
 }
 
