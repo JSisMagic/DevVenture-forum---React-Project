@@ -15,6 +15,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Badge
 } from "@chakra-ui/react";
 import { FaThumbsUp } from "react-icons/fa";
 import { auth } from "../../config/firebase-config";
@@ -23,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 export function TagSearchResults() {
   const { tag: term } = useParams();
   const [filteredResults, setFilteredResults] = useState([]);
-  const [sortOption, setSortOption] = useState("newest");
+  const [sortOption, setSortOption] = useState();
   const [sortedPosts, setSortedPosts] = useState([]);
 
   const navigate = useNavigate();
@@ -34,27 +35,43 @@ export function TagSearchResults() {
       try {
         const allPosts = await db.get("posts");
         const searchTags = term.toLowerCase().split(" ");
-
-        const filteredPosts = Object.values(allPosts).filter((postData) =>
-          searchTags.every((searchTag) =>
-            ["title", "description", "content", "tags"].some((key) =>
-              Array.isArray(postData[key])
-                ? postData[key].some((tag) =>
-                    tag.toLowerCase().includes(searchTag)
-                  )
-                : postData[key]?.toLowerCase()?.includes(searchTag)
+  
+        const filteredPosts = Object.values(allPosts)
+          .filter((postData) =>
+            searchTags.every((searchTag) =>
+              ["title", "description", "content", "tags"].some((key) =>
+                Array.isArray(postData[key])
+                  ? postData[key].some((tag) =>
+                      key === "tags" && searchTags.includes(tag.toLowerCase())
+                    )
+                  : postData[key]?.toLowerCase()?.includes(searchTag)
+              )
             )
           )
-        );
-
+          .sort((postA, postB) => {
+            const tagA = postA.tags.find((tag) => searchTags.includes(tag.toLowerCase()));
+            const tagB = postB.tags.find((tag) => searchTags.includes(tag.toLowerCase()));
+  
+            if (tagA && tagB) {
+              return tagA.toLowerCase() === searchTags[0] ? -1 : 1;
+            } else if (tagA) {
+              return -1;
+            } else if (tagB) {
+              return 1;
+            }
+  
+            return 0;
+          });
+  
         setFilteredResults(filteredPosts);
       } catch (error) {
         console.log(error.message);
       }
     };
-
+  
     handleSearch();
   }, [term]);
+  
 
   const handleLike = async (postId) => {
     try {
@@ -146,6 +163,18 @@ export function TagSearchResults() {
     setSortOption(option);
   };
 
+  const PostTags = ({ tags }) => {
+    return (
+      <Box>
+        {tags.map((tag, index) => (
+          <Badge key={index} colorScheme="teal" mr="2">
+            {tag}
+          </Badge>
+        ))}
+      </Box>
+    );
+  };
+
   return (
     <div>
       <h3>Search Results for Term: {term}</h3>
@@ -188,12 +217,10 @@ export function TagSearchResults() {
                 <Text fontSize="lg" color="white.600" mb="10px">
                   {postData.description}
                 </Text>
-                <Text fontSize="lg" color="white.600" mb="10px">
-                  {postData.content}
-                </Text>
                 <Text fontSize="sm" color="gray.400" mb="10px">
                   {new Date(postData.date).toLocaleString()}
                 </Text>
+                <PostTags tags={postData.tags} />
                 <Text fontSize="sm" color="blue.500" mb="10px">
                   Posted by: {postData.user}
                 </Text>

@@ -12,6 +12,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Badge
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 import { FaThumbsUp } from "react-icons/fa";
@@ -131,6 +132,18 @@ export function PostList() {
     setSortOption(option);
   };
 
+  const PostTags = ({ tags }) => {
+    return (
+      <Box>
+        {tags.map((tag, index) => (
+          <Badge key={index} colorScheme="teal" mr="2">
+            {tag}
+          </Badge>
+        ))}
+      </Box>
+    );
+  };
+
   return (
     <>
       {" "}
@@ -173,9 +186,7 @@ export function PostList() {
             <Text fontSize="lg" color="white.600" mb="10px">
               {post.description}
             </Text>
-            <Text fontSize="lg" color="white.600" mb="10px">
-              {post.content}
-            </Text>
+            <PostTags tags={post.tags} />
             <Text fontSize="sm" color="gray.400" mb="10px">
               {new Date(post.date).toLocaleString()}
             </Text>
