@@ -22,11 +22,29 @@ import "./EditUser.css";
 import { endAt, set } from "firebase/database";
 import { storage } from "../../config/firebase-config";
 import { getDownloadURL,ref,uploadBytes } from "firebase/storage";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 //   const idWeNeed=user.uid
 
 const Edit = () => {
   const [upload, setUpload] = useState(null);
   const [URL, setURL] = useState(null);
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user) {
+      // Fetch the user's image URL and update the URL state
+      const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`);
+      getDownloadURL(userImageRef)
+        .then((downloadURL) => {
+          setURL(downloadURL);
+        })
+        .catch((error) => {
+          // Handle errors if necessary
+          console.log(error);
+        });
+    }
+  }, [user]);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -36,13 +54,15 @@ const Edit = () => {
   const uploadImg = () => {
     if (upload === null) return;
 
-    const storageRef = ref(storage, `AuthenticatedUserImages/${upload.name + "abc"}`);
-
-    uploadBytes(storageRef, upload)
+    const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`);
+    uploadBytes(userImageRef, upload)
       .then(() => {
-        getDownloadURL(storageRef)
+        getDownloadURL(userImageRef)
           .then((downloadURL) => {
-            setURL(downloadURL);
+            // Save the image URL to the database under the user's node
+            db.set(`/users/${user.uid}/imageURL`, downloadURL);
+
+            setURL(downloadURL); // Update the URL state with the new image URL
           })
           .catch((error) => {
             alert(error.message, "Error");
@@ -54,15 +74,7 @@ const Edit = () => {
         alert(error.message);
       });
   };
-  // useEffect(()=>{
-
-  // },[]) 
-  // const [editbox,setEditbox] = useState(false);
-  // const user = auth.currentUser;
-  // const idWeNeed=user.uid
-
-  // console.log(user)
-  // console.log(idWeNeed)
+  
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>
       <Stack

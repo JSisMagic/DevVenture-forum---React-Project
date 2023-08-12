@@ -1,8 +1,10 @@
-import { useContext } from "react"
-import { AuthContext } from "../../context/AuthContext"
-import { db } from "../../services/database-services"
-import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react"
-import { useNavigate } from "react-router-dom"
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { db } from "../../services/database-services";
+import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { getDownloadURL, ref } from "firebase/storage"; // Import necessary functions from firebase storage
+import { storage } from "../../config/firebase-config";
 
 const SingleMember = ({
   uid,
@@ -15,6 +17,20 @@ const SingleMember = ({
 }) => {
   const { userData } = useContext(AuthContext)
   const navigate = useNavigate()
+  const [imageURL, setImageURL] = useState(null); // State to store the user's image URL
+
+  useEffect(() => {
+    // Fetch the user's image URL and update the state
+    const userImageRef = ref(storage, `AuthenticatedUserImages/${uid}`);
+    getDownloadURL(userImageRef)
+      .then((downloadURL) => {
+        setImageURL(downloadURL);
+      })
+      .catch((error) => {
+        // Handle errors if necessary
+        console.log(error);
+      });
+  }, [uid]);
 
   const blockUser = async () => {
     console.log(userName, isBlock)
@@ -40,7 +56,7 @@ const SingleMember = ({
       onClick={handleNavigate}
     >
       <Flex gap={2}>
-        <Avatar src="https://images.saymedia-content.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:eco%2Cw_1200/MTk2NzY3MjA5ODc0MjY5ODI2/top-10-cutest-cat-photos-of-all-time.jpg" />
+        <Avatar src={imageURL} />
         <Box>
           <Heading size="md">
             {firstName} {lastName}
