@@ -21,26 +21,38 @@ import { database } from "../../config/firebase-config";
 import "./EditUser.css";
 import { endAt, set } from "firebase/database";
 import { storage } from "../../config/firebase-config";
-import { getDownloadURL, ref,uploadBytes } from "firebase/storage";
+import { getDownloadURL,ref,uploadBytes } from "firebase/storage";
 //   const idWeNeed=user.uid
 
 const Edit = () => {
-  const [upload, setImage] = useState(null);
-  const[URL,setURL]=useState(null);
-  // const[userImage,setUserImage]=useState([]);
+  const [upload, setUpload] = useState(null);
+  const [URL, setURL] = useState(null);
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setUpload(selectedFile);
+  };
+
   const uploadImg = () => {
     if (upload === null) return;
-    const kadeShteQSavnem = ref(storage,`AuthenticatedUserImages/${upload.name+`abc`}`);
-    uploadBytes(kadeShteQSavnem,upload).then(()=>{
-  getDownloadURL(upload).then((URL)=>{
-    setURL(URL);
-  }).catch((error)=>{
-    alert(error.message,'Error')
-  })
-  setImage(null);
-    }).catch((error)=>{
-      alert(error.message)
-    })
+
+    const storageRef = ref(storage, `AuthenticatedUserImages/${upload.name + "abc"}`);
+
+    uploadBytes(storageRef, upload)
+      .then(() => {
+        getDownloadURL(storageRef)
+          .then((downloadURL) => {
+            setURL(downloadURL);
+          })
+          .catch((error) => {
+            alert(error.message, "Error");
+          });
+
+        setUpload(null);
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
   // useEffect(()=>{
 
@@ -85,9 +97,7 @@ const Edit = () => {
             <div>
               <input
                 type="file"
-                onChange={(katoGoNat) => {
-                  setImage(katoGoNat.target.files[0]);
-                }}
+                onChange={handleFileChange}
               />
               <button onClick={uploadImg}>Upload</button>
             </div>
