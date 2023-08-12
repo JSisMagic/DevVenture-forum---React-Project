@@ -12,6 +12,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 import { useState,useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../../services/database-services";
@@ -149,7 +150,9 @@ const Edit = () => {
         </FormControl>
         <Stack>
           <button className="submit-button">Submit</button>
-          <button className="can-button">Cancel</button>
+          <Link to="/home">
+         <button className="can-button">Cancel</button>
+           </Link>
         </Stack>
       </Stack>
     </Flex>
