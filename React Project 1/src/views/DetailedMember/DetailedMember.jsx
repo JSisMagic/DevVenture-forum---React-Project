@@ -1,23 +1,20 @@
 
-import { DownloadIcon } from "@chakra-ui/icons"
-import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { getUserById } from "../../services/users.services"
-
-const fallbackUrl =
-  "https://images.saymedia-content.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:eco%2Cw_1200/MTk2NzY3MjA5ODc0MjY5ODI2/top-10-cutest-cat-photos-of-all-time.jpg"
+import { DownloadIcon } from "@chakra-ui/icons";
+import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getUserById } from "../../services/users.services";
 
 const DetailedMember = () => {
-  const { id } = useParams()
-  const [memberData, setMemberData] = useState({})
+  const { id } = useParams();
+  const [memberData, setMemberData] = useState({});
 
   useEffect(() => {
     getUserById(id)
-      .then(data => setMemberData(data))
-      .catch(console.error)
-  }, [id])
-  console.log(memberData)
+      .then((data) => setMemberData(data))
+      .catch(console.error);
+  }, [id]);
+
   return (
     <Box
       width="50%"
@@ -29,7 +26,7 @@ const DetailedMember = () => {
     >
       <Flex justify="space-between" alignItems="center">
         <Flex gap={3}>
-          <Avatar borderRadius="5px" size="2xl" src={memberData.profilePhotoUrl || fallbackUrl} />
+          <Avatar borderRadius="5px" size="2xl" src={memberData.imageURL} />
           <Box>
             <Heading>
               {memberData.firstname} {memberData.lastname}
