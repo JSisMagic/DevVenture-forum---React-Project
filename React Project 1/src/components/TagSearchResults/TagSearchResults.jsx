@@ -33,6 +33,9 @@ export function TagSearchResults() {
   useEffect(() => {
     const handleSearch = async () => {
       try {
+
+        setSortOption("tags");
+        
         const allPosts = await db.get("posts");
         const searchTags = term.toLowerCase().split(" ");
   
