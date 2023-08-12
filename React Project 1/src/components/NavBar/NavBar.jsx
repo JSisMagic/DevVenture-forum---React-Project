@@ -74,9 +74,6 @@ export function Nav() {
               <Button as={Link} to="/new-post" className="menu-button">
                 New Post
               </Button>
-              <Button as={Link} to="/post-list" className="menu-button">
-                Post List
-              </Button>
               <Button as={Link} to="/members" className="menu-button">
                 Members
               </Button>
