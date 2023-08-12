@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { db } from "../../services/database-services";
 import {
   Box,
   Menu,
@@ -13,17 +12,19 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Badge
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 import { FaThumbsUp } from "react-icons/fa";
 import { GlassContainer } from "../GlassContainer/GlassContainer";
 import { auth } from "../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
+import { TagList } from "./TagList";
+import { db } from "../../services/database-services";
 
 export function PostList() {
   const [posts, setPosts] = useState([]);
   const [sortOption, setSortOption] = useState("newest");
-
   const navigate = useNavigate();
   const user = auth.currentUser;
 
@@ -57,38 +58,32 @@ export function PostList() {
       const currentUserUID = user.uid;
 
       // Find the post by ID
-      const likedPost = posts.find((post) => post.id === postId);
+      const likedPostIndex = posts.findIndex((post) => post.id === postId);
 
-      if (likedPost) {
+      if (likedPostIndex !== -1) {
+        const updatedPosts = [...posts];
+        const likedPost = updatedPosts[likedPostIndex];
+
         // Check if the post has a likedBy array and if the current user liked it
-        const userLiked =
-          likedPost.likedBy && likedPost.likedBy.includes(currentUserUID);
+        const userLiked = likedPost.likedBy?.includes(currentUserUID);
 
         // Update the likedBy array based on userLiked
-        const updatedLikedBy = userLiked
+        likedPost.likedBy = userLiked
           ? likedPost.likedBy.filter((uid) => uid !== currentUserUID)
           : likedPost.likedBy
           ? [...likedPost.likedBy, currentUserUID]
           : [currentUserUID]; // Initialize likedBy if it doesn't exist
 
         // Increment or decrement the likes count based on userLiked
-        const updatedLikes = userLiked
-          ? likedPost.likes - 1
-          : likedPost.likes + 1;
+        likedPost.likes = userLiked ? likedPost.likes - 1 : likedPost.likes + 1;
 
-        // Update the likes count and likedBy array in the state
-        setPosts((prevPosts) =>
-          prevPosts.map((post) =>
-            post.id === postId
-              ? { ...post, likes: updatedLikes, likedBy: updatedLikedBy }
-              : post
-          )
-        );
+        // Update the posts array
+        setPosts(updatedPosts);
 
         // Update the likes count and likedBy array in the database
         await db.update(`posts/${postId}`, {
-          likes: updatedLikes,
-          likedBy: updatedLikedBy,
+          likes: likedPost.likes,
+          likedBy: likedPost.likedBy,
         });
       }
     } catch (error) {
@@ -96,12 +91,10 @@ export function PostList() {
     }
   };
 
-  const handleSort = (option) => {
-    setSortOption(option);
+  const sortedPosts = useMemo(() => {
     let sortedPosts = [...posts];
-    console.log(sortedPosts);
 
-    switch (option) {
+    switch (sortOption) {
       case "newest":
         sortedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
         break;
@@ -109,10 +102,14 @@ export function PostList() {
         sortedPosts.sort((a, b) => new Date(a.date) - new Date(b.date));
         break;
       case "mostLiked":
-        sortedPosts.sort((a, b) => b.likes - a.likes);
+        sortedPosts.sort(
+          (a, b) => b.likes - a.likes || new Date(b.date) - new Date(a.date)
+        );
         break;
       case "leastLiked":
-        sortedPosts.sort((a, b) => a.likes - b.likes);
+        sortedPosts.sort(
+          (a, b) => a.likes - b.likes || new Date(b.date) - new Date(a.date)
+        );
         break;
       case "mostCommented":
         sortedPosts.sort(
@@ -128,7 +125,23 @@ export function PostList() {
         break;
     }
 
-    setPosts(sortedPosts);
+    return sortedPosts;
+  }, [posts, sortOption]);
+
+  const handleSort = (option) => {
+    setSortOption(option);
+  };
+
+  const PostTags = ({ tags }) => {
+    return (
+      <Box>
+        {tags.map((tag, index) => (
+          <Badge key={index} colorScheme="teal" mr="2">
+            {tag}
+          </Badge>
+        ))}
+      </Box>
+    );
   };
 
   return (
@@ -155,11 +168,12 @@ export function PostList() {
           </MenuItem>
         </MenuList>
       </Menu>
+      <TagList />
       <Heading as="h1" textAlign="center" mb="20px">
         Post List
       </Heading>
       <VStack spacing="20px">
-        {posts.map((post) => (
+        {sortedPosts.map((post) => (
           <GlassContainer key={post.id} height="auto">
             <Link
               to={`/post-list/${post.id}`}
@@ -172,9 +186,7 @@ export function PostList() {
             <Text fontSize="lg" color="white.600" mb="10px">
               {post.description}
             </Text>
-            <Text fontSize="lg" color="white.600" mb="10px">
-              {post.content}
-            </Text>
+            <PostTags tags={post.tags} />
             <Text fontSize="sm" color="gray.400" mb="10px">
               {new Date(post.date).toLocaleString()}
             </Text>
@@ -194,12 +206,11 @@ export function PostList() {
               <Button
                 aria-label="Upvote"
                 colorScheme="black"
-                leftIcon={<ChatIcon boxSize={8} />} 
-                alignSelf="flex" 
+                leftIcon={<ChatIcon boxSize={8} />}
+                alignSelf="flex"
                 as={Link}
                 to={user ? `/post-list/${post.id}` : "/sign-up"}
-              >
-              </Button>
+              ></Button>
             </HStack>
           </GlassContainer>
         ))}

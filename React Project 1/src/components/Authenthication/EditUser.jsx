@@ -102,7 +102,6 @@ const kadeShteQSavnem=ref(storage,)
         </Stack>
       </Stack>
     </Flex>
-    // {editbox===true&&<Edi}
   )
 }
 

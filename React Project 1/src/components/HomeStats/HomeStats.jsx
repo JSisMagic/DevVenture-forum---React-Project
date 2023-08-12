@@ -2,17 +2,17 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getAllPosts } from "../../services/posts.services";
 import { getAllUsers } from "../../services/users.services";
-import { getTotalCommentCount } from "../../services/comments.services"; 
+import { getTotalCommentCount } from "../../services/comments.services";
 
 const HomeStats = () => {
-  const [usersCount, setUsersCount] = useState(0);
+  const [usersCount, setContextsCount] = useState(0);
   const [postsCount, setPostsCount] = useState(0);
-  const [commentsCount, setCommentsCount] = useState(0); 
+  const [commentsCount, setCommentsCount] = useState(0);
 
   useEffect(() => {
-    getAllUsers().then(data => setUsersCount(data.length));
-    getAllPosts().then(data => setPostsCount(data.length));
-    getTotalCommentCount().then(count => setCommentsCount(count)); 
+    getAllUsers().then((data) => setContextsCount(data.length));
+    getAllPosts().then((data) => setPostsCount(data.length));
+    getTotalCommentCount().then((count) => setCommentsCount(count));
   }, []);
 
   return (
@@ -40,7 +40,6 @@ const HomeStats = () => {
       </Box>
     </Flex>
   );
-}
+};
 
 export default HomeStats;
-
