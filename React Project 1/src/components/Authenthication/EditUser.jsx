@@ -103,6 +103,22 @@ const Edit = () => {
             </div>
           </Stack>
         </FormControl>
+        <FormControl id="name" >
+          <FormLabel>Firstname</FormLabel>
+          <Input
+            placeholder={"Firstname"}
+            _placeholder={{ color: "white" }}
+            type="text"
+          />
+        </FormControl>
+        <FormControl id="name" >
+          <FormLabel>Lastname</FormLabel>
+          <Input
+            placeholder={"Lastname"}
+            _placeholder={{ color: "white" }}
+            type="name"
+          />
+        </FormControl>
         <FormControl id="email" isRequired>
           <FormLabel>Email address</FormLabel>
           <Input
