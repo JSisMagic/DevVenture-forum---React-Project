@@ -12,24 +12,39 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../../services/database-services";
 import { auth } from "../../config/firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
 import { database } from "../../config/firebase-config";
 import "./EditUser.css";
-import { endAt } from "firebase/database";
+import { endAt, set } from "firebase/database";
 import { storage } from "../../config/firebase-config";
-import { ref } from "firebase/storage";
+import { getDownloadURL, ref,uploadBytes } from "firebase/storage";
 //   const idWeNeed=user.uid
 
 const Edit = () => {
   const [upload, setImage] = useState(null);
+  const[URL,setURL]=useState(null);
+  // const[userImage,setUserImage]=useState([]);
   const uploadImg = () => {
     if (upload === null) return;
-    const kadeShteQSavnem = ref(storage);
+    const kadeShteQSavnem = ref(storage,`AuthenticatedUserImages/${upload.name+`abc`}`);
+    uploadBytes(kadeShteQSavnem,upload).then(()=>{
+  getDownloadURL(upload).then((URL)=>{
+    setURL(URL);
+  }).catch((error)=>{
+    alert(error.message,'Error')
+  })
+  setImage(null);
+    }).catch((error)=>{
+      alert(error.message)
+    })
   };
+  // useEffect(()=>{
+
+  // },[]) 
   // const [editbox,setEditbox] = useState(false);
   // const user = auth.currentUser;
   // const idWeNeed=user.uid
@@ -55,7 +70,7 @@ const Edit = () => {
           <FormLabel>User Icon</FormLabel>
           <Stack direction={["column", "row"]} spacing={6}>
             <Center>
-              <Avatar size="xl" src="">
+              <Avatar size="xl" src={URL}>
                 <AvatarBadge
                   as={IconButton}
                   size="sm"
