@@ -139,8 +139,9 @@ export function Nav() {
                         <br />
                       </>
                     )}
-
-                    <button className="edit-user">Edit User</button>
+                    <Link to="/edit">
+                      <button className="edit-user">Edit User</button>
+                    </Link>
                     <button className="signout-user" onClick={userSignOut}>
                       Logout
                     </button>
