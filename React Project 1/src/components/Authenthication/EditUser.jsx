@@ -1,6 +1,5 @@
-import React from 'react';
+import React from "react";
 import {
-  Button,
   Flex,
   FormControl,
   FormLabel,
@@ -11,26 +10,26 @@ import {
   AvatarBadge,
   IconButton,
   Center,
-} from '@chakra-ui/react'
-import { SmallCloseIcon } from '@chakra-ui/icons'
-import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { db } from '../../services/database-services';
-import { auth } from '../../config/firebase-config';
-import { onAuthStateChanged } from 'firebase/auth';
-import {database} from  '../../config/firebase-config';
-import "./EditUser.css"
-import { endAt } from 'firebase/database';
-import { storage} from '../../config/firebase-config';
-import { ref } from 'firebase/storage';
+} from "@chakra-ui/react";
+import { SmallCloseIcon } from "@chakra-ui/icons";
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { db } from "../../services/database-services";
+import { auth } from "../../config/firebase-config";
+import { onAuthStateChanged } from "firebase/auth";
+import { database } from "../../config/firebase-config";
+import "./EditUser.css";
+import { endAt } from "firebase/database";
+import { storage } from "../../config/firebase-config";
+import { ref } from "firebase/storage";
 //   const idWeNeed=user.uid
 
 const Edit = () => {
-  const [upload,setImage]=useState(null);
-const uploadImg=()=>{
-if (upload===null) return;
-const kadeShteQSavnem=ref(storage,)
-}
+  const [upload, setImage] = useState(null);
+  const uploadImg = () => {
+    if (upload === null) return;
+    const kadeShteQSavnem = ref(storage);
+  };
   // const [editbox,setEditbox] = useState(false);
   // const user = auth.currentUser;
   // const idWeNeed=user.uid
@@ -38,25 +37,23 @@ const kadeShteQSavnem=ref(storage,)
   // console.log(user)
   // console.log(idWeNeed)
   return (
- <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      >
-      <Stack className="edit-web"
+    <Flex minH={"100vh"} align={"center"} justify={"center"}>
+      <Stack
+        className="edit-web"
         spacing={4}
-        w={'full'}
-        maxW={'md'}
-        rounded={'xl'}
-        boxShadow={'lg'}
+        w={"full"}
+        maxW={"md"}
+        rounded={"xl"}
+        boxShadow={"lg"}
         p={6}
-        my={12}>
-        <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl' }}>
+        my={12}
+      >
+        <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
           User Profile Edit
         </Heading>
         <FormControl id="userName">
           <FormLabel>User Icon</FormLabel>
-          <Stack direction={['column', 'row']} spacing={6}>
+          <Stack direction={["column", "row"]} spacing={6}>
             <Center>
               <Avatar size="xl" src="">
                 <AvatarBadge
@@ -70,17 +67,22 @@ const kadeShteQSavnem=ref(storage,)
                 />
               </Avatar>
             </Center>
-           <div>
-            <input type='file' onChange={(katoGoNat)=>{setImage(katoGoNat.target.files[0])}}/>
-            <button onClick={uploadImg}>Upload</button>
+            <div>
+              <input
+                type="file"
+                onChange={(katoGoNat) => {
+                  setImage(katoGoNat.target.files[0]);
+                }}
+              />
+              <button onClick={uploadImg}>Upload</button>
             </div>
           </Stack>
         </FormControl>
-       <FormControl id="email" isRequired>
+        <FormControl id="email" isRequired>
           <FormLabel>Email address</FormLabel>
           <Input
             placeholder={"Email address"}
-            _placeholder={{ color: 'white' }}
+            _placeholder={{ color: "white" }}
             type="email"
           />
         </FormControl>
@@ -88,22 +90,17 @@ const kadeShteQSavnem=ref(storage,)
           <FormLabel>Password</FormLabel>
           <Input
             placeholder="password"
-            _placeholder={{ color: 'white' }}
+            _placeholder={{ color: "white" }}
             type="password"
           />
         </FormControl>
-        <Stack >
-          <Button  className="submit-button">
-            Submit
-          </Button>
-          <Button  className="can-button">
-            Cancel
-          </Button>
+        <Stack>
+          <button className="submit-button">Submit</button>
+          <button className="can-button">Cancel</button>
         </Stack>
       </Stack>
     </Flex>
-  )
-}
+  );
+};
 
-
-export default Edit ;
+export default Edit;

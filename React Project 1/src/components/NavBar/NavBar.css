@@ -1,40 +1,69 @@
-
-  .menu-button{
-    background-color:red;
-       color:white;
-     /* height: 36px;
+.menu-button {
+  background-color: red;
+  color: white;
+  /* height: 36px;
      width: 60px; */
-     padding-top: 7px;
-     padding-bottom: 7px;
-     padding-right: 16px;
-     padding-left: 16px;
-     border:none;
-     cursor: pointer;
-     transition:background-color 1s,color 1s;
-     vertical-align: top;
-  }
-  .menu-button:hover{
-    opacity: 0.1;
-    color: #000;;
-
-  } 
-  .menu-button:active{
-    opacity: 0.3;
-  } 
-  .right-button:hover{
-    opacity: 0.1;
-    color: #000;;
-  }
-  .right-button:active{
-    opacity: 0.3;
-  }
-  .men-container{
-    background-color: red;
-    opacity: 0.8;
-    backdrop-filter: blur(16px);
-    border-radius: 5px;
-    
-  }
-  .number{
-    background-color: red;
-  }
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-right: 16px;
+  padding-left: 16px;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 1s,
+    color 1s;
+  vertical-align: top;
+}
+.menu-button:hover {
+  opacity: 0.1;
+  color: #000;
+}
+.menu-button:active {
+  opacity: 0.3;
+}
+.right-button:hover {
+  opacity: 0.1;
+  color: #000;
+}
+.right-button:active {
+  opacity: 0.3;
+}
+.men-container {
+  background-color: red;
+  opacity: 0.8;
+  backdrop-filter: blur(16px);
+  border-radius: 5px;
+}
+.number {
+  background-color: red;
+}
+.edit-user {
+  margin-top: 0;
+  color: white;
+  transition:
+    background-color 2s,
+    color 3s;
+  cursor: pointer;
+  width: 100%;
+  padding-left: 16px;
+}
+.edit-user:hover {
+  color: #2c5364;
+  background-color: white;
+}
+.signout-user {
+  color: white;
+  transition:
+    background-color 2s,
+    color 3s;
+  cursor: pointer;
+  width: 100%;
+  padding-left: 16px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+.signout-user:hover {
+  color: #2c5364;
+  background-color: white;
+  object-fit: fill;
+}

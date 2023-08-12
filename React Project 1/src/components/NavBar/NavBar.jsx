@@ -22,7 +22,6 @@ import { AuthContext } from "../../context/AuthContext";
 import { TagSearch } from "../TagSearch/TagSearch";
 import "./NavBar.css";
 
-
 export function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
   const [currentUser, setCurrentUser] = useState(null);
@@ -62,8 +61,8 @@ export function Nav() {
             </ButtonGroup>
           </Flex>
 
-          <Flex  alignItems={"center"}>
-            <Stack  direction={"row"} spacing={5}>
+          <Flex alignItems={"center"}>
+            <Stack direction={"row"} spacing={5}>
               <TagSearch />
 
               <Button onClick={toggleColorMode}>
@@ -83,10 +82,10 @@ export function Nav() {
               ) : (
                 // User is signed in, show user menu
 
-    <Menu className="men-container"> 
-                  <MenuButton  className='number'
-                
-              as={Button}
+                <Menu className="men-container">
+                  <MenuButton
+                    className="number"
+                    as={Button}
                     rounded={"full"}
                     variant={"link"}
                     cursor={"pointer"}
@@ -97,9 +96,19 @@ export function Nav() {
                       src={"https://avatars.dicebear.com/api/male/username.svg"}
                     />
                   </MenuButton>
-                  <MenuList  alignItems={"center"}>
-                    <br/>
-                    <Center >
+                  <MenuList
+                    padding={"0"}
+                    bg={"rgba(255, 255, 255, 0.1)"}
+                    backdropBlur={"blur(26px)"}
+                    alignItems={"center"}
+                    boxShadow={"0rem 1rem 3rem rgba(0, 0, 0, 0.8)"}
+                    borderRadius={"16px"}
+                    opacity={"0.8"}
+                    border={"none"}
+                    color={"white"}
+                  >
+                    <br />
+                    <Center>
                       <Avatar
                         size={"2xl"}
                         src={
@@ -130,11 +139,11 @@ export function Nav() {
                         <br />
                       </>
                     )}
-                    <MenuDivider />
-                    <MenuItem as={Link} to="/edit">
-                      Edit User
-                    </MenuItem>
-                    <MenuItem onClick={userSignOut}>Logout</MenuItem>
+
+                    <button className="edit-user">Edit User</button>
+                    <button className="signout-user" onClick={userSignOut}>
+                      Logout
+                    </button>
                   </MenuList>
                 </Menu>
               )}
