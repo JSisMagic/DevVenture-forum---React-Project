@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 export function TagSearchResults() {
   const { tag: term } = useParams();
   const [filteredResults, setFilteredResults] = useState([]);
-  const [sortOption, setSortOption] = useState();
+  const [sortOption, setSortOption] = useState("tags");
   const [sortedPosts, setSortedPosts] = useState([]);
 
   const navigate = useNavigate();
