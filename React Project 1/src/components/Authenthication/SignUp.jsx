@@ -6,6 +6,7 @@ import { db } from "../../services/database-services";
 import { useNavigate } from "react-router-dom";
 import "./SignUp.css";
 import { AuthContext } from "../../context/AuthContext";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const { setContext, ...appState } = useContext(AuthContext);
@@ -88,7 +89,7 @@ const SignUp = () => {
         <button className="sign-up-button" type="submit">
           Sign Up
         </button>
-        <p className="sign-up-tex">Already have an account? Sign in!</p>
+        <p className="sign-up-tex">Already have an account? <Link to="/sign-in" style={{ fontWeight: 'bold', textDecoration: 'underline' }}>Sign in!</Link></p>
       </form>
     </div>
   );

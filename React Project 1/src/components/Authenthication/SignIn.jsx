@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../../config/firebase-config";
 import { AuthContext } from "../../context/AuthContext";
 import "./SignIn.css";
+import { Link } from "react-router-dom";
 
 const SignIn = () => {
   const { setContext, ...appState } = useContext(AuthContext);
@@ -50,7 +51,7 @@ const SignIn = () => {
         <button className="sign-in-button" type="submit">
           LogIn
         </button>
-        <p className="sign-in-tex">Don`t have an account? Sign up!</p>
+        <p className="sign-in-tex">Don`t have an account? <Link to="/sign-up" style={{ fontWeight: 'bold', textDecoration: 'underline' }}>Sign up!</Link></p>
       </form>
     </div>
   );
