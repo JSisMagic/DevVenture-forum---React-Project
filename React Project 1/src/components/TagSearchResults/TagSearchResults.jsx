@@ -29,6 +29,7 @@ export function TagSearchResults() {
 
   const navigate = useNavigate();
   const user = auth.currentUser;
+  const searchTags = term.toLowerCase().split(" ");
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -37,7 +38,6 @@ export function TagSearchResults() {
         setSortOption("tags");
         
         const allPosts = await db.get("posts");
-        const searchTags = term.toLowerCase().split(" ");
   
         const filteredPosts = Object.values(allPosts)
           .filter((postData) =>
@@ -51,20 +51,6 @@ export function TagSearchResults() {
               )
             )
           )
-          .sort((postA, postB) => {
-            const tagA = postA.tags.find((tag) => searchTags.includes(tag.toLowerCase()));
-            const tagB = postB.tags.find((tag) => searchTags.includes(tag.toLowerCase()));
-  
-            if (tagA && tagB) {
-              return tagA.toLowerCase() === searchTags[0] ? -1 : 1;
-            } else if (tagA) {
-              return -1;
-            } else if (tagB) {
-              return 1;
-            }
-  
-            return 0;
-          });
   
         setFilteredResults(filteredPosts);
       } catch (error) {
@@ -155,6 +141,22 @@ export function TagSearchResults() {
           (a, b) => (a.replies?.length || 0) - (b.replies?.length || 0)
         );
         break;
+      case "tags":
+        sortedPostsCopy.sort((a, b) => {
+          const tagA = a.tags.find((tag) => searchTags.includes(tag.toLowerCase()));
+          const tagB = b.tags.find((tag) => searchTags.includes(tag.toLowerCase()));
+
+          if (tagA && tagB) {
+            return tagA.toLowerCase() === searchTags[0] ? -1 : 1;
+          } else if (tagA) {
+            return -1;
+          } else if (tagB) {
+            return 1;
+          }
+
+          return 0;
+        });
+        break;
       default:
         break;
     }
@@ -204,6 +206,7 @@ export function TagSearchResults() {
               <MenuItem onClick={() => handleSort("leastCommented")}>
                 Least Commented
               </MenuItem>
+              <MenuItem onClick={() => handleSort("tags")}>Tag</MenuItem>
             </MenuList>
           </Menu>
           {sortedPosts.map((postData) => (
