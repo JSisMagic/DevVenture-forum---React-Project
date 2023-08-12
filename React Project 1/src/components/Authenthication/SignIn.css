@@ -15,11 +15,11 @@
     left: 50%;
     transform: translate(-50%,-50%);
     padding: 15px;
-    box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.8);
     background-color: rgba(255, 255, 255, 0.1);
     opacity: 0.8;
     backdrop-filter: blur(16px);
-    border-radius: 5px;
+    border-radius: 16px;
     color: white;
     
   }
@@ -59,9 +59,8 @@
   .sign-in-button{
     display: block;
     margin: auto;
-    width: 100%;
+    width: 60%;
     height: 38px;
-    background-color: red;
     border: none;
     cursor: pointer;
     border-radius: 30px;
@@ -69,14 +68,16 @@
     color: white;
     margin-top: 116px;
   margin-bottom: 16px;
+  transition:background-color 1s,color 2s;
   }
   .sign-in-button:hover{
-  background-color: rgba(62, 116, 185, 0.3);
-   color:rgb(48, 122, 233);
+    color: #2C5364;
+    background-color: white;
   
   }
   .sign-in-button:active{
-  
+    color: #2C5364;
+  background-color: white;
   
   }
   .sign-in-tex{

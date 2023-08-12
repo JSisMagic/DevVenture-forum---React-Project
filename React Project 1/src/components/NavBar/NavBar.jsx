@@ -22,24 +22,7 @@ import { useNavigate } from "react-router-dom/dist";
 import "./NavBar.css";
 import { TagSearch } from "../TagSearch/TagSearch";
 
-const NavLink = (props) => {
-  const { children } = props;
-  return (
-    <Box
-      as="a"
-      px={2}
-      py={1}
-      rounded={"md"}
-      _hover={{
-        textDecoration: "none",
-        bg: useColorModeValue("gray.200", "gray.700"),
-      }}
-      href={"#"}
-    >
-      {children}
-    </Box>
-  );
-};
+
 
 export function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -84,8 +67,8 @@ useEffect(() => {
             </ButtonGroup>
           </Flex>
 
-          <Flex alignItems={"center"}>
-            <Stack direction={"row"} spacing={5}>
+          <Flex  alignItems={"center"}>
+            <Stack  direction={"row"} spacing={5}>
               <TagSearch />
 
               <Button onClick={toggleColorMode}>
@@ -106,7 +89,7 @@ useEffect(() => {
                 // User is signed in, show user menu
 
     <Menu className="men-container"> 
-                  <MenuButton
+                  <MenuButton  className='number'
                 
               as={Button}
                     rounded={"full"}
@@ -120,8 +103,8 @@ useEffect(() => {
                     />
                   </MenuButton>
                   <MenuList  alignItems={"center"}>
-                    <br />
-                    <Center>
+                    <br/>
+                    <Center >
                       <Avatar
                         size={"2xl"}
                         src={

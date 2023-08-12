@@ -7,7 +7,6 @@ import {
   Heading,
   Input,
   Stack,
-  useColorModeValue,
   Avatar,
   AvatarBadge,
   IconButton,
@@ -20,12 +19,18 @@ import { db } from '../../services/database-services';
 import { auth } from '../../config/firebase-config';
 import { onAuthStateChanged } from 'firebase/auth';
 import {database} from  '../../config/firebase-config';
-
-// const user = auth.currentUser;
+import "./EditUser.css"
+import { endAt } from 'firebase/database';
+import { storage} from '../../config/firebase-config';
+import { ref } from 'firebase/storage';
 //   const idWeNeed=user.uid
 
-
 const Edit = () => {
+  const [upload,setImage]=useState(null);
+const uploadImg=()=>{
+if (upload===null) return;
+const kadeShteQSavnem=ref(storage,)
+}
   // const [editbox,setEditbox] = useState(false);
   // const user = auth.currentUser;
   // const idWeNeed=user.uid
@@ -38,11 +43,10 @@ const Edit = () => {
       align={'center'}
       justify={'center'}
       >
-      <Stack
+      <Stack className="edit-web"
         spacing={4}
         w={'full'}
         maxW={'md'}
-        bg={useColorModeValue('white', 'gray.700')}
         rounded={'xl'}
         boxShadow={'lg'}
         p={6}
@@ -54,7 +58,7 @@ const Edit = () => {
           <FormLabel>User Icon</FormLabel>
           <Stack direction={['column', 'row']} spacing={6}>
             <Center>
-              <Avatar size="xl" src="https://bit.ly/sage-adebayo">
+              <Avatar size="xl" src="">
                 <AvatarBadge
                   as={IconButton}
                   size="sm"
@@ -66,24 +70,17 @@ const Edit = () => {
                 />
               </Avatar>
             </Center>
-            <Center w="full">
-              <Button w="full">Change Icon</Button>
-            </Center>
+           <div>
+            <input type='file' onChange={(katoGoNat)=>{setImage(katoGoNat.target.files[0])}}/>
+            <button onClick={uploadImg}>Upload</button>
+            </div>
           </Stack>
         </FormControl>
-        <FormControl id="userName" isRequired>
-          <FormLabel></FormLabel>
-          <Input
-            placeholder="UserName"
-            _placeholder={{ color: 'gray.500' }}
-            type="text"
-          />
-        </FormControl>
-        <FormControl id="email" isRequired>
+       <FormControl id="email" isRequired>
           <FormLabel>Email address</FormLabel>
           <Input
-            placeholder="your-email@example.com"
-            _placeholder={{ color: 'gray.500' }}
+            placeholder={"Email address"}
+            _placeholder={{ color: 'white' }}
             type="email"
           />
         </FormControl>
@@ -91,28 +88,16 @@ const Edit = () => {
           <FormLabel>Password</FormLabel>
           <Input
             placeholder="password"
-            _placeholder={{ color: 'gray.500' }}
+            _placeholder={{ color: 'white' }}
             type="password"
           />
         </FormControl>
-        <Stack spacing={6} direction={['column', 'row']}>
-          <Button
-            bg={'red.400'}
-            color={'white'}
-            w="full"
-            _hover={{
-              bg: 'red.500',
-            }}>
-            Cancel
-          </Button>
-          <Button 
-            bg={'blue.400'}
-            color={'white'}
-            w="full"
-            _hover={{
-              bg: 'blue.500',
-            }}>
+        <Stack >
+          <Button  className="submit-button">
             Submit
+          </Button>
+          <Button  className="can-button">
+            Cancel
           </Button>
         </Stack>
       </Stack>
