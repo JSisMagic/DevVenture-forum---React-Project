@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { db } from '../../services/database-services';
-import { auth } from '../../config/firebase-config';
-import { useNavigate, Link } from 'react-router-dom';
-import './NewPostForm.css';
+import React, { useState, useEffect } from "react";
+import { db } from "../../services/database-services";
+import { auth } from "../../config/firebase-config";
+import { useNavigate, Link } from "react-router-dom";
+import "./NewPostForm.css";
 
 export function NewPost() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [tags, setTags] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [tags, setTags] = useState("");
+  const [description, setDescription] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
@@ -42,19 +42,19 @@ export function NewPost() {
     try {
       if (!currentUser) {
         // If no user is logged in, redirect to the signup page
-        navigate('/sign-up');
+        navigate("/sign-up");
         return;
       }
 
-      const currentUserUid = currentUser.uid
-      
+      const currentUserUid = currentUser.uid;
+
       const userData = await db.get(`users/${currentUserUid}`);
-      const username = userData && userData.username ? userData.username : '';
-      
-      const tagArray = tags.split(' ').map(tag => tag.trim());
+      const username = userData && userData.username ? userData.username : "";
+
+      const tagArray = tags.split(" ").map((tag) => tag.toLowerCase().trim());
       const uniqueTagsArray = Array.from(new Set(tagArray));
 
-      const postId = await db.push('posts', {
+      const postId = await db.push("posts", {
         title: title,
         content: content,
         description: description,
@@ -62,52 +62,73 @@ export function NewPost() {
         date: new Date().toISOString(),
         likes: 0,
         userUID: currentUser.uid,
-        user: username 
+        user: username,
       });
 
       // Add the post's key as 'id' in the database
       await db.update(`posts/${postId}`, { id: postId });
 
-       // Associate post IDs with tags
+      // Associate post IDs with tags
       for (const tag of uniqueTagsArray) {
         await db.set(`tags/${tag}/${postId}`, true);
       }
 
       // Redirect to the home page after submitting the new post
-      navigate('/post-list');
+      navigate("/post-list");
     } catch (error) {
       console.log(error.message);
-      alert('Error submitting post. Please try again later.');
+      alert("Error submitting post. Please try again later.");
     }
   };
 
   return (
     <div className="create-web">
-       <div className="create-container">
-      <h1 className='Title-header' >New Post</h1>
-      <div className='Title-container'>
-        <label>Title:</label>
-        <input type="text"  placeholder="Enter your PostName" value={title} onChange={handleTitleChange} />
+      <div className="create-container">
+        <h1 className="Title-header">New Post</h1>
+        <div className="Title-container">
+          <label>Title:</label>
+          <input
+            type="text"
+            placeholder="Enter your PostName"
+            value={title}
+            onChange={handleTitleChange}
+          />
+        </div>
+        <div className="Description-container">
+          <label>Description:</label>
+          <input
+            type="text"
+            placeholder="Enter your PostName"
+            value={description}
+            onChange={handleDescriptionChange}
+          />
+        </div>
+        <div className="Content-container">
+          <label>Content:</label>
+          <textarea
+            className="tex-container"
+            value={content}
+            onChange={handleContentChange}
+          />
+        </div>
+        <div className="tag-container">
+          <label>Tags:</label>
+          <input
+            placeholder="Split by space"
+            type="text"
+            value={tags}
+            onChange={handleTagsChange}
+          />
+        </div>
+        <button className="create-button" onClick={handleSubmit}>
+          Submit
+        </button>
+        {!currentUser && (
+          <p className="create-tex">
+            You need to <Link to="/sign-up">sign up</Link> to create a new post.
+          </p>
+        )}
       </div>
-      <div className='Description-container'>
-        <label>Description:</label>
-        <input  type="text"  placeholder="Enter your PostName" value={description} onChange={handleDescriptionChange} />
-      </div>
-      <div className='Content-container' >
-        <label>Content:</label>
-        <textarea className='tex-container' value={content} onChange={handleContentChange} />
-      </div>
-      <div className='tag-container'>
-        <label>Tags:</label>
-        <input placeholder= "Split by space" type="text" value={tags} onChange={handleTagsChange} />
-      </div>
-      <button className='create-button'  onClick={handleSubmit}>Submit</button>
-      {!currentUser && (
-        <p className='create-tex' >
-          You need to <Link to="/sign-up">sign up</Link> to create a new post.
-        </p>
-      )}
-      </div>  
     </div>
   );
 }
