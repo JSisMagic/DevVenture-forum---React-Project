@@ -32,12 +32,20 @@ import {
   reauthenticateWithCredential,
   EmailAuthProvider,
 } from "firebase/auth";
+import {
+  isValidEmail,
+  isValidFirstName,
+  isValidLastName,
+  isValidPassword,
+} from "../../services/validation.services";
 import { useNavigate } from "react-router-dom";
 
 const Edit = () => {
   const [upload, setUpload] = useState(null);
   const [URL, setURL] = useState(null);
   const { user } = useContext(AuthContext);
+  const [inputErrors, setInputErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
   const userCur = auth.currentUser;
@@ -119,13 +127,47 @@ const Edit = () => {
     const newPassword = document.getElementById("newPassword").value;
     const currentPassword = document.getElementById("currentPassword").value;
 
+    // Check if all of the input fields are empty
+    if (
+      !newFirstname &
+      !newLastname &
+      !newEmail &
+      !newPassword &
+      !currentPassword
+    ) {
+      navigate("/");
+      return;
+    }
+
+    // Validate inputs
+    const errors = {};
+    if (!isValidFirstName(newFirstname)) {
+      errors.firstname = "Invalid first name.";
+    }
+    if (!isValidLastName(newLastname)) {
+      errors.lastname = "Invalid last name.";
+    }
+    if (!isValidEmail(newEmail)) {
+      errors.email = "Invalid email address.";
+    }
+    if (!isValidPassword(newPassword)) {
+      errors.password = "Invalid password.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setInputErrors(errors);
+      return;
+    }
+
+    setInputErrors({});
+
     try {
       // Reauthenticate the user
       const credential = EmailAuthProvider.credential(
         user.email,
         currentPassword
       );
-      await reauthenticateWithCredential(userCur, credential);
+      await reauthenticateWithCredential(auth.currentUser, credential);
 
       // Update user information in the database
       await db.update(`/users/${user.uid}`, {
@@ -150,6 +192,11 @@ const Edit = () => {
       await Promise.all(promises);
 
       console.log("Profile updated successfully");
+      setSuccessMessage("Profile updated successfully");
+      setTimeout(() => {
+        setSuccessMessage("");
+        navigate("/");
+      }, 3000);
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -200,6 +247,9 @@ const Edit = () => {
             _placeholder={{ color: "gray.500" }}
             type="text"
           />
+          {inputErrors.firstname && (
+            <p className="error-message">{inputErrors.firstname}</p>
+          )}
         </FormControl>
         <FormControl id="lastname">
           <FormLabel>Lastname</FormLabel>
@@ -208,6 +258,9 @@ const Edit = () => {
             _placeholder={{ color: "gray.500" }}
             type="text"
           />
+          {inputErrors.lastname && (
+            <p className="error-message">{inputErrors.lastname}</p>
+          )}
         </FormControl>
         <FormControl id="newEmail" isRequired>
           <FormLabel>Email address</FormLabel>
@@ -216,6 +269,9 @@ const Edit = () => {
             _placeholder={{ color: "gray.500" }}
             type="email"
           />
+          {inputErrors.email && (
+            <p className="error-message">{inputErrors.email}</p>
+          )}
         </FormControl>
         <FormControl id="currentPassword" isRequired>
           <FormLabel>Current Password</FormLabel>
@@ -232,13 +288,17 @@ const Edit = () => {
             _placeholder={{ color: "gray.500" }}
             type="password"
           />
+          {inputErrors.password && (
+            <p className="error-message">{inputErrors.password}</p>
+          )}
         </FormControl>
         <Stack>
-        <Link to="/">
           <button className="submit-button" onClick={updateUserProfile}>
             Submit
           </button>
-          </Link>
+          {successMessage && (
+            <p className="success-message">{successMessage}</p>
+          )}
           <Link to="/">
             <button className="can-button">Cancel</button>
           </Link>
