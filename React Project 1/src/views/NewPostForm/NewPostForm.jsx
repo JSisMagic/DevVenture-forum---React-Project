@@ -74,7 +74,7 @@ export function NewPost() {
       }
 
       // Redirect to the home page after submitting the new post
-      navigate("/post-list");
+      navigate("/");
     } catch (error) {
       console.log(error.message);
       alert("Error submitting post. Please try again later.");

@@ -14,13 +14,9 @@ import {
 import { SmallCloseIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../../services/database-services";
 import { auth } from "../../config/firebase-config";
-import { onAuthStateChanged } from "firebase/auth";
-import { database } from "../../config/firebase-config";
 import "./EditUser.css";
-import { endAt, set } from "firebase/database";
 import { storage } from "../../config/firebase-config";
 import {
   getDownloadURL,
@@ -30,12 +26,21 @@ import {
 } from "firebase/storage";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-//   const idWeNeed=user.uid
+import {
+  updatePassword,
+  updateEmail,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Edit = () => {
   const [upload, setUpload] = useState(null);
   const [URL, setURL] = useState(null);
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const userCur = auth.currentUser;
 
   useEffect(() => {
     if (user) {
@@ -69,7 +74,7 @@ const Edit = () => {
             db.set(`/users/${user.uid}/imageURL`, downloadURL);
 
             setURL(downloadURL); // Update the URL state with the new image URL
-            
+
             clearInput();
           })
           .catch((error) => {
@@ -93,7 +98,7 @@ const Edit = () => {
         // Clear the URL state
         setURL(null);
 
-       clearInput();
+        clearInput();
       })
       .catch((error) => {
         console.error("Error removing image:", error);
@@ -105,7 +110,50 @@ const Edit = () => {
     if (inputElement) {
       inputElement.value = "";
     }
-  }
+  };
+
+  const updateUserProfile = async () => {
+    const newFirstname = document.getElementById("firstname").value;
+    const newLastname = document.getElementById("lastname").value;
+    const newEmail = document.getElementById("newEmail").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const currentPassword = document.getElementById("currentPassword").value;
+
+    try {
+      // Reauthenticate the user
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+      await reauthenticateWithCredential(userCur, credential);
+
+      // Update user information in the database
+      await db.update(`/users/${user.uid}`, {
+        firstname: newFirstname,
+        lastname: newLastname,
+        email: newEmail,
+      });
+
+      // Update email and password
+      const promises = [];
+
+      if (newEmail !== user.email) {
+        promises.push(updateEmail(userCur, newEmail));
+        console.log("Email updated successfully");
+      }
+
+      if (newPassword) {
+        promises.push(updatePassword(userCur, newPassword));
+        console.log("Password updated successfully");
+      }
+
+      await Promise.all(promises);
+
+      console.log("Profile updated successfully");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
 
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>
@@ -145,41 +193,53 @@ const Edit = () => {
             </div>
           </Stack>
         </FormControl>
-        <FormControl id="name">
+        <FormControl id="firstname">
           <FormLabel>Firstname</FormLabel>
           <Input
-            placeholder={"Firstname"}
-            _placeholder={{ color: "white" }}
+            placeholder="Enter your firstname"
+            _placeholder={{ color: "gray.500" }}
             type="text"
           />
         </FormControl>
-        <FormControl id="name">
+        <FormControl id="lastname">
           <FormLabel>Lastname</FormLabel>
           <Input
-            placeholder={"Lastname"}
-            _placeholder={{ color: "white" }}
-            type="name"
+            placeholder="Enter your lastname"
+            _placeholder={{ color: "gray.500" }}
+            type="text"
           />
         </FormControl>
-        <FormControl id="email" isRequired>
+        <FormControl id="newEmail" isRequired>
           <FormLabel>Email address</FormLabel>
           <Input
-            placeholder={"Email address"}
-            _placeholder={{ color: "white" }}
+            placeholder="Enter your email address"
+            _placeholder={{ color: "gray.500" }}
             type="email"
           />
         </FormControl>
-        <FormControl id="password" isRequired>
-          <FormLabel>Password</FormLabel>
+        <FormControl id="currentPassword" isRequired>
+          <FormLabel>Current Password</FormLabel>
           <Input
-            placeholder="password"
-            _placeholder={{ color: "white" }}
+            placeholder="Enter your current password"
+            _placeholder={{ color: "gray.500" }}
+            type="password"
+          />
+        </FormControl>
+        <FormControl id="newPassword" isRequired>
+          <FormLabel>New Password</FormLabel>
+          <Input
+            placeholder="Enter your new password"
+            _placeholder={{ color: "gray.500" }}
             type="password"
           />
         </FormControl>
         <Stack>
-          <button className="submit-button">Submit</button>
-          <Link to="/home">
+        <Link to="/">
+          <button className="submit-button" onClick={updateUserProfile}>
+            Submit
+          </button>
+          </Link>
+          <Link to="/">
             <button className="can-button">Cancel</button>
           </Link>
         </Stack>
