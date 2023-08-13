@@ -5,6 +5,7 @@
   justify-content: center;
   }
   .viw-container{
+    z-index: 10;
     position:absolute;
     min-height: 80%;
     min-width: 80%;
@@ -49,7 +50,7 @@
     }
   .viw-description{
     text-align:start;
-    background-color:transparent;
+    background-color:#0f2027;
     color:white;
     border-radius: 5px;
     border-color: white;
@@ -57,17 +58,17 @@
     padding:6px;
   }
     .viw-content{
-      margin-top: 30px;
+    margin-top: 30px;
     width: 100%;
-    height: 88px;
+    height: auto;
     padding:6px;
     outline: none;
     border-radius: 5px;
-    border-color: white;
-    border-style: solid;
-    background-color:transparent;
+    /* border-color: white; */
+    /* border-style: solid; */
+    background-color: transparent;
     color:white;
-    border-width: 1px;
+    /* border-width: 1px; */
     resize: none;
     outline: none;
     overflow: auto;
@@ -76,9 +77,9 @@
  .viw-count{
     text-align:end;
  }
- .viw-button-div{
-  margin-top: 8px;
- text-align: end;
+ .viw-button-count{
+  margin-top: 30px;
+  text-align: end;
 }
 .viw-comment-box{
   margin-top: 16px;
@@ -87,7 +88,7 @@ border-style:solid;
   border-width: 1px;
   border-radius:3px;
   padding: 12px;
-  background-color:transparent;
+  background-color:#0f2027;
   color:white;
   border-radius: 5px;
   border-color: white;
@@ -106,7 +107,6 @@ font-weight:bolder;
   }
   .viw-rep{
     margin-top: 2px;
-    background-color: red;
     overflow: auto;
     resize: none;
     outline: none;
@@ -130,9 +130,27 @@ font-weight:bolder;
   border-radius: 5px;
   border-color: white;
   border-style: solid;
-  background-color: rgb(5, 8, 38);
+  background-color: #0f2027;
   color: white;
   border-width: 1px;
   resize: none;
   padding:16px;  
+}
+
+.viw-button-container {
+  position: absolute;
+  top: 30px;
+  right: 13px; 
+}
+
+.reply-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.submit-div{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
 }

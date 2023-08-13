@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { db } from '../../services/database-services';
-import { auth } from '../../config/firebase-config';
-import { useNavigate } from 'react-router-dom/dist';
-import { Button, IconButton } from '@chakra-ui/react';
-import './PostPage.css';
-import { Link } from 'react-router-dom';
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { db } from "../../services/database-services";
+import { auth } from "../../config/firebase-config";
+import { useNavigate } from "react-router-dom/dist";
+import { Button, IconButton } from "@chakra-ui/react";
+import "./PostPage.css";
+import { Link } from "react-router-dom";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 
 export function PostPage() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
-  const [reply, setReply] = useState('');
+  const [reply, setReply] = useState("");
   const [replies, setReplies] = useState([]);
   const [likes, setLikes] = useState(0);
   const [editingIndex, setEditingIndex] = useState(-1);
-  const [editedReplyContent, setEditedReplyContent] = useState('');
+  const [editedReplyContent, setEditedReplyContent] = useState("");
   const [likedBy, setLikedBy] = useState([]);
 
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ export function PostPage() {
   const handleSubmitReply = async (e) => {
     e.preventDefault();
 
-    if (reply.trim() !== '') {
+    if (reply.trim() !== "") {
       try {
         if (user) {
           const userUID = user.uid;
@@ -64,9 +64,9 @@ export function PostPage() {
           setReplies([...replies, newReply]);
 
           // Clear the reply input
-          setReply('');
+          setReply("");
         } else {
-          navigate('/sign-up');
+          navigate("/sign-up");
         }
       } catch (error) {
         console.log(error.message);
@@ -76,50 +76,55 @@ export function PostPage() {
 
   const handleLike = async () => {
     try {
-      if (!user){
-        navigate('/sign-up');
+      if (!user) {
+        navigate("/sign-up");
         return;
       }
 
-      const currentUserUID = user.uid
+      const currentUserUID = user.uid;
 
       // Check if the user has already liked the post
       const userLiked = likedBy.includes(currentUserUID); // Replace with the appropriate value
-  
+
       if (userLiked) {
         // User has already liked, so remove the like
         const updatedLikedBy = likedBy.filter((uid) => uid !== currentUserUID);
         setLikedBy(updatedLikedBy);
-  
+
         // Decrement the likes count in the state and local state
         setLikes((prevLikes) => prevLikes - 1);
         setPost((prevPost) => ({
           ...prevPost,
           likes: prevPost.likes - 1,
         }));
-  
+
         // Update the likes count in the database
-        await db.update(`posts/${id}`, { likes: likes - 1, likedBy: updatedLikedBy });
+        await db.update(`posts/${id}`, {
+          likes: likes - 1,
+          likedBy: updatedLikedBy,
+        });
       } else {
         // User has not liked, so add the like
         const updatedLikedBy = [...likedBy, currentUserUID];
         setLikedBy(updatedLikedBy);
-  
+
         // Increment the likes count in the state and local state
         setLikes((prevLikes) => prevLikes + 1);
         setPost((prevPost) => ({
           ...prevPost,
           likes: prevPost.likes + 1,
         }));
-  
+
         // Update the likes count and likedBy array in the database
-        await db.update(`posts/${id}`, { likes: likes + 1, likedBy: updatedLikedBy });
+        await db.update(`posts/${id}`, {
+          likes: likes + 1,
+          likedBy: updatedLikedBy,
+        });
       }
     } catch (error) {
       console.log(error.message);
     }
   };
-
 
   const handleDeleteComment = async (commentIndex) => {
     try {
@@ -137,12 +142,12 @@ export function PostPage() {
         // Update the local state with the updated replies
         setReplies(updatedReplies);
 
-        console.log('Comment deleted successfully.');
+        console.log("Comment deleted successfully.");
       } else {
-        console.log('Invalid comment index.');
+        console.log("Invalid comment index.");
       }
     } catch (error) {
-      console.error('Error deleting comment:', error.message);
+      console.error("Error deleting comment:", error.message);
     }
   };
 
@@ -167,40 +172,46 @@ export function PostPage() {
 
       // Reset editing state
       setEditingIndex(-1);
-      setEditedReplyContent('');
+      setEditedReplyContent("");
 
-      console.log('Reply edited and saved successfully.');
+      console.log("Reply edited and saved successfully.");
     } catch (error) {
-      console.error('Error editing reply:', error.message);
+      console.error("Error editing reply:", error.message);
     }
   };
 
   if (!post) {
     return <h1>There is no such post!</h1>;
   }
-  
 
   return (
     <div className="create-viw">
       <div className="viw-container">
-        <h1 className='viw-header'>{post.user}</h1>
-        <h2 className='viw-Title'>{post.title}</h2>
-        <p className='viw-description'>{post.description}</p>
-        <p className='viw-count'>Likes: {post.likes}</p>
-        <p className='viw-content'>{post.content}</p>
-        <div className='viw-button-div'>
-          <button className='viw-button' onClick={handleLike}>Like button</button>
+        <h1 className="viw-header">{post.user}</h1>
+        <h2 className="viw-Title">{post.title}</h2>
+        <p className="viw-content">
+          {post.description}
+          <br />
+          <br />
+          {post.content}
+        </p>
+        <div className="viw-button-count">
+          <Button colorScheme="teal" onClick={() => handleLike(post.id)}>
+            Like ({post.likes})
+          </Button>
         </div>
-        <h3 className='viw-comment'>Replies:</h3>
+        <h3 className="viw-comment">Replies:</h3>
         <ul>
           {replies.map((reply, index) => (
-            <li className='viw-comment-box' key={index}>
-              <div className='viw-ere'>
-                <p className='viw-user'>{`Created by:${reply.user}`}</p>
-                <span className='onn'>/</span>
-                <p className='viw-dating'>{`Date: ${new Date(reply.date).toLocaleString()}`}</p>
+            <li className="viw-comment-box" key={index}>
+              <div className="viw-ere">
+                <p className="viw-user">{`Created by:${reply.user}`}</p>
+                <span className="onn">/</span>
+                <p className="viw-dating">{`Date: ${new Date(
+                  reply.date
+                ).toLocaleString()}`}</p>
               </div>
-              <div className='viw-rep'>
+              <div className="viw-rep">
                 {editingIndex === index ? (
                   <input
                     type="text"
@@ -210,84 +221,101 @@ export function PostPage() {
                 ) : (
                   <p>{`${reply.content}`}</p>
                 )}
-                {user && (user.uid === reply.userUID) && (user.uid === post.userUID)  && (
-                  <div className="submit-div">
-                    {editingIndex === index ? (
-                      <Button
-                        colorScheme="green"
-                        variant="ghost"
-                        onClick={() => handleSaveEdit(index)}
-                      >
-                        Save
-                      </Button>
-                    ) : (
+                {user &&
+                  user.uid === reply.userUID &&
+                  user.uid === post.userUID && (
+                    <div className="submit-div">
+                      {editingIndex === index ? (
+                        <Button
+                          colorScheme="green"
+                          variant="ghost"
+                          onClick={() => handleSaveEdit(index)}
+                        >
+                          Save
+                        </Button>
+                      ) : (
+                        <IconButton
+                          icon={<EditIcon />}
+                          colorScheme="blue"
+                          variant="ghost"
+                          aria-label="Edit"
+                          onClick={() => handleStartEdit(index, reply.content)}
+                        />
+                      )}
                       <IconButton
-                        icon={<EditIcon />}
-                        colorScheme="blue"
+                        icon={<DeleteIcon />}
+                        colorScheme="red"
                         variant="ghost"
-                        aria-label="Edit"
-                        onClick={() => handleStartEdit(index, reply.content)}
+                        aria-label="Delete"
+                        onClick={() => handleDeleteComment(index)}
                       />
-                    )}
-                    <IconButton
-                      icon={<DeleteIcon />}
-                      colorScheme="red"
-                      variant="ghost"
-                      aria-label="Delete"
-                      onClick={() => handleDeleteComment(index)}
-                    />
-                  </div>
-                )}
-                {user && (user.uid === reply.userUID) && !(user.uid === post.userUID)  && (
-                  <div>
-                    {editingIndex === index ? (
-                      <Button
-                        colorScheme="green"
-                        variant="ghost"
-                        onClick={() => handleSaveEdit(index)}
-                      >
-                        Save
-                      </Button>
-                    ) : (
+                    </div>
+                  )}
+                {user &&
+                  user.uid === reply.userUID &&
+                  !(user.uid === post.userUID) && (
+                    <div>
+                      {editingIndex === index ? (
+                        <Button
+                          colorScheme="green"
+                          variant="ghost"
+                          onClick={() => handleSaveEdit(index)}
+                        >
+                          Save
+                        </Button>
+                      ) : (
+                        <IconButton
+                          icon={<EditIcon />}
+                          colorScheme="blue"
+                          variant="ghost"
+                          aria-label="Edit"
+                          onClick={() => handleStartEdit(index, reply.content)}
+                        />
+                      )}
                       <IconButton
-                        icon={<EditIcon />}
-                        colorScheme="blue"
+                        icon={<DeleteIcon />}
+                        colorScheme="red"
                         variant="ghost"
-                        aria-label="Edit"
-                        onClick={() => handleStartEdit(index, reply.content)}
+                        aria-label="Delete"
+                        onClick={() => handleDeleteComment(index)}
                       />
-                    )}
-                    <IconButton
-                      icon={<DeleteIcon />}
-                      colorScheme="red"
-                      variant="ghost"
-                      aria-label="Delete"
-                      onClick={() => handleDeleteComment(index)}
-                    />
-                  </div>
-                )}
+                    </div>
+                  )}
               </div>
-              {user && (user.uid === post.userUID) && !(user.uid === reply.userUID) && (
-              <IconButton
-                icon={<DeleteIcon />}
-                colorScheme="red"
-                variant="ghost"
-                aria-label="Delete"
-                onClick={() => handleDeleteComment(index)}
-              />
-            )}
+              {user &&
+                user.uid === post.userUID &&
+                !(user.uid === reply.userUID) && (
+                  <IconButton
+                    icon={<DeleteIcon />}
+                    colorScheme="red"
+                    variant="ghost"
+                    aria-label="Delete"
+                    onClick={() => handleDeleteComment(index)}
+                  />
+                )}
             </li>
           ))}
         </ul>
-    
-          <textarea className="submit-rep" value={reply} onChange={handleReplyChange} />
-          <Button onClick={handleSubmitReply} type="submit">Reply</Button>
-        {user && (user.uid === post.userUID) && (
-          <Button as={Link} to={`/edit/${post.id}`} colorScheme="blue">
-            Edit
+
+        <textarea
+          placeholder= "Comment here"
+          className="submit-rep"
+          value={reply}
+          onChange={handleReplyChange}
+        />
+        <div className="reply-button-container">
+          <Button onClick={handleSubmitReply} type="submit">
+            Reply
           </Button>
-        )}
+        </div>
+        <div className="viw-button-container">
+          {user && user.uid === post.userUID && (
+            <Button as={Link} to={`/edit/${post.id}`} colorScheme="blue">
+              Edit post
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
-}  
+}
