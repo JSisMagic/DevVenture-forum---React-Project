@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../../services/database-services";
 import { auth } from "../../config/firebase-config";
@@ -22,7 +22,12 @@ import { database } from "../../config/firebase-config";
 import "./EditUser.css";
 import { endAt, set } from "firebase/database";
 import { storage } from "../../config/firebase-config";
-import { getDownloadURL,ref,uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  deleteObject,
+} from "firebase/storage";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 //   const idWeNeed=user.uid
@@ -64,6 +69,8 @@ const Edit = () => {
             db.set(`/users/${user.uid}/imageURL`, downloadURL);
 
             setURL(downloadURL); // Update the URL state with the new image URL
+            
+            clearInput();
           })
           .catch((error) => {
             alert(error.message, "Error");
@@ -75,7 +82,31 @@ const Edit = () => {
         alert(error.message);
       });
   };
-  
+
+  const removeImage = () => {
+    // Remove the image from Firebase Storage
+    const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`);
+    deleteObject(userImageRef)
+      .then(() => {
+        // Remove the image URL from Firebase Database
+        db.set(`/users/${user.uid}/imageURL`, null);
+        // Clear the URL state
+        setURL(null);
+
+       clearInput();
+      })
+      .catch((error) => {
+        console.error("Error removing image:", error);
+      });
+  };
+
+  const clearInput = () => {
+    const inputElement = document.getElementById("fileInput");
+    if (inputElement) {
+      inputElement.value = "";
+    }
+  }
+
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>
       <Stack
@@ -104,19 +135,17 @@ const Edit = () => {
                   colorScheme="red"
                   aria-label="remove Image"
                   icon={<SmallCloseIcon />}
+                  onClick={removeImage}
                 />
               </Avatar>
             </Center>
             <div>
-              <input
-                type="file"
-                onChange={handleFileChange}
-              />
+              <input type="file" id="fileInput" onChange={handleFileChange} />
               <button onClick={uploadImg}>Upload</button>
             </div>
           </Stack>
         </FormControl>
-        <FormControl id="name" >
+        <FormControl id="name">
           <FormLabel>Firstname</FormLabel>
           <Input
             placeholder={"Firstname"}
@@ -124,7 +153,7 @@ const Edit = () => {
             type="text"
           />
         </FormControl>
-        <FormControl id="name" >
+        <FormControl id="name">
           <FormLabel>Lastname</FormLabel>
           <Input
             placeholder={"Lastname"}
@@ -151,8 +180,8 @@ const Edit = () => {
         <Stack>
           <button className="submit-button">Submit</button>
           <Link to="/home">
-         <button className="can-button">Cancel</button>
-           </Link>
+            <button className="can-button">Cancel</button>
+          </Link>
         </Stack>
       </Stack>
     </Flex>
