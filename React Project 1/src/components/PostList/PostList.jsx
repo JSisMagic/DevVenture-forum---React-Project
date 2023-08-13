@@ -14,6 +14,8 @@ import {
   MenuItem,
   Badge,
   Icon,
+  Avatar,
+  Spacer,
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
@@ -27,6 +29,7 @@ export function PostList() {
   const [posts, setPosts] = useState([]);
   const [sortOption, setSortOption] = useState("newest");
   const navigate = useNavigate();
+
   const user = auth.currentUser;
 
   useEffect(() => {
@@ -147,14 +150,35 @@ export function PostList() {
 
   return (
     <>
-      {" "}
       <Menu>
-        <MenuButton as={Button} mb="20px">
+        <MenuButton as={Button} rounded={"full"} cursor={"pointer"} minW={0}>
           Sort By: {sortOption}
         </MenuButton>
-        <MenuList>
-          <MenuItem onClick={() => handleSort("newest")}>Newest</MenuItem>
-          <MenuItem onClick={() => handleSort("oldest")}>Oldest</MenuItem>
+        <MenuList
+          padding={"-1"}
+          bg={"transparent"} // Set the background color of MenuList to transparent
+          backdropBlur={"blur(26px)"}
+          alignItems={"center"}
+          boxShadow={"0rem 1rem 3rem rgba(0, 0, 0, 0.8)"}
+          borderRadius={"16px"}
+          opacity={"0.8"}
+          border={"none"}
+          color={"white"}
+        >
+          <MenuItem>
+            <Button
+              onClick={() => handleSort("newest")}
+              w="100%"
+              justifyContent="flex-start"
+              paddingLeft="1rem"
+              border={"none"}
+            >
+              Newest
+            </Button>
+          </MenuItem>
+          <MenuItem>
+            <Button onClick={() => handleSort("oldest")}>Oldest</Button>
+          </MenuItem>
           <MenuItem onClick={() => handleSort("mostLiked")}>
             Most Liked
           </MenuItem>
@@ -162,7 +186,7 @@ export function PostList() {
             Least Liked
           </MenuItem>
           <MenuItem onClick={() => handleSort("mostCommented")}>
-            Most Commented{" "}
+            Most Commented
           </MenuItem>
           <MenuItem onClick={() => handleSort("leastCommented")}>
             Least Commented
@@ -176,6 +200,37 @@ export function PostList() {
       <VStack spacing="20px">
         {sortedPosts.map((post) => (
           <GlassContainer key={post.id} height="auto">
+            <HStack justifyContent="space-between" alignItems="center">
+              <VStack alignItems="flex-start" spacing={1}>
+                <Avatar />
+                <Text fontSize="sm" color="blue.500">
+                  Posted by: {post.user}
+                </Text>
+              </VStack>
+              <Spacer />
+              <HStack spacing={2}>
+                <Button colorScheme="black" onClick={() => handleLike(post.id)}>
+                  <Icon
+                    as={
+                      user && post.likedBy?.includes(user.uid)
+                        ? AiFillHeart
+                        : AiOutlineHeart
+                    }
+                    boxSize={10}
+                    color={
+                      user && post.likedBy?.includes(user.uid) ? "red.500" : "black.300"
+                    }
+                  />
+                  {post.likes}
+                </Button>
+                <Button
+                  colorScheme="black"
+                  leftIcon={<ChatIcon boxSize={8} />}
+                  as={Link}
+                  to={user ? `/post-list/${post.id}` : "/sign-up"}
+                ></Button>
+              </HStack>
+            </HStack>
             <Link
               to={`/post-list/${post.id}`}
               style={{ textDecoration: "none", color: "black" }}
@@ -191,34 +246,6 @@ export function PostList() {
             <Text fontSize="sm" color="gray.400" mb="10px">
               {new Date(post.date).toLocaleString()}
             </Text>
-            <Text fontSize="sm" color="blue.500" mb="10px">
-              Posted by: {post.user}
-            </Text>
-            <HStack justifyContent="flex-end">
-              <Button
-                colorScheme="black"
-                onClick={() => handleLike(post.id)}
-              >
-                <Icon
-                  as={
-                    post.likedBy?.includes(user.uid)
-                      ? AiFillHeart
-                      : AiOutlineHeart
-                  }
-                  boxSize={10}
-                  color={
-                    post.likedBy?.includes(user.uid) ? "red.500" : "black.300"
-                  }
-                />
-                {post.likes}
-              </Button>
-              <Button
-                colorScheme="black"
-                leftIcon={<ChatIcon boxSize={8} />}
-                as={Link}
-                to={user ? `/post-list/${post.id}` : "/sign-up"}
-              ></Button>
-            </HStack>
           </GlassContainer>
         ))}
       </VStack>

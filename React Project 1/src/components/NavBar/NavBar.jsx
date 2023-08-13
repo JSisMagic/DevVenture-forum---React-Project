@@ -138,7 +138,6 @@ export function Nav() {
                       <>
                         <Center>
                           <p>ADMIN</p>
-                     
                         </Center>
                         <br />
                       </>
@@ -152,10 +151,16 @@ export function Nav() {
                       </>
                     )}
                     <Link to="/edit">
-                      <Button  rounded={'none'} className="edit-user">Edit User</Button>
+                      <Button rounded={"none"} className="edit-user">
+                        Edit User
+                      </Button>
                     </Link>
-                    <Button roundedBottomLeft={'16px'} roundedBottomRight={'16px'}
-                     className="signout-user" onClick={userSignOut}>
+                    <Button
+                      rounded="none" 
+                      borderRadius="0px 0px 16px 16px" 
+                      className="signout-user"
+                      onClick={userSignOut}
+                    >
                       Logout
                     </Button>
                   </MenuList>

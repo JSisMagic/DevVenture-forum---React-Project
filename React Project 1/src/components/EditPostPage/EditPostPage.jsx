@@ -91,7 +91,7 @@ export function EditPostPage() {
       }
 
       // Redirect back to the post list page after deleting
-      navigate('/post-list');
+      navigate('/');
     } catch (error) {
       console.log(error.message);
     }
