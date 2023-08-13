@@ -1,207 +1,246 @@
-import React from "react";
+import { SmallCloseIcon } from "@chakra-ui/icons"
 import {
-  Flex,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  Stack,
   Avatar,
   AvatarBadge,
-  IconButton,
   Center,
-} from "@chakra-ui/react";
-import { SmallCloseIcon } from "@chakra-ui/icons";
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { db } from "../../services/database-services";
-import { auth } from "../../config/firebase-config";
-import "./EditUser.css";
-import { storage } from "../../config/firebase-config";
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  IconButton,
+  Input,
+  Stack,
+  Textarea,
+} from "@chakra-ui/react"
 import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  deleteObject,
-} from "firebase/storage";
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import {
-  updatePassword,
-  updateEmail,
-  reauthenticateWithCredential,
   EmailAuthProvider,
-} from "firebase/auth";
+  reauthenticateWithCredential,
+  updateEmail,
+  updatePassword,
+} from "firebase/auth"
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { useContext, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import {
-  isValidEmail,
-  isValidFirstName,
-  isValidLastName,
-  isValidPassword,
-} from "../../services/validation.services";
-import { PASSWORD_MIN_LENGTH } from "../../common/constants";
-import { useNavigate } from "react-router-dom";
+  FIRST_NAME_MAX_LENGTH,
+  FIRST_NAME_MIN_LENGTH,
+  PASSWORD_MIN_LENGTH,
+} from "../../common/constants"
+import { auth, storage } from "../../config/firebase-config"
+import { AuthContext } from "../../context/AuthContext"
+import { db } from "../../services/database-services"
+import "./EditUser.css"
 
 const Edit = () => {
-  const [upload, setUpload] = useState(null);
-  const [URL, setURL] = useState(null);
-  const { user } = useContext(AuthContext);
-  const [inputErrors, setInputErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
-  const navigate = useNavigate();
+  const { userData } = useContext(AuthContext)
+  const [upload, setUpload] = useState(null)
+  const [URL, setURL] = useState(null)
+  const { user } = useContext(AuthContext)
+  const [formState, setFormState] = useState({
+    firstname: {
+      value: "",
+      error: "",
+    },
+    lastname: {
+      value: "",
+      error: "",
+    },
+    email: {
+      value: "",
+      error: "",
+    },
+    currentPassword: {
+      value: "",
+      error: "",
+    },
+    newPassword: {
+      value: "",
+      error: "",
+    },
+    description: {
+      value: "",
+    },
+    linkedInURL: {
+      value: "",
+    },
+    gitLabURL: {
+      value: "",
+    },
+    gitHubURL: {
+      value: "",
+    },
+  })
 
-  const userCur = auth.currentUser;
+  const navigate = useNavigate()
+
+  const userCur = auth.currentUser
 
   useEffect(() => {
     if (user) {
       // Fetch the user's image URL and update the URL state
-      const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`);
+      const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`)
       getDownloadURL(userImageRef)
-        .then((downloadURL) => {
-          setURL(downloadURL);
+        .then(downloadURL => {
+          setURL(downloadURL)
         })
-        .catch((error) => {
+        .catch(error => {
           // Handle errors if necessary
-          console.log(error);
-        });
+          console.log(error)
+        })
     }
-  }, [user]);
+  }, [user])
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setUpload(selectedFile);
-  };
+  useEffect(() => {
+    if (userData !== null) {
+      setFormState(prev => ({
+        ...prev,
+        firstname: { value: userData.firstname, error: "" },
+        lastname: { value: userData.lastname, error: "" },
+        email: { value: userData.email, error: "" },
+        description: { value: userData?.description },
+        linkedInURL: { value: userData.linkedInURL },
+        gitLabURL: { value: userData.gitLabURL },
+        gitHubURL: { value: userData.gitHubURL },
+      }))
+    }
+  }, [userData])
+
+  const handleFormChange = event => {
+    const { id, value } = event.target
+
+    if (id === "firstname" || id === "lastname") {
+      if (value.length < FIRST_NAME_MIN_LENGTH || value.length > FIRST_NAME_MAX_LENGTH) {
+        return setFormState(prev => ({
+          ...prev,
+          [id]: {
+            value: value,
+            error: `Length should be between ${FIRST_NAME_MIN_LENGTH} and ${FIRST_NAME_MAX_LENGTH} characters`,
+          },
+        }))
+      }
+    } else if (id === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(value)) {
+        return setFormState(prev => ({
+          ...prev,
+          [id]: { value: value, error: "Should be valid email." },
+        }))
+      }
+    } else if (id === "newPassword") {
+      const passwordRegex = new RegExp(
+        `(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_=\\-+]).{${PASSWORD_MIN_LENGTH},}`
+      )
+      if (!passwordRegex.test(value)) {
+        return setFormState(prev => ({
+          ...prev,
+          [id]: {
+            value: value,
+            error: `Password must be at least ${PASSWORD_MIN_LENGTH} characters long and contain an uppercase letter, a lowercase letter, a number, and a special character.`,
+          },
+        }))
+      }
+    }
+
+    setFormState(prev => ({ ...prev, [id]: { value: value, error: "" } }))
+  }
+
+  const handleFileChange = event => {
+    const selectedFile = event.target.files[0]
+    setUpload(selectedFile)
+  }
 
   const uploadImg = () => {
-    if (upload === null) return;
+    if (upload === null) return
 
-    const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`);
+    const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`)
     uploadBytes(userImageRef, upload)
       .then(() => {
         getDownloadURL(userImageRef)
-          .then((downloadURL) => {
+          .then(downloadURL => {
             // Save the image URL to the database under the user's node
-            db.set(`/users/${user.uid}/imageURL`, downloadURL);
+            db.set(`/users/${user.uid}/imageURL`, downloadURL)
 
-            setURL(downloadURL); // Update the URL state with the new image URL
+            setURL(downloadURL) // Update the URL state with the new image URL
 
-            clearInput();
+            clearInput()
           })
-          .catch((error) => {
-            alert(error.message, "Error");
-          });
+          .catch(error => {
+            alert(error.message, "Error")
+          })
 
-        setUpload(null);
+        setUpload(null)
       })
-      .catch((error) => {
-        alert(error.message);
-      });
-  };
+      .catch(error => {
+        alert(error.message)
+      })
+  }
 
   const removeImage = () => {
     // Remove the image from Firebase Storage
-    const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`);
+    const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`)
     deleteObject(userImageRef)
       .then(() => {
         // Remove the image URL from Firebase Database
-        db.set(`/users/${user.uid}/imageURL`, null);
+        db.set(`/users/${user.uid}/imageURL`, null)
         // Clear the URL state
-        setURL(null);
+        setURL(null)
 
-        clearInput();
+        clearInput()
       })
-      .catch((error) => {
-        console.error("Error removing image:", error);
-      });
-  };
+      .catch(error => {
+        console.error("Error removing image:", error)
+      })
+  }
 
   const clearInput = () => {
-    const inputElement = document.getElementById("fileInput");
+    const inputElement = document.getElementById("fileInput")
     if (inputElement) {
-      inputElement.value = "";
+      inputElement.value = ""
     }
-  };
+  }
+
+  const navigateBackwards = () => {
+    navigate(-1)
+  }
 
   const updateUserProfile = async () => {
-    const newFirstname = document.getElementById("firstname").value;
-    const newLastname = document.getElementById("lastname").value;
-    const newEmail = document.getElementById("newEmail").value;
-    const newPassword = document.getElementById("newPassword").value;
-    const currentPassword = document.getElementById("currentPassword").value;
-
-    // Check if all of the input fields are empty
-    if (
-      !newFirstname &
-      !newLastname &
-      !newEmail &
-      !newPassword &
-      !currentPassword
-    ) {
-      navigate("/");
-      return;
-    }
-
-    // Validate inputs
-    const errors = {};
-    if (!isValidFirstName(newFirstname)) {
-      errors.firstname = "Invalid first name.";
-    }
-    if (!isValidLastName(newLastname)) {
-      errors.lastname = "Invalid last name.";
-    }
-    if (!isValidEmail(newEmail)) {
-      errors.email = "Invalid email address.";
-    }
-    if (!isValidPassword(newPassword)) {
-      errors.password = `Password must be at least ${PASSWORD_MIN_LENGTH} characters long and contain an uppercase letter, a lowercase letter, a number, and a special character.`;
-    }
-
-    if (Object.keys(errors).length > 0) {
-      setInputErrors(errors);
-      return;
-    }
-
-    setInputErrors({});
-
     try {
       // Reauthenticate the user
-      const credential = EmailAuthProvider.credential(
-        user.email,
-        currentPassword
-      );
-      await reauthenticateWithCredential(auth.currentUser, credential);
-
+      const credential = EmailAuthProvider.credential(user.email, formState.currentPassword.value)
+      await reauthenticateWithCredential(userCur, credential)
       // Update user information in the database
       await db.update(`/users/${user.uid}`, {
-        firstname: newFirstname,
-        lastname: newLastname,
-        email: newEmail,
-      });
+        firstname: formState.firstname.value,
+        lastname: formState.lastname.value,
+        email: formState.email.value,
+        description: formState.description.value,
+        linkedInURL: formState.linkedInURL.value,
+        gitLabURL: formState.gitLabURL.value,
+        gitHubURL: formState.gitHubURL.value,
+      })
 
       // Update email and password
-      const promises = [];
+      const promises = []
 
-      if (newEmail !== user.email) {
-        promises.push(updateEmail(userCur, newEmail));
-        console.log("Email updated successfully");
+      if (formState.email.value !== user.email) {
+        promises.push(updateEmail(userCur, formState.email.value))
+        console.log("Email updated successfully")
       }
 
-      if (newPassword) {
-        promises.push(updatePassword(userCur, newPassword));
-        console.log("Password updated successfully");
+      if (formState.newPassword.value) {
+        promises.push(updatePassword(userCur, formState.newPassword.value))
+        console.log("Password updated successfully")
       }
 
-      await Promise.all(promises);
+      await Promise.all(promises)
 
-      console.log("Profile updated successfully");
-      setSuccessMessage("Profile updated successfully");
-      setTimeout(() => {
-        setSuccessMessage("");
-        navigate("/");
-      }, 3000);
+      console.log("Profile updated successfully")
+      navigateBackwards()
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error("Error updating profile:", error)
     }
-  };
+  }
 
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>
@@ -241,72 +280,120 @@ const Edit = () => {
             </div>
           </Stack>
         </FormControl>
-        <FormControl id="firstname">
+        <FormControl id="firstname" isInvalid={formState.firstname.error}>
           <FormLabel>Firstname</FormLabel>
           <Input
+            value={formState.firstname.value}
+            onChange={handleFormChange}
             placeholder="Enter your firstname"
             _placeholder={{ color: "gray.500" }}
             type="text"
           />
-          {inputErrors.firstname && (
-            <p className="error-message">{inputErrors.firstname}</p>
-          )}
+          <FormErrorMessage>{formState.firstname.error}</FormErrorMessage>
         </FormControl>
-        <FormControl id="lastname">
+        <FormControl id="lastname" isInvalid={formState.lastname.error}>
           <FormLabel>Lastname</FormLabel>
           <Input
+            value={formState.lastname.value}
+            onChange={handleFormChange}
             placeholder="Enter your lastname"
             _placeholder={{ color: "gray.500" }}
             type="text"
           />
-          {inputErrors.lastname && (
-            <p className="error-message">{inputErrors.lastname}</p>
-          )}
+          <FormErrorMessage>{formState.lastname.error}</FormErrorMessage>
         </FormControl>
-        <FormControl id="newEmail" isRequired>
+        <FormControl id="email" isRequired isInvalid={formState.email.error}>
           <FormLabel>Email address</FormLabel>
           <Input
+            value={formState.email.value}
+            onChange={handleFormChange}
             placeholder="Enter your email address"
             _placeholder={{ color: "gray.500" }}
             type="email"
           />
-          {inputErrors.email && (
-            <p className="error-message">{inputErrors.email}</p>
-          )}
+          <FormErrorMessage>{formState.email.error}</FormErrorMessage>
         </FormControl>
         <FormControl id="currentPassword" isRequired>
           <FormLabel>Current Password</FormLabel>
           <Input
+            value={formState.currentPassword.value}
+            onChange={handleFormChange}
             placeholder="Enter your current password"
             _placeholder={{ color: "gray.500" }}
             type="password"
           />
         </FormControl>
-        <FormControl id="newPassword" isRequired>
+        <FormControl id="newPassword" isRequired isInvalid={formState.newPassword.error}>
           <FormLabel>New Password</FormLabel>
           <Input
+            value={formState.newPassword.value}
+            onChange={handleFormChange}
             placeholder="Enter your new password"
             _placeholder={{ color: "gray.500" }}
             type="password"
           />
-          {inputErrors.password && (
-            <p className="error-message">{inputErrors.password}</p>
-          )}
+          <FormErrorMessage>{formState.newPassword.error}</FormErrorMessage>
+        </FormControl>
+        <FormControl id="description">
+          <FormLabel>Description</FormLabel>
+          <Textarea
+            value={formState.description.value}
+            onChange={handleFormChange}
+            placeholder="Enter your profile description"
+            _placeholder={{ color: "gray.500" }}
+            type="password"
+          />
+        </FormControl>
+        <FormControl id="linkedInURL" isRequired>
+          <FormLabel>LinkedIn</FormLabel>
+          <Input
+            value={formState.linkedInURL.value}
+            onChange={handleFormChange}
+            placeholder="URL to your LinkedIn profile"
+            _placeholder={{ color: "gray.500" }}
+            type="text"
+          />
+        </FormControl>
+        <FormControl id="gitLabURL" isRequired>
+          <FormLabel>GitLab</FormLabel>
+          <Input
+            value={formState.gitLabURL.value}
+            onChange={handleFormChange}
+            placeholder="URL to your GitLab profile"
+            _placeholder={{ color: "gray.500" }}
+            type="text"
+          />
+        </FormControl>
+        <FormControl id="gitHubURL" isRequired>
+          <FormLabel>GitHub</FormLabel>
+          <Input
+            value={formState.gitHubURL.value}
+            onChange={handleFormChange}
+            placeholder="URL to your GitHub profile"
+            _placeholder={{ color: "gray.500" }}
+            type="text"
+          />
         </FormControl>
         <Stack>
-          <button className="submit-button" onClick={updateUserProfile}>
+          <button
+            className="submit-button"
+            onClick={updateUserProfile}
+            disabled={
+              formState.firstname.error ||
+              formState.lastname.error ||
+              formState.email.error ||
+              formState.newPassword.error
+            }
+          >
             Submit
           </button>
-          {successMessage && (
-            <p className="success-message">{successMessage}</p>
-          )}
-          <Link to="/">
-            <button className="can-button">Cancel</button>
-          </Link>
+          <button className="can-button" onClick={navigateBackwards}>
+            Cancel
+          </button>
         </Stack>
       </Stack>
     </Flex>
-  );
-};
+  )
+}
 
-export default Edit;
+export default Edit
