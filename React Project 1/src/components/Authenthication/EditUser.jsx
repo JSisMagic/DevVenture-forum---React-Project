@@ -38,6 +38,7 @@ import {
   isValidLastName,
   isValidPassword,
 } from "../../services/validation.services";
+import { PASSWORD_MIN_LENGTH } from "../../common/constants";
 import { useNavigate } from "react-router-dom";
 
 const Edit = () => {
@@ -151,7 +152,7 @@ const Edit = () => {
       errors.email = "Invalid email address.";
     }
     if (!isValidPassword(newPassword)) {
-      errors.password = "Invalid password.";
+      errors.password = `Password must be at least ${PASSWORD_MIN_LENGTH} characters long and contain an uppercase letter, a lowercase letter, a number, and a special character.`;
     }
 
     if (Object.keys(errors).length > 0) {
