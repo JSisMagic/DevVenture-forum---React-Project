@@ -49,6 +49,12 @@
     }
   .viw-description{
     text-align:start;
+    background-color: white;
+    color: #2C5364;
+    border-radius: 5px;
+    border-color: white;
+    border-style: solid;
+    padding:6px;
   }
     .viw-content{
       margin-top: 30px;
@@ -59,10 +65,13 @@
     border-radius: 5px;
     border-color: white;
     border-style: solid;
-    background-color: transparent;
-    color: white;
+    background-color: white;
+    color: #2C5364;
     border-width: 1px;
     resize: none;
+    outline: none;
+    overflow: auto;
+    box-shadow:inset 6px 6px 6px white;
   }
  .viw-count{
     text-align:end;
