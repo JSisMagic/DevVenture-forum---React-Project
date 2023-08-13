@@ -200,6 +200,21 @@ export function PostList() {
       <VStack spacing="20px">
         {sortedPosts.map((post) => (
           <GlassContainer key={post.id} height="auto">
+            <Link
+              to={`/post-list/${post.id}`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <Heading as="h3" size="lg" mb="10px">
+                {post.title}
+              </Heading>
+            </Link>
+            <Text fontSize="lg" color="white.600" mb="10px">
+              {post.description}
+            </Text>
+            <PostTags tags={post.tags} />
+            <Text fontSize="sm" color="gray.400" mb="10px">
+              {new Date(post.date).toLocaleString()}
+            </Text>
             <HStack justifyContent="space-between" alignItems="center">
               <VStack alignItems="flex-start" spacing={1}>
                 <Avatar />
@@ -231,21 +246,6 @@ export function PostList() {
                 ></Button>
               </HStack>
             </HStack>
-            <Link
-              to={`/post-list/${post.id}`}
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <Heading as="h3" size="lg" mb="10px">
-                {post.title}
-              </Heading>
-            </Link>
-            <Text fontSize="lg" color="white.600" mb="10px">
-              {post.description}
-            </Text>
-            <PostTags tags={post.tags} />
-            <Text fontSize="sm" color="gray.400" mb="10px">
-              {new Date(post.date).toLocaleString()}
-            </Text>
           </GlassContainer>
         ))}
       </VStack>
