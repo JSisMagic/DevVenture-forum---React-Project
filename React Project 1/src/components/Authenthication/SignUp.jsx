@@ -16,13 +16,6 @@ import {
   USERNAME_MIN_LENGTH,
   PASSWORD_MIN_LENGTH,
 } from "../../common/constants";
-import {
-  isValidEmail,
-  isValidFirstName,
-  isValidLastName,
-  isValidPassword,
-  isValidUsername,
-} from "../../services/validation.services";
 
 const SignUp = () => {
   const { setContext, ...appState } = useContext(AuthContext);
@@ -39,13 +32,22 @@ const SignUp = () => {
 
     // Validate inputs
     const errors = {};
-    if (!isValidFirstName(firstname)) {
+    if (
+      firstname.length < FIRST_NAME_MIN_LENGTH ||
+      firstname.length > FIRST_NAME_MAX_LENGTH
+    ) {
       errors.firstname = `First name must be between ${FIRST_NAME_MIN_LENGTH} and ${FIRST_NAME_MAX_LENGTH} characters.`;
     }
-    if (!isValidLastName(lastname)) {
+    if (
+      lastname.length < LAST_NAME_MIN_LENGTH ||
+      lastname.length > LAST_NAME_MAX_LENGTH
+    ) {
       errors.lastname = `Last name must be between ${LAST_NAME_MIN_LENGTH} and ${LAST_NAME_MAX_LENGTH} characters.`;
     }
-    if (!isValidUsername(username)) {
+    if (
+      username.length < USERNAME_MIN_LENGTH ||
+      username.length > USERNAME_MAX_LENGTH
+    ) {
       errors.username = `Username must be between ${USERNAME_MIN_LENGTH} and ${USERNAME_MAX_LENGTH} characters.`;
     }
     if (!isValidEmail(email)) {
@@ -95,6 +97,18 @@ const SignUp = () => {
           }
         });
     }
+  };
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPassword = (password) => {
+    const passwordRegex = new RegExp(
+      `(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_=\\-+]).{${PASSWORD_MIN_LENGTH},}`
+    );
+    return passwordRegex.test(password);
   };
 
   const handleFirstnameChange = (e) => {
