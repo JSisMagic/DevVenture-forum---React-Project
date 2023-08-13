@@ -12,10 +12,11 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Badge
+  Badge,
+  Icon,
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
-import { FaThumbsUp } from "react-icons/fa";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { GlassContainer } from "../GlassContainer/GlassContainer";
 import { auth } from "../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
@@ -193,21 +194,27 @@ export function PostList() {
             <Text fontSize="sm" color="blue.500" mb="10px">
               Posted by: {post.user}
             </Text>
-            <HStack spacing="10px">
-              <Button colorScheme="teal" onClick={() => handleLike(post.id)}>
-                Like ({post.likes})
-              </Button>
-              <IconButton
-                aria-label="Upvote"
-                icon={<FaThumbsUp />}
-                colorScheme="blue"
-                onClick={() => handleUpvote(post.id)}
-              />
+            <HStack justifyContent="flex-end">
               <Button
-                aria-label="Upvote"
+                colorScheme="black"
+                onClick={() => handleLike(post.id)}
+              >
+                <Icon
+                  as={
+                    post.likedBy?.includes(user.uid)
+                      ? AiFillHeart
+                      : AiOutlineHeart
+                  }
+                  boxSize={10}
+                  color={
+                    post.likedBy?.includes(user.uid) ? "red.500" : "black.300"
+                  }
+                />
+                {post.likes}
+              </Button>
+              <Button
                 colorScheme="black"
                 leftIcon={<ChatIcon boxSize={8} />}
-                alignSelf="flex"
                 as={Link}
                 to={user ? `/post-list/${post.id}` : "/sign-up"}
               ></Button>

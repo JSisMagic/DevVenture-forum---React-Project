@@ -15,11 +15,14 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Badge
+  Badge,
+  Icon
 } from "@chakra-ui/react";
 import { FaThumbsUp } from "react-icons/fa";
+import { ChatIcon } from "@chakra-ui/icons";
 import { auth } from "../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 export function TagSearchResults() {
   const { tag: term } = useParams();
@@ -34,33 +37,31 @@ export function TagSearchResults() {
   useEffect(() => {
     const handleSearch = async () => {
       try {
-
         setSortOption("tags");
-        
+
         const allPosts = await db.get("posts");
-  
-        const filteredPosts = Object.values(allPosts)
-          .filter((postData) =>
-            searchTags.every((searchTag) =>
-              ["title", "description", "content", "tags"].some((key) =>
-                Array.isArray(postData[key])
-                  ? postData[key].some((tag) =>
+
+        const filteredPosts = Object.values(allPosts).filter((postData) =>
+          searchTags.every((searchTag) =>
+            ["title", "description", "content", "tags"].some((key) =>
+              Array.isArray(postData[key])
+                ? postData[key].some(
+                    (tag) =>
                       key === "tags" && searchTags.includes(tag.toLowerCase())
-                    )
-                  : postData[key]?.toLowerCase()?.includes(searchTag)
-              )
+                  )
+                : postData[key]?.toLowerCase()?.includes(searchTag)
             )
           )
-  
+        );
+
         setFilteredResults(filteredPosts);
       } catch (error) {
         console.log(error.message);
       }
     };
-  
+
     handleSearch();
   }, [term]);
-  
 
   const handleLike = async (postId) => {
     try {
@@ -143,8 +144,12 @@ export function TagSearchResults() {
         break;
       case "tags":
         sortedPostsCopy.sort((a, b) => {
-          const tagA = a.tags.find((tag) => searchTags.includes(tag.toLowerCase()));
-          const tagB = b.tags.find((tag) => searchTags.includes(tag.toLowerCase()));
+          const tagA = a.tags.find((tag) =>
+            searchTags.includes(tag.toLowerCase())
+          );
+          const tagB = b.tags.find((tag) =>
+            searchTags.includes(tag.toLowerCase())
+          );
 
           if (tagA && tagB) {
             return tagA.toLowerCase() === searchTags[0] ? -1 : 1;
@@ -230,19 +235,32 @@ export function TagSearchResults() {
                 <Text fontSize="sm" color="blue.500" mb="10px">
                   Posted by: {postData.user}
                 </Text>
-                <HStack spacing="10px">
+                <HStack justifyContent="flex-end">
                   <Button
-                    colorScheme="teal"
+                    colorScheme="black"
                     onClick={() => handleLike(postData.id)}
                   >
-                    Like ({postData.likes})
+                    <Icon
+                      as={
+                        postData.likedBy?.includes(user.uid)
+                          ? AiFillHeart
+                          : AiOutlineHeart
+                      }
+                      boxSize={10}
+                      color={
+                        postData.likedBy?.includes(user.uid)
+                          ? "red.500"
+                          : "black.300"
+                      }
+                    />
+                    {postData.likes}
                   </Button>
-                  <IconButton
-                    aria-label="Upvote"
-                    icon={<FaThumbsUp />}
-                    colorScheme="blue"
-                    onClick={() => handleUpvote(postData.id)}
-                  />
+                  <Button
+                    colorScheme="black"
+                    leftIcon={<ChatIcon boxSize={8} />}
+                    as={Link}
+                    to={user ? `/post-list/${postData.id}` : "/sign-up"}
+                  ></Button>
                 </HStack>
               </GlassContainer>
             </li>
