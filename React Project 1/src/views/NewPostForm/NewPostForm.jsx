@@ -106,6 +106,7 @@ export function NewPost() {
         <div className="Content-container">
           <label>Content:</label>
           <textarea
+            placeholder="Begin to create"
             className="tex-container"
             value={content}
             onChange={handleContentChange}

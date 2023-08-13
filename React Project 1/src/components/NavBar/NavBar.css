@@ -32,10 +32,10 @@
   background-color: red;
   opacity: 0.8;
   backdrop-filter: blur(16px);
-  border-radius: 5px;
+
 }
 .number {
-  background-color: red;
+border-radius: 0;
 }
 .edit-user {
   margin-top: 0;
@@ -46,6 +46,7 @@
   cursor: pointer;
   width: 100%;
   padding-left: 16px;
+  border-radius: 0;
 }
 .edit-user:hover {
   color: #2c5364;
@@ -58,12 +59,11 @@
     color 3s;
   cursor: pointer;
   width: 100%;
-  padding-left: 16px;
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+  object-fit: fill;
+
+
 }
 .signout-user:hover {
   color: #2c5364;
   background-color: white;
-  object-fit: fill;
 }

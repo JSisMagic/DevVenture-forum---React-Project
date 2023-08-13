@@ -115,7 +115,7 @@ export function Nav() {
                     <Avatar size={"sm"} src={imageURL} />
                   </MenuButton>
                   <MenuList
-                    padding={"0"}
+                    padding={"-1"}
                     bg={"rgba(255, 255, 255, 0.1)"}
                     backdropBlur={"blur(26px)"}
                     alignItems={"center"}
@@ -138,7 +138,7 @@ export function Nav() {
                       <>
                         <Center>
                           <p>ADMIN</p>
-                          <br />
+                     
                         </Center>
                         <br />
                       </>
@@ -147,17 +147,17 @@ export function Nav() {
                       <>
                         <Center>
                           <p>BLOCKED ACCOUNT</p>
-                          <br />
                         </Center>
                         <br />
                       </>
                     )}
                     <Link to="/edit">
-                      <button className="edit-user">Edit User</button>
+                      <Button  rounded={'none'} className="edit-user">Edit User</Button>
                     </Link>
-                    <button className="signout-user" onClick={userSignOut}>
+                    <Button roundedBottomLeft={'16px'} roundedBottomRight={'16px'}
+                     className="signout-user" onClick={userSignOut}>
                       Logout
-                    </button>
+                    </Button>
                   </MenuList>
                 </Menu>
               )}
