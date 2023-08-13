@@ -49,8 +49,8 @@
     }
   .viw-description{
     text-align:start;
-    background-color: white;
-    color: #2C5364;
+    background-color:transparent;
+    color:white;
     border-radius: 5px;
     border-color: white;
     border-style: solid;
@@ -65,13 +65,13 @@
     border-radius: 5px;
     border-color: white;
     border-style: solid;
-    background-color: white;
-    color: #2C5364;
+    background-color:transparent;
+    color:white;
     border-width: 1px;
     resize: none;
     outline: none;
     overflow: auto;
-    box-shadow:inset 6px 6px 6px white;
+
   }
  .viw-count{
     text-align:end;
@@ -86,18 +86,32 @@ border-style:solid;
   border-color: white;
   border-width: 1px;
   border-radius:3px;
-  padding: 3px;
+  padding: 12px;
+  background-color:transparent;
+  color:white;
+  border-radius: 5px;
+  border-color: white;
+  padding:16px;  
+   overflow: auto;
+  
 
   }
   .viw-ere{
 display: flex;
-
+font-weight:bolder;
   }
   .viw-user{
     margin-right: 6px;
+
   }
   .viw-rep{
     margin-top: 2px;
+    background-color: red;
+    overflow: auto;
+    resize: none;
+    outline: none;
+    word-wrap: break-word;
+    width: auto;
   }
 .onn{
   margin-right: 8px;
@@ -107,3 +121,18 @@ display: flex;
   top: 16px;
   right: 16px;
 } */
+.submit-rep{
+  margin-top: 16px;
+  width: 100%;
+  height: 68px;
+  padding:3px;
+  outline: none;
+  border-radius: 5px;
+  border-color: white;
+  border-style: solid;
+  background-color: rgb(5, 8, 38);
+  color: white;
+  border-width: 1px;
+  resize: none;
+  padding:16px;  
+}

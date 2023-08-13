@@ -211,7 +211,7 @@ export function PostPage() {
                   <p>{`${reply.content}`}</p>
                 )}
                 {user && (user.uid === reply.userUID) && (user.uid === post.userUID)  && (
-                  <div>
+                  <div className="submit-div">
                     {editingIndex === index ? (
                       <Button
                         colorScheme="green"
@@ -279,10 +279,9 @@ export function PostPage() {
             </li>
           ))}
         </ul>
-        <form onSubmit={handleSubmitReply}>
-          <textarea value={reply} onChange={handleReplyChange} />
-          <button type="submit">Reply</button>
-        </form>
+    
+          <textarea className="submit-rep" value={reply} onChange={handleReplyChange} />
+          <Button onClick={handleSubmitReply} type="submit">Reply</Button>
         {user && (user.uid === post.userUID) && (
           <Button as={Link} to={`/edit/${post.id}`} colorScheme="blue">
             Edit
