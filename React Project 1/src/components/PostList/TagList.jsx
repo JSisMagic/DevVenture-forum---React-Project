@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../../services/database-services";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 
 export const TagList = () => {
   const [tags, setTags] = useState([]);
@@ -27,10 +27,14 @@ export const TagList = () => {
 
 
   return (
-    <Flex direction="column" alignItems="center">
-      <Text fontSize="xl" fontWeight="bold" mb={4}>
+    <Flex direction="column" alignItems="center" maxW={"230px"} marginTop={'100px'}>
+      <Button fontSize="xl" fontWeight="bold" mb={6}
+      boxShadow="0 1rem 3rem rgba(0, 0, 0, 0.8)"
+      bg={' rgba(255, 255, 255, 0.1)'}
+ cursor={"none"}
+      >
         Available Tags
-      </Text>
+      </Button>
       <Flex flexWrap="wrap" justifyContent="center">
         {tags.map((tag) => (
           <Link
@@ -38,11 +42,20 @@ export const TagList = () => {
             to={`/searched-tag/${tag.name}`} 
             style={{
               textDecoration: "none",
-              padding: "8px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              margin: "4px",
+              padding: "6px",
+              border: "none",
+              borderRadius: "8px",
+              margin: "3px",
+              cursor: 'pointer',
+              zIndex:"12",
+            backgroundColor:' rgba(255, 255, 255, 0.1)',
+            opacity: '0.8',
+            boxShadow:'0 1rem 3rem rgba(0, 0, 0, 0.8)',
+            color:"white",
+            backdropBlur:"36px",
+            
             }}
+            
           >
             {tag.name}
           </Link>

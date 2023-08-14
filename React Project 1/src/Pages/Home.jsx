@@ -7,8 +7,8 @@ import { UpperBody } from "../components/UpperBody/UpperBody";
 function Home() {
   return (
     <>
-      <UpperBody />
-      <HomeStats />
+     {/* <UpperBody /> */}
+     {/* <HomeStats /> */}
       <PostList />
     </>
   );

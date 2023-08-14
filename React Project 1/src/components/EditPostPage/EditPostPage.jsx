@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../services/database-services';
-
+import "./EditPostPage.css";
 export function EditPostPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -98,9 +98,10 @@ export function EditPostPage() {
   };
 
   return (
-    <div>
-      <h2>Edit Post</h2>
-      <div>
+    <div className="edi-web">
+      <div className="edi-container" >
+      <h2 className="edi-header">Edit Post</h2>
+      <div className="edi-header-box">
         <label>Title:</label>
         <input
           type="text"
@@ -134,6 +135,8 @@ export function EditPostPage() {
       </div>
       <button onClick={handleSubmit}>Save Changes</button>
       <button onClick={handleDelete}>Delete Post</button>
+
+      </div>
     </div>
   );
 }

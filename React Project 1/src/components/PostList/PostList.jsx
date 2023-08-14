@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   Box,
   Menu,
+  Flex ,
   Heading,
   Text,
   Button,
@@ -15,6 +16,7 @@ import {
   Badge,
   Icon,
   Avatar,
+
   Spacer,
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
@@ -109,10 +111,13 @@ export function PostList() {
 
   return (
     <>
-      <Menu>
-        <MenuButton as={Button} rounded={"full"} cursor={"pointer"} minW={0}>
+    <Menu>
+      <Flex justifyContent="space-between" alignItems={'center'} mb="23px" >
+      <TagList textAlign="start" />
+       <MenuButton as={Button} rounded={"full"} cursor={"pointer"} minW={0}>
           Sort By: {sortOption}
         </MenuButton>
+        </Flex> 
         <MenuList
           padding={"-1"}
           bg={"transparent"} // Set the background color of MenuList to transparent
@@ -151,11 +156,7 @@ export function PostList() {
             Least Commented
           </MenuItem>
         </MenuList>
-      </Menu>
-      <TagList />
-      <Heading as="h1" textAlign="center" mb="20px">
-        Post List
-      </Heading>
+        </Menu>
       <VStack spacing="20px">
         {sortedPosts.map((post) => (
           <GlassContainer key={post.id} height="auto">
