@@ -16,7 +16,7 @@ import {
   MenuList,
   MenuItem,
   Badge,
-  Icon
+  Icon,
 } from "@chakra-ui/react";
 import { FaThumbsUp } from "react-icons/fa";
 import { ChatIcon } from "@chakra-ui/icons";
@@ -24,6 +24,8 @@ import { auth } from "../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useLikePost } from "../PostList/UseLikePost";
+import { VStack, Spacer } from "@chakra-ui/react";
+import { Avatar } from "@chakra-ui/react";
 
 export function TagSearchResults() {
   const { tag: term } = useParams();
@@ -65,7 +67,6 @@ export function TagSearchResults() {
 
     handleSearch();
   }, [term]);
-
 
   useEffect(() => {
     let sortedPostsCopy = [...filteredResults];
@@ -183,39 +184,51 @@ export function TagSearchResults() {
                 <Text fontSize="lg" color="white.600" mb="10px">
                   {postData.description}
                 </Text>
+                <PostTags tags={postData.tags} />
                 <Text fontSize="sm" color="gray.400" mb="10px">
                   {new Date(postData.date).toLocaleString()}
                 </Text>
-                <PostTags tags={postData.tags} />
-                <Text fontSize="sm" color="blue.500" mb="10px">
-                  Posted by: {postData.user}
-                </Text>
-                <HStack justifyContent="flex-end">
-                  <Button
-                    colorScheme="black"
-                    onClick={() => handleLike(postData.id, filteredResults, setFilteredResults)}
-                  >
-                    <Icon
-                      as={
-                        postData.likedBy?.includes(user.uid)
-                          ? AiFillHeart
-                          : AiOutlineHeart
+                <HStack justifyContent="space-between" alignItems="center">
+                  <VStack alignItems="flex-start" spacing={1}>
+                    <Avatar />
+                    <Text fontSize="sm" color="blue.500">
+                      Posted by: {postData.user}
+                    </Text>
+                  </VStack>
+                  <Spacer />
+                  <HStack spacing={2}>
+                    <Button
+                      colorScheme="black"
+                      onClick={() =>
+                        handleLike(
+                          postData.id,
+                          filteredResults,
+                          setFilteredResults
+                        )
                       }
-                      boxSize={10}
-                      color={
-                        postData.likedBy?.includes(user.uid)
-                          ? "red.500"
-                          : "black.300"
-                      }
-                    />
-                    {postData.likes}
-                  </Button>
-                  <Button
-                    colorScheme="black"
-                    leftIcon={<ChatIcon boxSize={8} />}
-                    as={Link}
-                    to={user ? `/post-list/${postData.id}` : "/sign-up"}
-                  ></Button>
+                    >
+                      <Icon
+                        as={
+                          user && postData.likedBy?.includes(user.uid)
+                            ? AiFillHeart
+                            : AiOutlineHeart
+                        }
+                        boxSize={10}
+                        color={
+                          user && postData.likedBy?.includes(user.uid)
+                            ? "red.500"
+                            : "black.300"
+                        }
+                      />
+                      {postData.likes}
+                    </Button>
+                    <Button
+                      colorScheme="black"
+                      leftIcon={<ChatIcon boxSize={8} />}
+                      as={Link}
+                      to={user ? `/post-list/${postData.id}` : "/sign-up"}
+                    ></Button>
+                  </HStack>
                 </HStack>
               </GlassContainer>
             </li>
