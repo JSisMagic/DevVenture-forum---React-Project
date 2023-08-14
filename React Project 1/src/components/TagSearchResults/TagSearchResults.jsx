@@ -23,6 +23,7 @@ import { ChatIcon } from "@chakra-ui/icons";
 import { auth } from "../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { useLikePost } from "../PostList/UseLikePost";
 
 export function TagSearchResults() {
   const { tag: term } = useParams();
@@ -33,6 +34,8 @@ export function TagSearchResults() {
   const navigate = useNavigate();
   const user = auth.currentUser;
   const searchTags = term.toLowerCase().split(" ");
+
+  const { handleLike } = useLikePost();
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -63,54 +66,6 @@ export function TagSearchResults() {
     handleSearch();
   }, [term]);
 
-  const handleLike = async (postId) => {
-    try {
-      if (!user) {
-        navigate("/sign-up");
-        return;
-      }
-
-      const currentUserUID = user.uid;
-
-      // Find the post by ID
-      const likedPost = filteredResults.find((post) => post.id === postId);
-
-      if (likedPost) {
-        // Check if the post has a likedBy array and if the current user liked it
-        const userLiked =
-          likedPost.likedBy && likedPost.likedBy.includes(currentUserUID);
-
-        // Update the likedBy array based on userLiked
-        const updatedLikedBy = userLiked
-          ? likedPost.likedBy.filter((uid) => uid !== currentUserUID)
-          : likedPost.likedBy
-          ? [...likedPost.likedBy, currentUserUID]
-          : [currentUserUID]; // Initialize likedBy if it doesn't exist
-
-        // Increment or decrement the likes count based on userLiked
-        const updatedLikes = userLiked
-          ? likedPost.likes - 1
-          : likedPost.likes + 1;
-
-        // Update the likes count and likedBy array in the state
-        setFilteredResults((prevPosts) =>
-          prevPosts.map((post) =>
-            post.id === postId
-              ? { ...post, likes: updatedLikes, likedBy: updatedLikedBy }
-              : post
-          )
-        );
-
-        // Update the likes count and likedBy array in the database
-        await db.update(`posts/${postId}`, {
-          likes: updatedLikes,
-          likedBy: updatedLikedBy,
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
 
   useEffect(() => {
     let sortedPostsCopy = [...filteredResults];
@@ -238,7 +193,7 @@ export function TagSearchResults() {
                 <HStack justifyContent="flex-end">
                   <Button
                     colorScheme="black"
-                    onClick={() => handleLike(postData.id)}
+                    onClick={() => handleLike(postData.id, filteredResults, setFilteredResults)}
                   >
                     <Icon
                       as={

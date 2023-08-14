@@ -24,11 +24,13 @@ import { auth } from "../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
 import { TagList } from "./TagList";
 import { db } from "../../services/database-services";
+import { useLikePost } from "./UseLikePost";
 
 export function PostList() {
   const [posts, setPosts] = useState([]);
   const [sortOption, setSortOption] = useState("newest");
   const navigate = useNavigate();
+  const { handleLike } = useLikePost();
 
   const user = auth.currentUser;
 
@@ -51,49 +53,6 @@ export function PostList() {
 
     fetchPosts();
   }, []);
-
-  const handleLike = async (postId) => {
-    try {
-      if (!user) {
-        navigate("/sign-up");
-        return;
-      }
-
-      const currentUserUID = user.uid;
-
-      // Find the post by ID
-      const likedPostIndex = posts.findIndex((post) => post.id === postId);
-
-      if (likedPostIndex !== -1) {
-        const updatedPosts = [...posts];
-        const likedPost = updatedPosts[likedPostIndex];
-
-        // Check if the post has a likedBy array and if the current user liked it
-        const userLiked = likedPost.likedBy?.includes(currentUserUID);
-
-        // Update the likedBy array based on userLiked
-        likedPost.likedBy = userLiked
-          ? likedPost.likedBy.filter((uid) => uid !== currentUserUID)
-          : likedPost.likedBy
-          ? [...likedPost.likedBy, currentUserUID]
-          : [currentUserUID]; // Initialize likedBy if it doesn't exist
-
-        // Increment or decrement the likes count based on userLiked
-        likedPost.likes = userLiked ? likedPost.likes - 1 : likedPost.likes + 1;
-
-        // Update the posts array
-        setPosts(updatedPosts);
-
-        // Update the likes count and likedBy array in the database
-        await db.update(`posts/${postId}`, {
-          likes: likedPost.likes,
-          likedBy: likedPost.likedBy,
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
 
   const sortedPosts = useMemo(() => {
     let sortedPosts = [...posts];
@@ -224,7 +183,7 @@ export function PostList() {
               </VStack>
               <Spacer />
               <HStack spacing={2}>
-                <Button colorScheme="black" onClick={() => handleLike(post.id)}>
+                <Button colorScheme="black" onClick={() => handleLike(post.id, posts, setPosts)}>
                   <Icon
                     as={
                       user && post.likedBy?.includes(user.uid)

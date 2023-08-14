@@ -28,6 +28,7 @@ export function PostPage() {
         setPost(postData);
         setReplies(postData.replies || []);
         setLikes(postData.likes || 0);
+        setLikedBy(postData.likedBy || [])
       } catch (error) {
         console.log(error.message);
       }
