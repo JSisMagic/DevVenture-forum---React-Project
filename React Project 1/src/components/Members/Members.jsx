@@ -37,6 +37,7 @@ const Members = () => {
         email={member.email}
         setBlocked={setBlocked}
         isBlock={member.isBlock}
+        imageURL={member.imageURL}
       />
     )
   })
