@@ -2,6 +2,7 @@ import { SmallCloseIcon } from "@chakra-ui/icons"
 import {
   Avatar,
   AvatarBadge,
+  Button,
   Center,
   Flex,
   FormControl,
@@ -199,7 +200,7 @@ const Edit = () => {
       inputElement.value = ""
     }
   }
-
+  console.log(URL);
   const navigateBackwards = () => {
     navigate(-1)
   }
@@ -218,6 +219,7 @@ const Edit = () => {
         linkedInURL: formState.linkedInURL.value,
         gitLabURL: formState.gitLabURL.value,
         gitHubURL: formState.gitHubURL.value,
+        imageURL: URL,
       })
 
       // Update email and password
@@ -276,7 +278,7 @@ const Edit = () => {
             </Center>
             <div>
               <input type="file" id="fileInput" onChange={handleFileChange} />
-              <button onClick={uploadImg}>Upload</button>
+              <Button onClick={uploadImg}>Upload</Button>
             </div>
           </Stack>
         </FormControl>
