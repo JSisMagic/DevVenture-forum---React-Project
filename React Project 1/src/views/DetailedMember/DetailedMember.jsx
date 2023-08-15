@@ -25,7 +25,7 @@ const DetailedMember = () => {
       getUserPosts(memberData?.username).then(setUserPosts).catch(console.error)
     }
   }, [memberData])
-
+  console.log(memberData);
   const handleShowEditModal = () => {
     navigate("/edit")
   }

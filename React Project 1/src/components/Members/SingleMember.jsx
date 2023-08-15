@@ -1,10 +1,8 @@
-import { useContext, useEffect, useState } from "react"
+import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react"
+import { useContext } from "react"
+import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../../context/AuthContext"
 import { db } from "../../services/database-services"
-import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react"
-import { useNavigate } from "react-router-dom"
-import { getDownloadURL, ref } from "firebase/storage" // Import necessary functions from firebase storage
-import { storage } from "../../config/firebase-config"
 
 const SingleMember = ({
   uid,
@@ -14,23 +12,10 @@ const SingleMember = ({
   email,
   isBlock = false,
   setBlocked,
+  imageURL,
 }) => {
   const { userData } = useContext(AuthContext)
   const navigate = useNavigate()
-  const [imageURL, setImageURL] = useState(null) // State to store the user's image URL
-
-  useEffect(() => {
-    // Fetch the user's image URL and update the state
-    const userImageRef = ref(storage, `AuthenticatedUserImages/${uid}`)
-    getDownloadURL(userImageRef)
-      .then(downloadURL => {
-        setImageURL(downloadURL)
-      })
-      .catch(error => {
-        // Handle errors if necessary
-        console.log(error)
-      })
-  }, [uid])
 
   const blockUser = async () => {
     console.log(userName, isBlock)
