@@ -4,14 +4,25 @@ import { Avatar, Button, HStack, Heading, Icon, Spacer, Text, VStack } from "@ch
 import { ChatIcon } from "@chakra-ui/icons"
 import PostTags from "./PostTags"
 import { useLikePost } from "../PostList/UseLikePost"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../context/AuthContext"
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"
+import { getUserById } from "../../services/users.services"
 
 const Post = ({ post, posts, setPosts }) => {
   const { user } = useContext(AuthContext)
   const { handleLike } = useLikePost()
 
+  const [authorData, setAuthorData] = useState(null)
+  useEffect(() => {
+    if (post?.userUID) {
+      getUserById(post.userUID)
+        .then(data => setAuthorData(data))
+        .catch(console.error)
+    }
+  }, [post])
+
+  console.log(post)
   return (
     <GlassContainer key={post.id} height="auto">
       <Link to={`/post-list/${post.id}`} style={{ textDecoration: "none", color: "black" }}>
@@ -28,7 +39,7 @@ const Post = ({ post, posts, setPosts }) => {
       </Text>
       <HStack justifyContent="space-between" alignItems="center">
         <VStack alignItems="flex-start" spacing={1}>
-          <Avatar />
+          <Avatar src={authorData?.imageURL} />
           <Text fontSize="sm" color="blue.500">
             Posted by: {post.user}
           </Text>

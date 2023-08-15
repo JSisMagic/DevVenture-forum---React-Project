@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import { db } from "../../services/database-services"
 import { auth } from "../../config/firebase-config"
 import { useNavigate } from "react-router-dom/dist"
-import { Button, Heading, IconButton } from "@chakra-ui/react"
+import { Box, Button, Divider, Flex, Heading, IconButton, Text } from "@chakra-ui/react"
 import "./PostPage.css"
 import { Link } from "react-router-dom"
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
@@ -77,17 +77,17 @@ export function PostPage() {
       }
     }
   }
-  console.log(userData?.isBlock);
+  console.log(userData?.isBlock)
   const handleLike = async () => {
     try {
       if (!user) {
         navigate("/sign-up")
         return
       }
-      
+
       if (userData?.isBlock) {
-        alert("Blocked users are not allowed to like posts.");
-        return;
+        alert("Blocked users are not allowed to like posts.")
+        return
       }
 
       const currentUserUID = user.uid
@@ -196,20 +196,20 @@ export function PostPage() {
   return (
     <div className="create-viw">
       <div className="viw-container">
-        <h1 className="viw-header">{post.user}</h1>
-        <h2 className="viw-Title">{post.title}</h2>
-        <p className="viw-content">
-          {post.description}
-          <br />
-          <br />
+        <Box>
+          <Heading width="90%">{post.title}</Heading>
+          <span>posted by <Heading display="inline-block" size="sm">@{post.user}</Heading></span>
+        </Box>
+        <Divider marginBlock={3} bg="white" />
+        <Text>
           {post.content}
-        </p>
+        </Text>
         <div className="viw-button-count">
           <Button colorScheme="teal" onClick={() => handleLike(post.id)}>
             Like ({post.likes})
           </Button>
         </div>
-        <h3 className="viw-comment">Replies:</h3>
+        <Heading size="md">Replies</Heading>
         <ul>
           {replies.map((reply, index) => (
             <li className="viw-comment-box" key={index}>
@@ -272,7 +272,9 @@ export function PostPage() {
         </ul>
 
         {userData?.isBlock ? (
-          <Heading size="lg" textAlign="center" marginTop={5}>Blocked users are not allowed to reply to posts.</Heading>
+          <Heading size="lg" textAlign="center" marginTop={5}>
+            Blocked users are not allowed to reply to posts.
+          </Heading>
         ) : (
           <>
             <textarea
