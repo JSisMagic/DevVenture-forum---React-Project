@@ -1,15 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../config/firebase-config";
 import { db } from "../../services/database-services";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 export function useLikePost() {
   const navigate = useNavigate();
   const user = auth.currentUser;
+  const { userData } = useContext(AuthContext)
 
   const handleLike = async (postId, posts, setPosts) => {
     try {
       if (!user) {
         navigate("/sign-up");
+        return;
+      }
+
+      if (userData?.isBlock) {
+        alert("Blocked users are not allowed to like posts.");
         return;
       }
 

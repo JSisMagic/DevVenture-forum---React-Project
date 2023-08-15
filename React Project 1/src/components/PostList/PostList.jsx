@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   Box,
   Menu,
-  Flex ,
+  Flex,
   Heading,
   Text,
   Button,
@@ -16,7 +16,6 @@ import {
   Badge,
   Icon,
   Avatar,
-
   Spacer,
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
@@ -27,6 +26,8 @@ import { useNavigate } from "react-router-dom";
 import { TagList } from "./TagList";
 import { db } from "../../services/database-services";
 import { useLikePost } from "./UseLikePost";
+import HomeStats from "../HomeStats/HomeStats";
+import Post from "../Post/Post";
 
 export function PostList() {
   const [posts, setPosts] = useState([]);
@@ -111,104 +112,55 @@ export function PostList() {
 
   return (
     <>
-    <Menu>
-      <Flex justifyContent="space-between" alignItems={'center'} mb="23px" >
-      <TagList textAlign="start" />
-       <MenuButton as={Button} rounded={"full"} cursor={"pointer"} minW={0}>
-          Sort By: {sortOption}
-        </MenuButton>
-        </Flex> 
-        <MenuList
-          padding={"-1"}
-          bg={"transparent"} // Set the background color of MenuList to transparent
-          backdropBlur={"blur(26px)"}
-          alignItems={"center"}
-          boxShadow={"0rem 1rem 3rem rgba(0, 0, 0, 0.8)"}
-          borderRadius={"16px"}
-          opacity={"0.8"}
-          border={"none"}
-          color={"white"}
-        >
-          <MenuItem>
-            <Button
-              onClick={() => handleSort("newest")}
-              w="100%"
-              justifyContent="flex-start"
-              paddingLeft="1rem"
-              border={"none"}
-            >
-              Newest
-            </Button>
-          </MenuItem>
-          <MenuItem>
-            <Button onClick={() => handleSort("oldest")}>Oldest</Button>
-          </MenuItem>
-          <MenuItem onClick={() => handleSort("mostLiked")}>
-            Most Liked
-          </MenuItem>
-          <MenuItem onClick={() => handleSort("leastLiked")}>
-            Least Liked
-          </MenuItem>
-          <MenuItem onClick={() => handleSort("mostCommented")}>
-            Most Commented
-          </MenuItem>
-          <MenuItem onClick={() => handleSort("leastCommented")}>
-            Least Commented
-          </MenuItem>
-        </MenuList>
+      <Flex
+        direction="column"
+        alignItems="flex-end"
+        position="relative"
+        opacity={"0.8"}
+        color={"white"}
+      >
+        <Flex>
+        <Menu>
+          <MenuButton as={Button} rounded={"full"} cursor={"pointer"} minW={0}>
+            Sort By: {sortOption}
+          </MenuButton>
+          <MenuList>
+            <MenuItem>
+              <MenuItem onClick={() => handleSort("newest")}>Newest</MenuItem>
+            </MenuItem>
+            <MenuItem>
+              <Button onClick={() => handleSort("oldest")}>Oldest</Button>
+            </MenuItem>
+            <MenuItem onClick={() => handleSort("mostLiked")}>
+              Most Liked
+            </MenuItem>
+            <MenuItem onClick={() => handleSort("leastLiked")}>
+              Least Liked
+            </MenuItem>
+            <MenuItem onClick={() => handleSort("mostCommented")}>
+              Most Commented
+            </MenuItem>
+            <MenuItem onClick={() => handleSort("leastCommented")}>
+              Least Commented
+            </MenuItem>
+          </MenuList>
         </Menu>
-      <VStack spacing="20px">
-        {sortedPosts.map((post) => (
-          <GlassContainer key={post.id} height="auto">
-            <Link
-              to={`/post-list/${post.id}`}
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <Heading as="h3" size="lg" mb="10px">
-                {post.title}
-              </Heading>
-            </Link>
-            <Text fontSize="lg" color="white.600" mb="10px">
-              {post.description}
-            </Text>
-            <PostTags tags={post.tags} />
-            <Text fontSize="sm" color="gray.400" mb="10px">
-              {new Date(post.date).toLocaleString()}
-            </Text>
-            <HStack justifyContent="space-between" alignItems="center">
-              <VStack alignItems="flex-start" spacing={1}>
-                <Avatar />
-                <Text fontSize="sm" color="blue.500">
-                  Posted by: {post.user}
-                </Text>
-              </VStack>
-              <Spacer />
-              <HStack spacing={2}>
-                <Button colorScheme="black" onClick={() => handleLike(post.id, posts, setPosts)}>
-                  <Icon
-                    as={
-                      user && post.likedBy?.includes(user.uid)
-                        ? AiFillHeart
-                        : AiOutlineHeart
-                    }
-                    boxSize={10}
-                    color={
-                      user && post.likedBy?.includes(user.uid) ? "red.500" : "black.300"
-                    }
-                  />
-                  {post.likes}
-                </Button>
-                <Button
-                  colorScheme="black"
-                  leftIcon={<ChatIcon boxSize={8} />}
-                  as={Link}
-                  to={user ? `/post-list/${post.id}` : "/sign-up"}
-                ></Button>
-              </HStack>
-            </HStack>
-          </GlassContainer>
-        ))}
-      </VStack>
+        </Flex>
+      </Flex>
+
+      <Flex justifyContent="space-between" alignItems={"start"} mb="23px">
+        <TagList textAlign="start" />
+        {/* <UpperBody /> */}
+
+        <VStack spacing="13px" alignItems={"center"} marginRight={"123px"} width="60%">
+          {sortedPosts.map((post) => (
+            <Post key={post.id} post={post} posts={posts} setPosts={setPosts} />
+          ))}
+        </VStack>
+        <Flex>
+          <HomeStats />
+        </Flex>
+      </Flex>
     </>
   );
 }

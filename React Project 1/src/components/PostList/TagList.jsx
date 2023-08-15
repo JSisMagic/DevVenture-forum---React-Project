@@ -25,13 +25,20 @@ export const TagList = () => {
     fetchTags();
   }, []);
 
-
   return (
-    <Flex direction="column" alignItems="center" maxW={"230px"} marginTop={'100px'}>
-      <Button fontSize="xl" fontWeight="bold" mb={6}
-      boxShadow="0 1rem 3rem rgba(0, 0, 0, 0.8)"
-      bg={' rgba(255, 255, 255, 0.1)'}
- cursor={"none"}
+    <Flex
+      direction="column"
+      alignItems="center"
+      maxW={"230px"}
+      marginTop={"100px"}
+    >
+      <Button
+        fontSize="xl"
+        fontWeight="bold"
+        mb={6}
+        boxShadow="0 1rem 3rem rgba(0, 0, 0, 0.8)"
+        bg={" rgba(255, 255, 255, 0.1)"}
+        cursor={"none"}
       >
         Available Tags
       </Button>
@@ -39,23 +46,21 @@ export const TagList = () => {
         {tags.map((tag) => (
           <Link
             key={tag.name}
-            to={`/searched-tag/${tag.name}`} 
+            to={`/searched-tag/${tag.name}`}
             style={{
               textDecoration: "none",
               padding: "6px",
               border: "none",
               borderRadius: "8px",
               margin: "3px",
-              cursor: 'pointer',
-              zIndex:"12",
-            backgroundColor:' rgba(255, 255, 255, 0.1)',
-            opacity: '0.8',
-            boxShadow:'0 1rem 3rem rgba(0, 0, 0, 0.8)',
-            color:"white",
-            backdropBlur:"36px",
-            
+              cursor: "pointer",
+              zIndex: "12",
+              backgroundColor: " rgba(255, 255, 255, 0.1)",
+              opacity: "0.8",
+              boxShadow: "0 1rem 3rem rgba(0, 0, 0, 0.8)",
+              color: "white",
+              backdropBlur: "36px",
             }}
-            
           >
             {tag.name}
           </Link>
@@ -64,4 +69,3 @@ export const TagList = () => {
     </Flex>
   );
 };
-

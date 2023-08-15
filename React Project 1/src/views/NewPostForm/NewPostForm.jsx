@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { db } from "../../services/database-services";
 import { auth } from "../../config/firebase-config";
 import { useNavigate, Link } from "react-router-dom";
 import "./NewPostForm.css";
+import { AuthContext } from "../../context/AuthContext";
+import { Heading } from "@chakra-ui/react";
 
 export function NewPost() {
+  const { userData } = useContext(AuthContext);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState("");
@@ -80,6 +83,10 @@ export function NewPost() {
       alert("Error submitting post. Please try again later.");
     }
   };
+
+  if (userData?.isBlock) {
+    return <Heading size="lg" textAlign="center" marginTop="20rem">Blocked users are not allowed to create posts.</Heading>
+  }
 
   return (
     <div className="create-web">
