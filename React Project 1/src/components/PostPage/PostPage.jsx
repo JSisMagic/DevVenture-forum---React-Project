@@ -228,7 +228,7 @@ export function PostPage() {
                 ) : (
                   <p>{`${reply.content}`}</p>
                 )}
-                {user.uid === reply.userUID || isAdmin ? (
+                {user && (user.uid === reply.userUID || isAdmin) ? (
                   <div className="submit-div">
                     {editingIndex === index ? (
                       <Button
@@ -256,7 +256,7 @@ export function PostPage() {
                     />
                   </div>
                 ) : (
-                  user.uid === post.userUID && (
+                 user && (user.uid === post.userUID) && (
                     <IconButton
                       icon={<DeleteIcon />}
                       colorScheme="red"
