@@ -5,6 +5,8 @@ import { useNavigate, Link } from "react-router-dom";
 import "./NewPostForm.css";
 import { AuthContext } from "../../context/AuthContext";
 import { Heading } from "@chakra-ui/react";
+import { isValidDescription, isValidPostContent, isValidPostTitle, isValidTagInput } from "../../services/validation.services";
+import { TITLE_MAX_LENGTH, TITLE_MIN_LENGTH, DESCRIPTION_MAX_LENGTH, DESCRIPTION_MIN_LENGTH, CONTENT_MAX_LENGTH, CONTENT_MIN_LENGTH } from "../../common/constants";
 
 export function NewPost() {
   const { userData } = useContext(AuthContext);
@@ -13,6 +15,7 @@ export function NewPost() {
   const [tags, setTags] = useState("");
   const [description, setDescription] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,6 +49,29 @@ export function NewPost() {
       if (!currentUser) {
         // If no user is logged in, redirect to the signup page
         navigate("/sign-up");
+        return;
+      }
+
+      const validationErrors = {};
+
+      if (!isValidPostTitle(title)) {
+        validationErrors.title = `Title must be between ${TITLE_MIN_LENGTH} and ${TITLE_MAX_LENGTH} characters.`;
+      }
+  
+      if (!isValidPostContent(content)) {
+        validationErrors.content = `Content must be between ${CONTENT_MIN_LENGTH} and ${CONTENT_MAX_LENGTH} characters.`;
+      }
+
+      if (!isValidDescription(description)){
+        validationErrors.description = `Description must be between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters.`;
+      }
+  
+      if (!isValidTagInput(tags)) {
+        validationErrors.tags = `Invalid tags. Tags should be split by space and cannot start with symbols.`;
+      }
+  
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
         return;
       }
 
@@ -100,6 +126,7 @@ export function NewPost() {
             value={title}
             onChange={handleTitleChange}
           />
+          {errors.title && <div className="error-message">{errors.title}</div>}
         </div>
         <div className="Description-container">
           <label>Description:</label>
@@ -109,6 +136,7 @@ export function NewPost() {
             value={description}
             onChange={handleDescriptionChange}
           />
+          {errors.description && <div className="error-message">{errors.description}</div>}
         </div>
         <div className="Content-container">
           <label>Content:</label>
@@ -118,6 +146,7 @@ export function NewPost() {
             value={content}
             onChange={handleContentChange}
           />
+          {errors.content && <div className="error-message">{errors.content}</div>}
         </div>
         <div className="tag-container">
           <label>Tags:</label>
@@ -127,6 +156,7 @@ export function NewPost() {
             value={tags}
             onChange={handleTagsChange}
           />
+          {errors.tags && <div className="error-message">{errors.tags}</div>}
         </div>
         <button className="create-button" onClick={handleSubmit}>
           Submit

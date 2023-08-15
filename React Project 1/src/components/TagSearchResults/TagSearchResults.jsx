@@ -26,6 +26,8 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useLikePost } from "../PostList/UseLikePost";
 import { VStack, Spacer } from "@chakra-ui/react";
 import { Avatar } from "@chakra-ui/react";
+import Post from "../Post/Post";
+import { Flex } from "@chakra-ui/react";
 
 export function TagSearchResults() {
   const { tag: term } = useParams();
@@ -170,69 +172,13 @@ export function TagSearchResults() {
               <MenuItem onClick={() => handleSort("tags")}>Tag</MenuItem>
             </MenuList>
           </Menu>
-          {sortedPosts.map((postData) => (
-            <li key={postData.id} className="searched-posts-container">
-              <GlassContainer height="auto">
-                <Link
-                  to={`/searched-tag/${term}/${postData.id}`}
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  <Heading as="h3" size="lg" mb="10px">
-                    {postData.title}
-                  </Heading>
-                </Link>
-                <Text fontSize="lg" color="white.600" mb="10px">
-                  {postData.description}
-                </Text>
-                <PostTags tags={postData.tags} />
-                <Text fontSize="sm" color="gray.400" mb="10px">
-                  {new Date(postData.date).toLocaleString()}
-                </Text>
-                <HStack justifyContent="space-between" alignItems="center">
-                  <VStack alignItems="flex-start" spacing={1}>
-                    <Avatar />
-                    <Text fontSize="sm" color="blue.500">
-                      Posted by: {postData.user}
-                    </Text>
-                  </VStack>
-                  <Spacer />
-                  <HStack spacing={2}>
-                    <Button
-                      colorScheme="black"
-                      onClick={() =>
-                        handleLike(
-                          postData.id,
-                          filteredResults,
-                          setFilteredResults
-                        )
-                      }
-                    >
-                      <Icon
-                        as={
-                          user && postData.likedBy?.includes(user.uid)
-                            ? AiFillHeart
-                            : AiOutlineHeart
-                        }
-                        boxSize={10}
-                        color={
-                          user && postData.likedBy?.includes(user.uid)
-                            ? "red.500"
-                            : "black.300"
-                        }
-                      />
-                      {postData.likes}
-                    </Button>
-                    <Button
-                      colorScheme="black"
-                      leftIcon={<ChatIcon boxSize={8} />}
-                      as={Link}
-                      to={user ? `/post-list/${postData.id}` : "/sign-up"}
-                    ></Button>
-                  </HStack>
-                </HStack>
-              </GlassContainer>
-            </li>
+          <Flex justifyContent="center" alignItems={"start"} mb="23px">
+        <VStack spacing="13px" alignItems={"center"} width="60%">
+          {sortedPosts.map((post) => (
+            <Post key={post.id} post={post} posts={filteredResults} setPosts={setFilteredResults} />
           ))}
+        </VStack>
+      </Flex>
         </ul>
       )}
     </div>
