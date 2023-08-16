@@ -6,6 +6,7 @@ import { Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { VStack } from "@chakra-ui/react";
 import Post from "../Post/Post";
 import { Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 export function TagSearchResults() {
   const { tag: term } = useParams();
@@ -115,19 +116,20 @@ export function TagSearchResults() {
         </div>
       ) : (
         <ul>
-          <Flex
-            direction="column"
-            alignItems="start"
-            opacity={"0.8"}
-            color={"white"}
+          <Box
             width="60%"
-            gap={5}
+            position="relative"
+            mx="auto" // Center the box
           >
             <Menu>
-              <MenuButton as={Button} ml="337px" mb="20px">
+              <MenuButton as={Button} mr="900px" mb="20px">
                 Sort By: {sortOption}
               </MenuButton>
-              <MenuList bg="rgba(44,72,84, 0.5)" backdropFilter="blur(36px)">
+              <MenuList
+                bg="rgba(44,72,84, 0.5)"
+                backdropFilter="blur(36px)"
+                zIndex={3}
+              >
                 <MenuItem
                   backdropFilter="blur(36px)"
                   bg="rgba(44,72,84, 0.1)"
@@ -186,9 +188,17 @@ export function TagSearchResults() {
                 </MenuItem>
               </MenuList>
             </Menu>
-          </Flex>
-          <Flex justifyContent="center" alignItems={"start"} mb="23px">
-            <VStack spacing="13px" alignItems={"center"} width="60%" textAlign="left">
+            <Flex
+              direction="column"
+              alignItems="start"
+              opacity={"0.8"}
+              color={"white"}
+              gap={5}
+              textAlign="left"
+              position="relative"
+              zIndex={2}
+              backdropFilter="blur(7px)"
+            >
               {sortedPosts.map((post) => (
                 <Post
                   key={post.id}
@@ -197,8 +207,8 @@ export function TagSearchResults() {
                   setPosts={setFilteredResults}
                 />
               ))}
-            </VStack>
-          </Flex>
+            </Flex>
+          </Box>
         </ul>
       )}
     </div>
