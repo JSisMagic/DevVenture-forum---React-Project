@@ -84,6 +84,9 @@ export function PostList() {
       color={"white"}
       width="60%"
       gap={5}
+      position="relative" 
+      zIndex={2} 
+      backdropFilter="blur(7px)" 
     >
       <Menu>
         <MenuButton as={Button}>Sort By: {sortOption}</MenuButton>
