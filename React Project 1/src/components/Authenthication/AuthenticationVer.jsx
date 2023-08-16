@@ -13,7 +13,7 @@ export const AuthenticationVer = () => {
         logAuthenticationStatus(`User ${user.email} logged in`);
       } else {
         logAuthenticationStatus('User logged out');
-        navigate("/sign-in")
+        navigate("/")
       }
     });
 
