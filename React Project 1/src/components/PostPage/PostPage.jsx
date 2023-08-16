@@ -16,6 +16,7 @@ import "./PostPage.css";
 import { Link } from "react-router-dom";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { AuthContext } from "../../context/AuthContext";
+import PostTags from "../Post/PostTags";
 
 export function PostPage() {
   const { id } = useParams();
@@ -27,6 +28,7 @@ export function PostPage() {
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedReplyContent, setEditedReplyContent] = useState("");
   const [likedBy, setLikedBy] = useState([]);
+  const [tagsArray, setTagsArray] = useState([]);
 
   const navigate = useNavigate();
   const user = auth.currentUser;
@@ -40,6 +42,7 @@ export function PostPage() {
         setReplies(postData.replies || []);
         setLikes(postData.likes || 0);
         setLikedBy(postData.likedBy || []);
+        setTagsArray(postData.tags || [])
       } catch (error) {
         console.log(error.message);
       }
@@ -225,12 +228,20 @@ export function PostPage() {
         </Box>
         <Divider marginBlock={3} bg="white" />
         <Text>{post.content}</Text>
+        <Flex alignItems="center" justifyContent="space-between">
+          <div className="tags-contaner">
+            <Flex alignItems="center">
+              <Heading size="md" paddingRight={"15px"}>Tags:</Heading>
+              <PostTags tags={tagsArray} fontSize="md"/>
+              </Flex>
+          </div>
         <div className="viw-button-count">
           <Button colorScheme="teal" onClick={() => handleLike(post.id)}>
             Like ({post.likes})
           </Button>
         </div>
-        <Heading size="md">Replies</Heading>
+        </Flex>
+        <Heading size="md">Replies:</Heading>
         <ul>
           {replies.map((reply, index) => (
             <li className="viw-comment-box" key={index}>
