@@ -13,8 +13,8 @@
 }
 
 .menu-button:hover {
-  opacity: 0.1;
-  color: #000;
+  opacity: 0.3;
+  color: white;
 }
 
 .menu-button:active {
@@ -22,8 +22,8 @@
 }
 
 .right-button:hover {
-  opacity: 0.1;
-  color: #000;
+  opacity: 0.3;
+  color: white;
 }
 
 .right-button:active {
