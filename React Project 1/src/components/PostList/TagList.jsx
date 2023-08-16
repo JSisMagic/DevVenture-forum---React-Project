@@ -30,7 +30,6 @@ export const TagList = () => {
       direction="column"
       alignItems="center"
       maxW={"230px"}
-      marginTop={"100px"}
     >
       <Button
         fontSize="xl"

@@ -150,8 +150,15 @@ export function TagSearchResults() {
         <p>No posts found for this tag.</p>
       ) : (
         <ul>
+                    <Flex
+        direction="column"
+        alignItems="flex-start"
+        position="relative"
+        opacity={"0.8"}
+        color={"white"}
+      >
           <Menu>
-            <MenuButton as={Button} mb="20px">
+            <MenuButton as={Button} mb="30px" ml={"439px"}>
               Sort By: {sortOption}
             </MenuButton>
             <MenuList>
@@ -172,6 +179,7 @@ export function TagSearchResults() {
               <MenuItem onClick={() => handleSort("tags")}>Tag</MenuItem>
             </MenuList>
           </Menu>
+          </Flex>
           <Flex justifyContent="center" alignItems={"start"} mb="23px">
         <VStack spacing="13px" alignItems={"center"} width="60%">
           {sortedPosts.map((post) => (

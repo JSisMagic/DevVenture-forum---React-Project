@@ -111,17 +111,17 @@ export function PostList() {
   };
 
   return (
-    <>
-      <Flex
+  <>
+          <Flex
         direction="column"
-        alignItems="flex-end"
+        alignItems="flex-start"
         position="relative"
         opacity={"0.8"}
         color={"white"}
       >
         <Flex>
         <Menu>
-          <MenuButton as={Button} rounded={"full"} cursor={"pointer"} minW={0}>
+          <MenuButton as={Button} mb="30px" ml="394px">
             Sort By: {sortOption}
           </MenuButton>
           <MenuList>
@@ -147,20 +147,21 @@ export function PostList() {
         </Menu>
         </Flex>
       </Flex>
-
-      <Flex justifyContent="space-between" alignItems={"start"} mb="23px">
+    <Flex justifyContent="space-evenly" alignItems={"start"} marginBottom="23px">
+      <Flex marginLeft={"30px"}>
         <TagList textAlign="start" />
+      </Flex>
         {/* <UpperBody /> */}
 
-        <VStack spacing="13px" alignItems={"center"} marginRight={"123px"} width="60%">
+        <VStack spacing="13px" alignItems={"center"} width="60%">
           {sortedPosts.map((post) => (
             <Post key={post.id} post={post} posts={posts} setPosts={setPosts} />
           ))}
         </VStack>
-        <Flex>
+        <Flex marginRight={"30px"}>
           <HomeStats />
         </Flex>
-      </Flex>
-    </>
+    </Flex>
+  </>
   );
 }

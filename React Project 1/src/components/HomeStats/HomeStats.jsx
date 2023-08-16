@@ -17,7 +17,7 @@ const HomeStats = () => {
 
   return (
     <Flex
-    padding={"8px"}
+    padding={"10px"}
     bg={"rgba(255, 255, 255, 0.1)"}
     backdropBlur={"blur(26px)"}
     alignItems={"center"}
@@ -27,14 +27,13 @@ const HomeStats = () => {
     border={"none"}
     color={"white"}
       gap={10}
-      direction={"column"}
+      direction={"row"}
       // bg="rgba(255,255,255, 0.2)"
-      // width="max-content"
+      width="max-content"
       // padding="2rem"
       // borderRadius="lg"
-      maxW={"230px"}
+      maxW={"300px"}
        textAlign="center"
-       marginTop={"70px"}
       // marginInline="auto"
     >
       <Box>
