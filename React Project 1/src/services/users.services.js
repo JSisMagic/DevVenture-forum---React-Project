@@ -23,5 +23,7 @@ export const getUserById = async uid => {
       Object.keys(Object.values(value)[0].comments) : [],
     posts: Object.values(value)[0]?.posts ?
       Object.keys(Object.values(value)[0].posts) : [],
+    likedPosts: Object.values(value)[0]?.likedPosts ?
+      Object.keys(Object.values(value)[0].likedPosts) : [],
   } : value;
 }

@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
 export function useLikePost() {
   const navigate = useNavigate();
   const user = auth.currentUser;
-  const { userData } = useContext(AuthContext)
+  const { userData, setContext } = useContext(AuthContext)
 
   const handleLike = async (postId, posts, setPosts) => {
     try {
@@ -51,6 +51,22 @@ export function useLikePost() {
           likes: likedPost.likes,
           likedBy: likedPost.likedBy,
         });
+
+        await db.update(`users/${currentUserUID}/likedPosts`, {
+          [postId]: userLiked ? null : true,
+        });
+        
+        const updatedLikedPosts = userLiked 
+          ? userData.likedPosts.filter(id => id !== postId) 
+          : [...userData.likedPosts, postId]
+          
+        setContext((prev) => ({
+          ...prev, 
+          userData: {
+            ...prev.userData,
+            likedPosts: updatedLikedPosts,
+          }
+        }))
       }
     } catch (error) {
       console.log(error.message);
