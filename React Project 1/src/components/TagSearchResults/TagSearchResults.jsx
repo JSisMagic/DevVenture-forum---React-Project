@@ -188,7 +188,7 @@ export function TagSearchResults() {
             </Menu>
           </Flex>
           <Flex justifyContent="center" alignItems={"start"} mb="23px">
-            <VStack spacing="13px" alignItems={"center"} width="60%">
+            <VStack spacing="13px" alignItems={"center"} width="60%" textAlign="left">
               {sortedPosts.map((post) => (
                 <Post
                   key={post.id}
