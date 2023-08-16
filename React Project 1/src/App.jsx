@@ -12,7 +12,7 @@ import { EditPostPage } from "./components/EditPostPage/EditPostPage"
 import Members from "./components/Members/Members"
 import { Nav } from "./components/NavBar/NavBar"
 import { ParticlesBackground } from "./components/ParticlesBackground/ParticlesBackground"
-import { PostList } from "./components/PostList/PostList"
+import { AboutUs } from "./components/AboutUs/AboutUs"
 import { PostPage } from "./components/PostPage/PostPage"
 import { TagSearchResults } from "./components/TagSearchResults/TagSearchResults"
 import { auth } from "./config/firebase-config"
@@ -65,7 +65,7 @@ function App() {
           <Routes>
             <Route index element={<Home />} />
             <Route exact path="/new-post" element={<NewPost />} />
-            {/* <Route exact path="/post-list" element={<PostList />} /> */}
+            <Route exact path="/about-us" element={<AboutUs />} />
             <Route exact path="/sign-in" element={<SignIn />} />
             <Route exact path="/sign-up" element={<SignUp />} />
             <Route exact path="/edit" element={<Edit />} />

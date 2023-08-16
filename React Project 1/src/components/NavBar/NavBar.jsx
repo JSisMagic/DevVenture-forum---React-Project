@@ -73,9 +73,15 @@ export function Nav() {
               <Button as={Link} to="/" className="menu-button">
                 Home
               </Button>
-              <Button as={Link} to="/new-post" className="menu-button">
-                New Post
-              </Button>
+              {currentUser ? (
+                <Button as={Link} to="/new-post" className="menu-button">
+                  New Post
+                </Button>
+              ) : (
+                <Button as={Link} to="/about-us" className="menu-button">
+                  About Us
+                </Button>
+              )}
               <Button as={Link} to="/members" className="menu-button">
                 Members
               </Button>
@@ -156,8 +162,8 @@ export function Nav() {
                       </Button>
                     </Link>
                     <Button
-                      rounded="none" 
-                      borderRadius="0px 0px 16px 16px" 
+                      rounded="none"
+                      borderRadius="0px 0px 16px 16px"
                       className="signout-user"
                       onClick={userSignOut}
                     >

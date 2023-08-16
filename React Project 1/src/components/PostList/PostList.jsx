@@ -111,8 +111,8 @@ export function PostList() {
   };
 
   return (
-  <>
-          <Flex
+    <>
+      <Flex
         direction="column"
         alignItems="flex-start"
         position="relative"
@@ -120,37 +120,41 @@ export function PostList() {
         color={"white"}
       >
         <Flex>
-        <Menu>
-          <MenuButton as={Button} mb="30px" ml="394px">
-            Sort By: {sortOption}
-          </MenuButton>
-          <MenuList>
-            <MenuItem>
-              <MenuItem onClick={() => handleSort("newest")}>Newest</MenuItem>
-            </MenuItem>
-            <MenuItem>
-              <Button onClick={() => handleSort("oldest")}>Oldest</Button>
-            </MenuItem>
-            <MenuItem onClick={() => handleSort("mostLiked")}>
-              Most Liked
-            </MenuItem>
-            <MenuItem onClick={() => handleSort("leastLiked")}>
-              Least Liked
-            </MenuItem>
-            <MenuItem onClick={() => handleSort("mostCommented")}>
-              Most Commented
-            </MenuItem>
-            <MenuItem onClick={() => handleSort("leastCommented")}>
-              Least Commented
-            </MenuItem>
-          </MenuList>
-        </Menu>
+          <Menu>
+            <MenuButton as={Button} mb="30px" ml="394px" mt="30px">
+              Sort By: {sortOption}
+            </MenuButton>
+            <MenuList>
+              <MenuItem>
+                <MenuItem onClick={() => handleSort("newest")}>Newest</MenuItem>
+              </MenuItem>
+              <MenuItem>
+                <Button onClick={() => handleSort("oldest")}>Oldest</Button>
+              </MenuItem>
+              <MenuItem onClick={() => handleSort("mostLiked")}>
+                Most Liked
+              </MenuItem>
+              <MenuItem onClick={() => handleSort("leastLiked")}>
+                Least Liked
+              </MenuItem>
+              <MenuItem onClick={() => handleSort("mostCommented")}>
+                Most Commented
+              </MenuItem>
+              <MenuItem onClick={() => handleSort("leastCommented")}>
+                Least Commented
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </Flex>
       </Flex>
-    <Flex justifyContent="space-evenly" alignItems={"start"} marginBottom="23px">
-      <Flex marginLeft={"30px"}>
-        <TagList textAlign="start" />
-      </Flex>
+      <Flex
+        justifyContent="space-evenly"
+        alignItems={"start"}
+        marginBottom="23px"
+      >
+        <Flex marginLeft={"30px"}>
+          <TagList textAlign="start" />
+        </Flex>
         {/* <UpperBody /> */}
 
         <VStack spacing="13px" alignItems={"center"} width="60%">
@@ -161,7 +165,7 @@ export function PostList() {
         <Flex marginRight={"30px"}>
           <HomeStats />
         </Flex>
-    </Flex>
-  </>
+      </Flex>
+    </>
   );
 }
