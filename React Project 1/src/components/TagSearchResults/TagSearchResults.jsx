@@ -106,39 +106,84 @@ export function TagSearchResults() {
   };
 
   return (
-    <div>
-      <h3>Search Results for Term: {term}</h3>
+    <div className="main-searche-term">
+      <h3 className="results">Results for: </h3>
+      <p className="term">{term}</p>
       {filteredResults.length === 0 ? (
-        <p>No posts found for this tag.</p>
+        <div className="no-posts-found">
+          <p className="no-posts-message">NO POSTS FOUND FOR THIS TERM!</p>
+        </div>
       ) : (
         <ul>
           <Flex
             direction="column"
-            alignItems="flex-start"
-            position="relative"
+            alignItems="start"
             opacity={"0.8"}
             color={"white"}
+            width="60%"
+            gap={5}
           >
             <Menu>
-              <MenuButton as={Button} mb="30px" ml={"439px"}>
+              <MenuButton as={Button} ml="337px" mb="20px">
                 Sort By: {sortOption}
               </MenuButton>
-              <MenuList>
-                <MenuItem onClick={() => handleSort("newest")}>Newest</MenuItem>
-                <MenuItem onClick={() => handleSort("oldest")}>Oldest</MenuItem>
-                <MenuItem onClick={() => handleSort("mostLiked")}>
+              <MenuList bg="rgba(44,72,84, 0.5)" backdropFilter="blur(36px)">
+                <MenuItem
+                  backdropFilter="blur(36px)"
+                  bg="rgba(44,72,84, 0.1)"
+                  _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+                  onClick={() => handleSort("newest")}
+                >
+                  Newest
+                </MenuItem>
+                <MenuItem
+                  backdropFilter="blur(36px)"
+                  bg="rgba(44,72,84, 0.1)"
+                  _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+                  onClick={() => handleSort("oldest")}
+                >
+                  Oldest
+                </MenuItem>
+                <MenuItem
+                  backdropFilter="blur(36px)"
+                  bg="rgba(44,72,84, 0.1)"
+                  _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+                  onClick={() => handleSort("mostLiked")}
+                >
                   Most Liked
                 </MenuItem>
-                <MenuItem onClick={() => handleSort("leastLiked")}>
+                <MenuItem
+                  backdropFilter="blur(36px)"
+                  bg="rgba(44,72,84, 0.1)"
+                  _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+                  onClick={() => handleSort("leastLiked")}
+                >
                   Least Liked
                 </MenuItem>
-                <MenuItem onClick={() => handleSort("mostCommented")}>
+                <MenuItem
+                  backdropFilter="blur(36px)"
+                  bg="rgba(44,72,84, 0.1)"
+                  _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+                  onClick={() => handleSort("mostCommented")}
+                >
                   Most Commented{" "}
                 </MenuItem>
-                <MenuItem onClick={() => handleSort("leastCommented")}>
+                <MenuItem
+                  backdropFilter="blur(36px)"
+                  bg="rgba(44,72,84, 0.1)"
+                  _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+                  onClick={() => handleSort("leastCommented")}
+                >
                   Least Commented
                 </MenuItem>
-                <MenuItem onClick={() => handleSort("tags")}>Tag</MenuItem>
+                <MenuItem
+                  backdropFilter="blur(36px)"
+                  bg="rgba(44,72,84, 0.1)"
+                  _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+                  onClick={() => handleSort("tags")}
+                >
+                  Tag
+                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>

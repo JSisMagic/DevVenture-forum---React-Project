@@ -18,7 +18,7 @@ export const TITLE_MAX_LENGTH = 64;
 
 export const DESCRIPTION_MIN_LENGTH = 16;
 
-export const DESCRIPTION_MAX_LENGTH = 300;
+export const DESCRIPTION_MAX_LENGTH = 600;
 
 export const CONTENT_MIN_LENGTH = 32;
 

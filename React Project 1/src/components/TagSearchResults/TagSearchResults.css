@@ -3,3 +3,27 @@
   display: flex;
   margin-bottom: 10px;
 }
+
+.results{
+  font-size: xxx-large;
+  font-weight: bold;
+}
+
+.main-searche-term{
+  text-align: center;
+}
+
+.term{
+  font-size: x-large;
+}
+
+.no-posts-found{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 65vh; 
+}
+
+.no-posts-message{
+  font-size: xxx-large;
+}
