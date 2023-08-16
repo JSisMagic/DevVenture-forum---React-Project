@@ -120,6 +120,10 @@ export function PostPage() {
           likes: likes - 1,
           likedBy: updatedLikedBy,
         });
+
+        await db.update(`users/${currentUserUID}/likedPosts`, {
+          [id]: null,
+        });
       } else {
         // User has not liked, so add the like
         const updatedLikedBy = [...likedBy, currentUserUID];
@@ -136,6 +140,10 @@ export function PostPage() {
         await db.update(`posts/${id}`, {
           likes: likes + 1,
           likedBy: updatedLikedBy,
+        });
+
+        await db.update(`users/${currentUserUID}/likedPosts`, {
+          [id]: true,
         });
       }
     } catch (error) {

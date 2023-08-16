@@ -1,171 +1,128 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
-import {
-  Box,
-  Menu,
-  Flex,
-  Heading,
-  Text,
-  Button,
-  HStack,
-  VStack,
-  IconButton,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Badge,
-  Icon,
-  Avatar,
-  Spacer,
-} from "@chakra-ui/react";
-import { ChatIcon } from "@chakra-ui/icons";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { GlassContainer } from "../GlassContainer/GlassContainer";
-import { auth } from "../../config/firebase-config";
-import { useNavigate } from "react-router-dom";
-import { TagList } from "./TagList";
-import { db } from "../../services/database-services";
-import { useLikePost } from "./UseLikePost";
-import HomeStats from "../HomeStats/HomeStats";
-import Post from "../Post/Post";
+import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, VStack } from "@chakra-ui/react"
+import { useEffect, useMemo, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { auth } from "../../config/firebase-config"
+import { db } from "../../services/database-services"
+import Post from "../Post/Post"
+import { useLikePost } from "./UseLikePost"
 
 export function PostList() {
-  const [posts, setPosts] = useState([]);
-  const [sortOption, setSortOption] = useState("newest");
-  const navigate = useNavigate();
-  const { handleLike } = useLikePost();
-
-  const user = auth.currentUser;
+  const [posts, setPosts] = useState([])
+  const [sortOption, setSortOption] = useState("newest")
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const postsData = await db.get("posts");
+        const postsData = await db.get("posts")
         if (postsData) {
           // Convert the postsData object to an array of posts
-          const postsArray = Object.keys(postsData).map((postId) => ({
+          const postsArray = Object.keys(postsData).map(postId => ({
             id: postId,
             ...postsData[postId],
-          }));
-          setPosts(postsArray);
+          }))
+          setPosts(postsArray)
         }
       } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
       }
-    };
+    }
 
-    fetchPosts();
-  }, []);
+    fetchPosts()
+  }, [])
 
   const sortedPosts = useMemo(() => {
-    let sortedPosts = [...posts];
+    let sortedPosts = [...posts]
 
     switch (sortOption) {
       case "newest":
-        sortedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-        break;
+        sortedPosts.sort((a, b) => new Date(b.date) - new Date(a.date))
+        break
       case "oldest":
-        sortedPosts.sort((a, b) => new Date(a.date) - new Date(b.date));
-        break;
+        sortedPosts.sort((a, b) => new Date(a.date) - new Date(b.date))
+        break
       case "mostLiked":
-        sortedPosts.sort(
-          (a, b) => b.likes - a.likes || new Date(b.date) - new Date(a.date)
-        );
-        break;
+        sortedPosts.sort((a, b) => b.likes - a.likes || new Date(b.date) - new Date(a.date))
+        break
       case "leastLiked":
-        sortedPosts.sort(
-          (a, b) => a.likes - b.likes || new Date(b.date) - new Date(a.date)
-        );
-        break;
+        sortedPosts.sort((a, b) => a.likes - b.likes || new Date(b.date) - new Date(a.date))
+        break
       case "mostCommented":
-        sortedPosts.sort(
-          (a, b) => (b.replies?.length || 0) - (a.replies?.length || 0)
-        );
-        break;
+        sortedPosts.sort((a, b) => (b.replies?.length || 0) - (a.replies?.length || 0))
+        break
       case "leastCommented":
-        sortedPosts.sort(
-          (a, b) => (a.replies?.length || 0) - (b.replies?.length || 0)
-        );
-        break;
+        sortedPosts.sort((a, b) => (a.replies?.length || 0) - (b.replies?.length || 0))
+        break
       default:
-        break;
+        break
     }
 
-    return sortedPosts;
-  }, [posts, sortOption]);
+    return sortedPosts
+  }, [posts, sortOption])
 
-  const handleSort = (option) => {
-    setSortOption(option);
-  };
-
-  const PostTags = ({ tags }) => {
-    return (
-      <Box>
-        {tags.map((tag, index) => (
-          <Badge key={index} colorScheme="teal" mr="2">
-            {tag}
-          </Badge>
-        ))}
-      </Box>
-    );
-  };
+  const handleSort = option => {
+    setSortOption(option)
+  }
 
   return (
-    <>
-      <Flex
-        direction="column"
-        alignItems="flex-start"
-        position="relative"
-        opacity={"0.8"}
-        color={"white"}
-      >
-        <Flex>
-          <Menu>
-            <MenuButton as={Button} mb="30px" ml="394px" mt="30px">
-              Sort By: {sortOption}
-            </MenuButton>
-            <MenuList>
-              <MenuItem>
-                <MenuItem onClick={() => handleSort("newest")}>Newest</MenuItem>
-              </MenuItem>
-              <MenuItem>
-                <Button onClick={() => handleSort("oldest")}>Oldest</Button>
-              </MenuItem>
-              <MenuItem onClick={() => handleSort("mostLiked")}>
-                Most Liked
-              </MenuItem>
-              <MenuItem onClick={() => handleSort("leastLiked")}>
-                Least Liked
-              </MenuItem>
-              <MenuItem onClick={() => handleSort("mostCommented")}>
-                Most Commented
-              </MenuItem>
-              <MenuItem onClick={() => handleSort("leastCommented")}>
-                Least Commented
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </Flex>
-      </Flex>
-      <Flex
-        justifyContent="space-evenly"
-        alignItems={"start"}
-        marginBottom="23px"
-      >
-        <Flex marginLeft={"30px"}>
-          <TagList textAlign="start" />
-        </Flex>
-        {/* <UpperBody /> */}
-
-        <VStack spacing="13px" alignItems={"center"} width="60%">
-          {sortedPosts.map((post) => (
-            <Post key={post.id} post={post} posts={posts} setPosts={setPosts} />
-          ))}
-        </VStack>
-        <Flex marginRight={"30px"}>
-          <HomeStats />
-        </Flex>
-      </Flex>
-    </>
-  );
+    <Flex direction="column" alignItems="start" opacity={"0.8"} color={"white"} width="60%" gap={5}>
+      <Menu>
+        <MenuButton as={Button}>Sort By: {sortOption}</MenuButton>
+        <MenuList bg="rgba(44,72,84, 0.5)" backdropFilter="blur(36px)">
+          <MenuItem
+            backdropFilter="blur(36px)"
+            bg="rgba(44,72,84, 0.1)"
+            _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+            onClick={() => handleSort("newest")}
+          >
+            Newest
+          </MenuItem>
+          <MenuItem
+            backdropFilter="blur(36px)"
+            bg="rgba(44,72,84, 0.1)"
+            _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+            onClick={() => handleSort("oldest")}
+          >
+            Oldest
+          </MenuItem>
+          <MenuItem
+            backdropFilter="blur(36px)"
+            bg="rgba(44,72,84, 0.1)"
+            _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+            onClick={() => handleSort("mostLiked")}
+          >
+            Most Liked
+          </MenuItem>
+          <MenuItem
+            backdropFilter="blur(36px)"
+            bg="rgba(44,72,84, 0.1)"
+            _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+            onClick={() => handleSort("leastLiked")}
+          >
+            Least Liked
+          </MenuItem>
+          <MenuItem
+            backdropFilter="blur(36px)"
+            bg="rgba(44,72,84, 0.1)"
+            _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+            onClick={() => handleSort("mostCommented")}
+          >
+            Most Commented
+          </MenuItem>
+          <MenuItem
+            backdropFilter="blur(36px)"
+            bg="rgba(44,72,84, 0.1)"
+            _hover={{ bg: "rgba(255,255,255, 0.1)" }}
+            onClick={() => handleSort("leastCommented")}
+          >
+            Least Commented
+          </MenuItem>
+        </MenuList>
+      </Menu>
+      <VStack spacing="13px" alignItems={"center"}>
+        {sortedPosts.map(post => (
+          <Post key={post.id} post={post} posts={posts} setPosts={setPosts} />
+        ))}
+      </VStack>
+    </Flex>
+  )
 }
