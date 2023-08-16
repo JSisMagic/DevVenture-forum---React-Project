@@ -241,7 +241,6 @@ const Edit = () => {
       navigateBackwards()
     } catch (error) {
       console.error("Error updating profile:", error)
-      navigate("/sign-in")
     }
   }
 
