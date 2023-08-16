@@ -33,7 +33,7 @@ const SingleMember = ({
     <Flex
       justify="space-between"
       align="center"
-      bg="rgba(255,255,255, 0.2)"
+      bg="rgba(255,255,255, 0.1)"
       borderRadius="md"
       marginInline="auto"
       width="100%"
