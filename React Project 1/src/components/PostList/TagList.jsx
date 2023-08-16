@@ -52,7 +52,7 @@ export const TagList = () => {
               zIndex: "12",
               backgroundColor: " rgba(255, 255, 255, 0.1)",
               opacity: "0.8",
-              boxShadow: "0 1rem 3rem rgba(0, 0, 0, 0.8)",
+              boxShadow: "0 1rem 3rem rgba(0, 0, 0, 0.4)",
               color: "white",
               backdropBlur: "36px",
             }}
