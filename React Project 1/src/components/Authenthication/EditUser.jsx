@@ -200,7 +200,7 @@ const Edit = () => {
       inputElement.value = ""
     }
   }
-  console.log(URL);
+  console.log(URL)
   const navigateBackwards = () => {
     navigate(-1)
   }
@@ -240,21 +240,31 @@ const Edit = () => {
       console.log("Profile updated successfully")
       navigateBackwards()
     } catch (error) {
+      if (error.message.includes("wrong-password")) {
+        return setFormState(prev => ({
+          ...prev,
+          currentPassword: {
+            ...formState.currentPassword,
+            error: "Incorrect password",
+          },
+        }))
+      }
+
       console.error("Error updating profile:", error)
     }
   }
 
   return (
-    <Flex minH={"100vh"} align={"center"} justify={"center"}>
+    <Flex align={"center"} justify={"center"}>
       <Stack
-        className="edit-web"
+        boxShadow="0rem 1rem 3rem rgba(0, 0, 0, 0.4)"
+        bg="rgba(255, 255, 255, 0.1)"
+        backdropFilter="blur(26px)"
         spacing={4}
-        w={"full"}
-        maxW={"md"}
+        maxW={"lg"}
         rounded={"xl"}
-        boxShadow={"lg"}
         p={6}
-        my={12}
+        my={6}
       >
         <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
           User Profile Edit
@@ -304,7 +314,7 @@ const Edit = () => {
           />
           <FormErrorMessage>{formState.lastname.error}</FormErrorMessage>
         </FormControl>
-        <FormControl id="email" isRequired isInvalid={formState.email.error}>
+        <FormControl id="email" isInvalid={formState.email.error}>
           <FormLabel>Email address</FormLabel>
           <Input
             value={formState.email.value}
@@ -315,17 +325,7 @@ const Edit = () => {
           />
           <FormErrorMessage>{formState.email.error}</FormErrorMessage>
         </FormControl>
-        <FormControl id="currentPassword" isRequired>
-          <FormLabel>Current Password</FormLabel>
-          <Input
-            value={formState.currentPassword.value}
-            onChange={handleFormChange}
-            placeholder="Enter your current password"
-            _placeholder={{ color: "gray.500" }}
-            type="password"
-          />
-        </FormControl>
-        <FormControl id="newPassword" isRequired isInvalid={formState.newPassword.error}>
+        <FormControl id="newPassword" isInvalid={formState.newPassword.error}>
           <FormLabel>New Password</FormLabel>
           <Input
             value={formState.newPassword.value}
@@ -346,7 +346,7 @@ const Edit = () => {
             type="password"
           />
         </FormControl>
-        <FormControl id="linkedInURL" isRequired>
+        <FormControl id="linkedInURL">
           <FormLabel>LinkedIn</FormLabel>
           <Input
             value={formState.linkedInURL.value}
@@ -356,7 +356,7 @@ const Edit = () => {
             type="text"
           />
         </FormControl>
-        <FormControl id="gitLabURL" isRequired>
+        <FormControl id="gitLabURL">
           <FormLabel>GitLab</FormLabel>
           <Input
             value={formState.gitLabURL.value}
@@ -366,7 +366,7 @@ const Edit = () => {
             type="text"
           />
         </FormControl>
-        <FormControl id="gitHubURL" isRequired>
+        <FormControl id="gitHubURL">
           <FormLabel>GitHub</FormLabel>
           <Input
             value={formState.gitHubURL.value}
@@ -376,22 +376,40 @@ const Edit = () => {
             type="text"
           />
         </FormControl>
+        <FormControl
+          id="currentPassword"
+          isRequired
+          marginTop={3}
+          isInvalid={formState.currentPassword.error}
+        >
+          <FormLabel fontWeight={600}>Confirm changes</FormLabel>
+          <Input
+            value={formState.currentPassword.value}
+            onChange={handleFormChange}
+            placeholder="Enter your current password"
+            _placeholder={{ color: "gray.500" }}
+            type="password"
+          />
+          <FormErrorMessage>{formState.currentPassword.error}</FormErrorMessage>
+        </FormControl>
         <Stack>
-          <button
+          <Button
             className="submit-button"
             onClick={updateUserProfile}
-            disabled={
+            isDisabled={
               formState.firstname.error ||
               formState.lastname.error ||
               formState.email.error ||
-              formState.newPassword.error
+              formState.newPassword.error ||
+              !formState.currentPassword.value ||
+              formState.currentPassword.error
             }
           >
             Submit
-          </button>
-          <button className="can-button" onClick={navigateBackwards}>
+          </Button>
+          <Button className="can-button" onClick={navigateBackwards}>
             Cancel
-          </button>
+          </Button>
         </Stack>
       </Stack>
     </Flex>
