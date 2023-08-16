@@ -58,7 +58,7 @@ const SignIn = () => {
   return (
     <div className="sign-in-web">
       <form className="sign-in-container" onSubmit={signIn}>
-        <h1 className="sign-in-header">Log in</h1>
+        <h1 className="sign-in-header">Sign In</h1>
         <input
           type="text"
           placeholder="Enter your email"
@@ -80,7 +80,7 @@ const SignIn = () => {
           <p className="error-message">{inputErrors.password}</p>
         )}
         <button className="sign-in-button" type="submit">
-          LogIn
+        Sign In
         </button>
         <p className="sign-in-tex">
           Don`t have an account?{" "}
