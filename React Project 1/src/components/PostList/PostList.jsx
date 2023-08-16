@@ -61,10 +61,10 @@ export function PostList() {
   }
 
   return (
-    <Box width="60%">
+    <Box width="60%" position="relative">
       <Menu>
         <MenuButton as={Button}>Sort By: {sortOption}</MenuButton>
-        <MenuList bg="rgba(44,72,84, 0.5)" backdropFilter="blur(36px)">
+        <MenuList bg="rgba(44,72,84, 0.5)" backdropFilter="blur(36px)" zIndex={3}>
           <MenuItem
             backdropFilter="blur(36px)"
             bg="rgba(44,72,84, 0.1)"
