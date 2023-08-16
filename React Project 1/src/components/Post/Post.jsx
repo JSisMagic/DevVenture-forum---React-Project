@@ -1,33 +1,25 @@
-import { ChatIcon } from "@chakra-ui/icons";
-import {
-  Avatar,
-  Button,
-  Flex,
-  HStack,
-  Heading,
-  Icon,
-  Text,
-} from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
-import { getUserById } from "../../services/users.services";
-import { useLikePost } from "../PostList/UseLikePost";
-import PostTags from "./PostTags";
+import { ChatIcon } from "@chakra-ui/icons"
+import { Avatar, Button, Flex, HStack, Heading, Icon, Text } from "@chakra-ui/react"
+import { useContext, useEffect, useState } from "react"
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"
+import { Link } from "react-router-dom"
+import { AuthContext } from "../../context/AuthContext"
+import { getUserById } from "../../services/users.services"
+import { useLikePost } from "../PostList/UseLikePost"
+import PostTags from "./PostTags"
 
 const Post = ({ post, posts, setPosts }) => {
-  const { user } = useContext(AuthContext);
-  const { handleLike } = useLikePost();
+  const { user } = useContext(AuthContext)
+  const { handleLike } = useLikePost()
 
-  const [authorData, setAuthorData] = useState(null);
+  const [authorData, setAuthorData] = useState(null)
   useEffect(() => {
     if (post?.userUID) {
       getUserById(post.userUID)
-        .then((data) => setAuthorData(data))
-        .catch(console.error);
+        .then(data => setAuthorData(data))
+        .catch(console.error)
     }
-  }, [post]);
+  }, [post])
 
   return (
     <Flex
@@ -70,20 +62,11 @@ const Post = ({ post, posts, setPosts }) => {
           </Text>
         </HStack>
         <HStack spacing={2}>
-          <Button
-            colorScheme="black"
-            onClick={() => handleLike(post.id, posts, setPosts)}
-          >
+          <Button colorScheme="black" onClick={() => handleLike(post.id, posts, setPosts)}>
             <Icon
-              as={
-                post.likedBy?.includes(user?.uid) ? AiFillHeart : AiOutlineHeart
-              }
+              as={post.likedBy?.includes(user?.uid) ? AiFillHeart : AiOutlineHeart}
               boxSize={10}
-              color={
-                post.likedBy?.includes(user?.uid)
-                  ? "rgba(255,255,255, 0.8)"
-                  : "black.300"
-              }
+              color={post.likedBy?.includes(user?.uid) ? "rgba(255,255,255, 0.8)" : "black.300"}
             />
             {post.likes}
           </Button>
@@ -96,7 +79,7 @@ const Post = ({ post, posts, setPosts }) => {
         </HStack>
       </HStack>
     </Flex>
-  );
-};
+  )
+}
 
-export default Post;
+export default Post
