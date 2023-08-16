@@ -1,8 +1,8 @@
-import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react"
-import { useContext } from "react"
-import { useNavigate } from "react-router-dom"
-import { AuthContext } from "../../context/AuthContext"
-import { db } from "../../services/database-services"
+import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { db } from "../../services/database-services";
 
 const SingleMember = ({
   uid,
@@ -14,20 +14,20 @@ const SingleMember = ({
   setBlocked,
   imageURL,
 }) => {
-  const { userData } = useContext(AuthContext)
-  const navigate = useNavigate()
+  const { userData } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const blockUser = async () => {
-    console.log(userName, isBlock)
+    console.log(userName, isBlock);
     await db.update(`users/${uid}`, {
       isBlock: !isBlock,
-    })
-    setBlocked(blocked => [...blocked, userName])
-  }
+    });
+    setBlocked((blocked) => [...blocked, userName]);
+  };
 
   const handleNavigate = () => {
-    navigate(`/member/${uid}`)
-  }
+    navigate(`/member/${uid}`);
+  };
 
   return (
     <Flex
@@ -55,7 +55,7 @@ const SingleMember = ({
         </Flex>
       )}
     </Flex>
-  )
-}
+  );
+};
 
-export default SingleMember
+export default SingleMember;

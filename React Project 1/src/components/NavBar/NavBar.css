@@ -1,8 +1,5 @@
 .menu-button {
-
   color: white;
-  /* height: 36px;
-     width: 60px; */
   padding-top: 7px;
   padding-bottom: 7px;
   padding-right: 16px;
@@ -14,29 +11,35 @@
     color 1s;
   vertical-align: top;
 }
+
 .menu-button:hover {
   opacity: 0.1;
   color: #000;
 }
+
 .menu-button:active {
   opacity: 0.3;
 }
+
 .right-button:hover {
   opacity: 0.1;
   color: #000;
 }
+
 .right-button:active {
   opacity: 0.3;
 }
+
 .men-container {
   background-color: red;
   opacity: 0.8;
   backdrop-filter: blur(16px);
+}
 
-}
 .number {
-border-radius: 0;
+  border-radius: 0;
 }
+
 .edit-user {
   margin-top: 0;
   color: white;
@@ -48,10 +51,12 @@ border-radius: 0;
   padding-left: 16px;
   border-radius: 0;
 }
+
 .edit-user:hover {
   color: #2c5364;
   background-color: white;
 }
+
 .signout-user {
   color: white;
   transition:
@@ -60,9 +65,8 @@ border-radius: 0;
   cursor: pointer;
   width: 100%;
   object-fit: fill;
-
-
 }
+
 .signout-user:hover {
   color: #2c5364;
   background-color: white;

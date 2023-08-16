@@ -1,32 +1,38 @@
-import { SearchIcon } from "@chakra-ui/icons"
-import { Box, Input, InputGroup, InputLeftElement, Stack } from "@chakra-ui/react"
-import { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../../context/AuthContext"
-import { getAllUsers } from "../../services/users.services"
-import SingleMember from "./SingleMember"
+import { SearchIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Stack,
+} from "@chakra-ui/react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { getAllUsers } from "../../services/users.services";
+import SingleMember from "./SingleMember";
 
 const Members = () => {
-  const { userData } = useContext(AuthContext)
-  const [members, setMembers] = useState([])
-  const [blocked, setBlocked] = useState([])
-  const [searchKeyword, setSearchKeyword] = useState("")
-  const [searchResult, setSearchResult] = useState([])
+  const { userData } = useContext(AuthContext);
+  const [members, setMembers] = useState([]);
+  const [blocked, setBlocked] = useState([]);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
 
   useEffect(() => {
     getAllUsers()
-      .then(data => {
-        setMembers(data)
+      .then((data) => {
+        setMembers(data);
       })
-      .catch(error => {
-        console.error("Error fetching members:", error)
-      })
-  }, [])
+      .catch((error) => {
+        console.error("Error fetching members:", error);
+      });
+  }, []);
 
   useEffect(() => {
-    getAllUsers().then(setMembers).catch(console.error)
-  }, [blocked])
+    getAllUsers().then(setMembers).catch(console.error);
+  }, [blocked]);
 
-  const membersToDisplay = searchResult.map(member => {
+  const membersToDisplay = searchResult.map((member) => {
     return (
       <SingleMember
         key={member.id}
@@ -39,29 +45,29 @@ const Members = () => {
         isBlock={member.isBlock}
         imageURL={member.imageURL}
       />
-    )
-  })
+    );
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => {
       const filtered = members.filter(
-        member =>
+        (member) =>
           member.firstname.toLowerCase().includes(searchKeyword) ||
           member.lastname.toLowerCase().includes(searchKeyword) ||
           member.username.toLowerCase().includes(searchKeyword)
-      )
+      );
 
-      setSearchResult(filtered)
-    }, 500)
+      setSearchResult(filtered);
+    }, 500);
 
     return () => {
-      clearTimeout(timer)
-    }
-  }, [members, searchKeyword])
+      clearTimeout(timer);
+    };
+  }, [members, searchKeyword]);
 
-  const handleChangeSearch = event => {
-    setSearchKeyword(event.target.value.toLowerCase())
-  }
+  const handleChangeSearch = (event) => {
+    setSearchKeyword(event.target.value.toLowerCase());
+  };
 
   return (
     <Box width="50%" marginInline="auto">
@@ -81,7 +87,7 @@ const Members = () => {
         {membersToDisplay}
       </Stack>
     </Box>
-  )
-}
+  );
+};
 
-export default Members
+export default Members;

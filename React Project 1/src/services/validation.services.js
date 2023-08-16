@@ -52,22 +52,27 @@ export const isValidPostTitle = (title) => {
 };
 
 export const isValidDescription = (description) => {
-  return description.length >= DESCRIPTION_MIN_LENGTH && description.length <= DESCRIPTION_MAX_LENGTH;
-}
+  return (
+    description.length >= DESCRIPTION_MIN_LENGTH &&
+    description.length <= DESCRIPTION_MAX_LENGTH
+  );
+};
 
 export const isValidPostContent = (content) => {
-  return content.length >= CONTENT_MIN_LENGTH && content.length <= CONTENT_MAX_LENGTH;
+  return (
+    content.length >= CONTENT_MIN_LENGTH && content.length <= CONTENT_MAX_LENGTH
+  );
 };
 
 export const isValidTagInput = (input) => {
   const tagRegex = /^[^\s!@#$%^&*_=+\-].*$/;
   const tags = input.split(" ");
-  
+
   for (const tag of tags) {
     if (!tagRegex.test(tag)) {
       return false;
     }
   }
-  
+
   return true;
 };

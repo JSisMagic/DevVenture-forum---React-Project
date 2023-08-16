@@ -72,7 +72,6 @@ const SignUp = () => {
             isAdmin: false,
           };
 
-          // Create a new user document in the database using the user's UID as the key
           db.set(`users/${user.uid}`, userData);
 
           setContext({

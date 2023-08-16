@@ -1,4 +1,4 @@
-import { MoonIcon, SunIcon } from "@chakra-ui/icons"
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -8,74 +8,76 @@ import {
   Flex,
   Menu,
   MenuButton,
-  MenuDivider,
-  MenuItem,
   MenuList,
   Stack,
   useColorMode,
-} from "@chakra-ui/react"
-import React, { useContext, useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { useNavigate } from "react-router-dom/dist"
-import { auth } from "../../config/firebase-config"
-import { AuthContext } from "../../context/AuthContext"
-import { TagSearch } from "../TagSearch/TagSearch"
-import "./NavBar.css"
-import { db } from "../../services/database-services"
-import { ref, onValue } from "firebase/database" // Import from 'firebase/database'
-import { database } from "../../config/firebase-config" // Make sure you have the correct import for your database
+} from "@chakra-ui/react";
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom/dist";
+import { auth } from "../../config/firebase-config";
+import { AuthContext } from "../../context/AuthContext";
+import { TagSearch } from "../TagSearch/TagSearch";
+import "./NavBar.css";
+import { ref, onValue } from "firebase/database";
+import { database } from "../../config/firebase-config";
 
 export function Nav() {
-  const { colorMode, toggleColorMode } = useColorMode()
-  const [currentUser, setCurrentUser] = useState(null)
-  const [imageURL, setImageURL] = useState(null)
-  const navigate = useNavigate()
-  const { user, userData, setContext } = useContext(AuthContext)
+  const { colorMode, toggleColorMode } = useColorMode();
+  const [currentUser, setCurrentUser] = useState(null);
+  const [imageURL, setImageURL] = useState(null);
+  const navigate = useNavigate();
+  const { user, userData, setContext } = useContext(AuthContext);
 
   useEffect(() => {
     // Check if the user is signed in when the component mounts
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      setCurrentUser(user)
-    })
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+    });
 
-    // Unsubscribe from the listener when the component unmounts
-    return () => unsubscribe()
-  }, [])
+    return () => unsubscribe();
+  }, []);
 
   const userSignOut = () => {
-    auth.signOut()
-    setContext({ user: null, userData: null })
-    navigate("/")
-  }
+    auth.signOut();
+    setContext({ user: null, userData: null });
+    navigate("/");
+  };
 
   useEffect(() => {
     if (user && user.uid) {
-      const userImageRef = ref(database, `users/${user.uid}/imageURL`)
+      const userImageRef = ref(database, `users/${user.uid}/imageURL`);
 
-      const unsubscribe = onValue(userImageRef, snapshot => {
-        const imageURL = snapshot.val()
-        setImageURL(imageURL)
-      })
+      const unsubscribe = onValue(userImageRef, (snapshot) => {
+        const imageURL = snapshot.val();
+        setImageURL(imageURL);
+      });
 
       return () => {
-        // Unsubscribe from the listener when the component unmounts or the user changes
-        unsubscribe()
-      }
+        unsubscribe();
+      };
     }
-  }, [user])
+  }, [user]);
 
   return (
     <React.Fragment>
       <Box>
-        <Flex h={16} alignItems={"center"} justifyContent={"space-between"} px={10}>
+        <Flex
+          h={16}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+          px={10}
+        >
           <Flex alignItems={"center"}>
             <ButtonGroup spacing={5}>
               <Button as={Link} to="/" className="menu-button">
                 Home
               </Button>
-              {user && <Button as={Link} to="/new-post" className="menu-button">
-                New Post
-              </Button>}
+              {user && (
+                <Button as={Link} to="/new-post" className="menu-button">
+                  New Post
+                </Button>
+              )}
               <Button as={Link} to="/members" className="menu-button">
                 Members
               </Button>
@@ -94,7 +96,6 @@ export function Nav() {
               </Button>
 
               {!currentUser ? (
-                // User is not signed in, show "Join Us" and "Sign In" buttons
                 <>
                   <Button className="right-button" as={Link} to="/sign-up">
                     Join Us
@@ -104,8 +105,6 @@ export function Nav() {
                   </Button>
                 </>
               ) : (
-                // User is signed in, show user menu
-
                 <Menu className="men-container">
                   <MenuButton
                     className="number"
@@ -175,5 +174,5 @@ export function Nav() {
         </Flex>
       </Box>
     </React.Fragment>
-  )
+  );
 }

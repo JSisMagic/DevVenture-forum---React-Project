@@ -1,4 +1,4 @@
-import { Badge, Box } from "@chakra-ui/react"
+import { Badge, Box } from "@chakra-ui/react";
 
 const PostTags = ({ tags, fontSize }) => {
   return (
@@ -9,7 +9,7 @@ const PostTags = ({ tags, fontSize }) => {
         </Badge>
       ))}
     </Box>
-  )
-}
+  );
+};
 
-export default PostTags
+export default PostTags;

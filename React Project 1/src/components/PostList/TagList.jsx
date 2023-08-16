@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../../services/database-services";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 
 export const TagList = () => {
   const [tags, setTags] = useState([]);
@@ -26,11 +26,7 @@ export const TagList = () => {
   }, []);
 
   return (
-    <Flex
-      direction="column"
-      alignItems="center"
-      maxW={"230px"}
-    >
+    <Flex direction="column" alignItems="center" maxW={"230px"}>
       <Button
         fontSize="xl"
         fontWeight="bold"

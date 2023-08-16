@@ -47,12 +47,12 @@ const SignIn = () => {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setInputErrors({ ...inputErrors, email: "" }); // Clear the error when input changes
+    setInputErrors({ ...inputErrors, email: "" });
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setInputErrors({ ...inputErrors, password: "" }); // Clear the error when input changes
+    setInputErrors({ ...inputErrors, password: "" });
   };
 
   return (

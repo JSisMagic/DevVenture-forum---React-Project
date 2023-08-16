@@ -1,17 +1,16 @@
-import { Box, Flex } from "@chakra-ui/react"
-import Hero from "../components/Hero/Hero"
-import { PostList } from "../components/PostList/PostList"
-import "./Home.css"
-import { TagList } from "../components/PostList/TagList"
-import HomeStats from "../components/HomeStats/HomeStats"
-import TopUsers from "../components/TopUsers/TopUsers"
-import Footer from "../components/Footer/Footer"
+import { Box, Flex } from "@chakra-ui/react";
+import Hero from "../components/Hero/Hero";
+import { PostList } from "../components/PostList/PostList";
+import "./Home.css";
+import { TagList } from "../components/PostList/TagList";
+import HomeStats from "../components/HomeStats/HomeStats";
+import TopUsers from "../components/TopUsers/TopUsers";
+import Footer from "../components/Footer/Footer";
 
 function Home() {
   return (
     <>
       <Hero />
-      {/* <HomeStats /> */}
       <Flex justify="space-evenly" my={10}>
         <TagList />
         <PostList />
@@ -22,7 +21,7 @@ function Home() {
       </Flex>
       <Footer />
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;

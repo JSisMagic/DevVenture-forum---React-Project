@@ -1,4 +1,4 @@
-import { SmallCloseIcon } from "@chakra-ui/icons"
+import { SmallCloseIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   AvatarBadge,
@@ -13,31 +13,35 @@ import {
   Input,
   Stack,
   Textarea,
-} from "@chakra-ui/react"
+} from "@chakra-ui/react";
 import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   updateEmail,
   updatePassword,
-} from "firebase/auth"
-import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { useContext, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+} from "firebase/auth";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FIRST_NAME_MAX_LENGTH,
   FIRST_NAME_MIN_LENGTH,
   PASSWORD_MIN_LENGTH,
-} from "../../common/constants"
-import { auth, storage } from "../../config/firebase-config"
-import { AuthContext } from "../../context/AuthContext"
-import { db } from "../../services/database-services"
-import "./EditUser.css"
+} from "../../common/constants";
+import { auth, storage } from "../../config/firebase-config";
+import { AuthContext } from "../../context/AuthContext";
+import { db } from "../../services/database-services";
 
 const Edit = () => {
-  const { userData } = useContext(AuthContext)
-  const [upload, setUpload] = useState(null)
-  const [URL, setURL] = useState(null)
-  const { user } = useContext(AuthContext)
+  const { userData } = useContext(AuthContext);
+  const [upload, setUpload] = useState(null);
+  const [URL, setURL] = useState(null);
+  const { user } = useContext(AuthContext);
   const [formState, setFormState] = useState({
     firstname: {
       value: "",
@@ -71,30 +75,30 @@ const Edit = () => {
     gitHubURL: {
       value: "",
     },
-  })
+  });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const userCur = auth.currentUser
+  const userCur = auth.currentUser;
 
   useEffect(() => {
     if (user) {
       // Fetch the user's image URL and update the URL state
-      const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`)
+      const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`);
       getDownloadURL(userImageRef)
-        .then(downloadURL => {
-          setURL(downloadURL)
+        .then((downloadURL) => {
+          setURL(downloadURL);
         })
-        .catch(error => {
+        .catch((error) => {
           // Handle errors if necessary
-          console.log(error)
-        })
+          console.log(error);
+        });
     }
-  }, [user])
+  }, [user]);
 
   useEffect(() => {
     if (userData !== null) {
-      setFormState(prev => ({
+      setFormState((prev) => ({
         ...prev,
         firstname: { value: userData.firstname, error: "" },
         lastname: { value: userData.lastname, error: "" },
@@ -103,113 +107,119 @@ const Edit = () => {
         linkedInURL: { value: userData.linkedInURL },
         gitLabURL: { value: userData.gitLabURL },
         gitHubURL: { value: userData.gitHubURL },
-      }))
+      }));
     }
-  }, [userData])
+  }, [userData]);
 
-  const handleFormChange = event => {
-    const { id, value } = event.target
+  const handleFormChange = (event) => {
+    const { id, value } = event.target;
 
     if (id === "firstname" || id === "lastname") {
-      if (value.length < FIRST_NAME_MIN_LENGTH || value.length > FIRST_NAME_MAX_LENGTH) {
-        return setFormState(prev => ({
+      if (
+        value.length < FIRST_NAME_MIN_LENGTH ||
+        value.length > FIRST_NAME_MAX_LENGTH
+      ) {
+        return setFormState((prev) => ({
           ...prev,
           [id]: {
             value: value,
             error: `Length should be between ${FIRST_NAME_MIN_LENGTH} and ${FIRST_NAME_MAX_LENGTH} characters`,
           },
-        }))
+        }));
       }
     } else if (id === "email") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(value)) {
-        return setFormState(prev => ({
+        return setFormState((prev) => ({
           ...prev,
           [id]: { value: value, error: "Should be valid email." },
-        }))
+        }));
       }
     } else if (id === "newPassword") {
       const passwordRegex = new RegExp(
         `(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_=\\-+]).{${PASSWORD_MIN_LENGTH},}`
-      )
+      );
       if (!passwordRegex.test(value)) {
-        return setFormState(prev => ({
+        return setFormState((prev) => ({
           ...prev,
           [id]: {
             value: value,
             error: `Password must be at least ${PASSWORD_MIN_LENGTH} characters long and contain an uppercase letter, a lowercase letter, a number, and a special character.`,
           },
-        }))
+        }));
       }
     }
 
-    setFormState(prev => ({ ...prev, [id]: { value: value, error: "" } }))
-  }
+    setFormState((prev) => ({ ...prev, [id]: { value: value, error: "" } }));
+  };
 
-  const handleFileChange = event => {
-    const selectedFile = event.target.files[0]
-    setUpload(selectedFile)
-  }
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setUpload(selectedFile);
+  };
 
   const uploadImg = () => {
-    if (upload === null) return
+    if (upload === null) return;
 
-    const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`)
+    const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`);
     uploadBytes(userImageRef, upload)
       .then(() => {
         getDownloadURL(userImageRef)
-          .then(downloadURL => {
+          .then((downloadURL) => {
             // Save the image URL to the database under the user's node
-            db.set(`/users/${user.uid}/imageURL`, downloadURL)
+            db.set(`/users/${user.uid}/imageURL`, downloadURL);
 
-            setURL(downloadURL) // Update the URL state with the new image URL
+            setURL(downloadURL); // Update the URL state with the new image URL
 
-            clearInput()
+            clearInput();
           })
-          .catch(error => {
-            alert(error.message, "Error")
-          })
+          .catch((error) => {
+            alert(error.message, "Error");
+          });
 
-        setUpload(null)
+        setUpload(null);
       })
-      .catch(error => {
-        alert(error.message)
-      })
-  }
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
 
   const removeImage = () => {
     // Remove the image from Firebase Storage
-    const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`)
+    const userImageRef = ref(storage, `AuthenticatedUserImages/${user.uid}`);
     deleteObject(userImageRef)
       .then(() => {
         // Remove the image URL from Firebase Database
-        db.set(`/users/${user.uid}/imageURL`, null)
+        db.set(`/users/${user.uid}/imageURL`, null);
         // Clear the URL state
-        setURL(null)
+        setURL(null);
 
-        clearInput()
+        clearInput();
       })
-      .catch(error => {
-        console.error("Error removing image:", error)
-      })
-  }
+      .catch((error) => {
+        console.error("Error removing image:", error);
+      });
+  };
 
   const clearInput = () => {
-    const inputElement = document.getElementById("fileInput")
+    const inputElement = document.getElementById("fileInput");
     if (inputElement) {
-      inputElement.value = ""
+      inputElement.value = "";
     }
-  }
-  console.log(URL)
+  };
+  console.log(URL);
   const navigateBackwards = () => {
-    navigate(-1)
-  }
+    navigate(-1);
+  };
 
   const updateUserProfile = async () => {
     try {
       // Reauthenticate the user
-      const credential = EmailAuthProvider.credential(user.email, formState.currentPassword.value)
-      await reauthenticateWithCredential(userCur, credential)
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        formState.currentPassword.value
+      );
+      await reauthenticateWithCredential(userCur, credential);
       // Update user information in the database
       await db.update(`/users/${user.uid}`, {
         firstname: formState.firstname.value,
@@ -220,39 +230,39 @@ const Edit = () => {
         gitLabURL: formState.gitLabURL.value,
         gitHubURL: formState.gitHubURL.value,
         imageURL: URL,
-      })
+      });
 
       // Update email and password
-      const promises = []
+      const promises = [];
 
       if (formState.email.value !== user.email) {
-        promises.push(updateEmail(userCur, formState.email.value))
-        console.log("Email updated successfully")
+        promises.push(updateEmail(userCur, formState.email.value));
+        console.log("Email updated successfully");
       }
 
       if (formState.newPassword.value) {
-        promises.push(updatePassword(userCur, formState.newPassword.value))
-        console.log("Password updated successfully")
+        promises.push(updatePassword(userCur, formState.newPassword.value));
+        console.log("Password updated successfully");
       }
 
-      await Promise.all(promises)
+      await Promise.all(promises);
 
-      console.log("Profile updated successfully")
-      navigateBackwards()
+      console.log("Profile updated successfully");
+      navigateBackwards();
     } catch (error) {
       if (error.message.includes("wrong-password")) {
-        return setFormState(prev => ({
+        return setFormState((prev) => ({
           ...prev,
           currentPassword: {
             ...formState.currentPassword,
             error: "Incorrect password",
           },
-        }))
+        }));
       }
 
-      console.error("Error updating profile:", error)
+      console.error("Error updating profile:", error);
     }
-  }
+  };
 
   return (
     <Flex align={"center"} justify={"center"}>
@@ -413,7 +423,7 @@ const Edit = () => {
         </Stack>
       </Stack>
     </Flex>
-  )
-}
+  );
+};
 
-export default Edit
+export default Edit;

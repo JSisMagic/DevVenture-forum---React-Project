@@ -21,8 +21,7 @@ import { db } from "./services/database-services.js";
 import { getUserById } from "./services/users.services";
 import { NewPost } from "./views/NewPostForm/NewPostForm";
 import DetailedMember from "./views/DetailedMember/DetailedMember";
-import { theme } from "./services/theme";
-
+import { theme } from "./common/theme";
 
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -64,7 +63,6 @@ function App() {
           <Nav />
           <AuthenticationVer />
           <ParticlesBackground />
-          {/* <SignUp/> */}
           <Routes>
             <Route index element={<Home />} />
             <Route exact path="/new-post" element={<NewPost />} />
@@ -82,11 +80,9 @@ function App() {
             <Route exact path="/edit/:id" element={<EditPostPage />} />
             <Route exact path="/members" element={<Members />} />
             <Route exact path="/member/:id" element={<DetailedMember />} />
-            {/* <Route exact path="/sign-out" element={<AuthenticationVer/>} /> */}
           </Routes>
         </ChakraProvider>
       </AuthContext.Provider>
-      {/* <button onClick={forTest}>Test for adding post!</button> */}
     </>
   );
 }

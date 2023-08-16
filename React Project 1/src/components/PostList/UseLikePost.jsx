@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
 export function useLikePost() {
   const navigate = useNavigate();
   const user = auth.currentUser;
-  const { userData, setContext } = useContext(AuthContext)
+  const { userData, setContext } = useContext(AuthContext);
 
   const handleLike = async (postId, posts, setPosts) => {
     try {
@@ -30,10 +30,8 @@ export function useLikePost() {
         const updatedPosts = [...posts];
         const likedPost = updatedPosts[likedPostIndex];
 
-        // Check if the post has a likedBy array and if the current user liked it
         const userLiked = likedPost.likedBy?.includes(currentUserUID);
 
-        // Update the likedBy array based on userLiked
         likedPost.likedBy = userLiked
           ? likedPost.likedBy.filter((uid) => uid !== currentUserUID)
           : likedPost.likedBy
@@ -43,10 +41,8 @@ export function useLikePost() {
         // Increment or decrement the likes count based on userLiked
         likedPost.likes = userLiked ? likedPost.likes - 1 : likedPost.likes + 1;
 
-        // Update the posts array
         setPosts(updatedPosts);
 
-        // Update the likes count and likedBy array in the database
         await db.update(`posts/${postId}`, {
           likes: likedPost.likes,
           likedBy: likedPost.likedBy,
@@ -55,18 +51,18 @@ export function useLikePost() {
         await db.update(`users/${currentUserUID}/likedPosts`, {
           [postId]: userLiked ? null : true,
         });
-        
-        const updatedLikedPosts = userLiked 
-          ? userData.likedPosts.filter(id => id !== postId) 
-          : [...userData.likedPosts, postId]
-          
+
+        const updatedLikedPosts = userLiked
+          ? userData.likedPosts.filter((id) => id !== postId)
+          : [...userData.likedPosts, postId];
+
         setContext((prev) => ({
-          ...prev, 
+          ...prev,
           userData: {
             ...prev.userData,
             likedPosts: updatedLikedPosts,
-          }
-        }))
+          },
+        }));
       }
     } catch (error) {
       console.log(error.message);

@@ -5,8 +5,20 @@ import { useNavigate, Link } from "react-router-dom";
 import "./NewPostForm.css";
 import { AuthContext } from "../../context/AuthContext";
 import { Heading } from "@chakra-ui/react";
-import { isValidDescription, isValidPostContent, isValidPostTitle, isValidTagInput } from "../../services/validation.services";
-import { TITLE_MAX_LENGTH, TITLE_MIN_LENGTH, DESCRIPTION_MAX_LENGTH, DESCRIPTION_MIN_LENGTH, CONTENT_MAX_LENGTH, CONTENT_MIN_LENGTH } from "../../common/constants";
+import {
+  isValidDescription,
+  isValidPostContent,
+  isValidPostTitle,
+  isValidTagInput,
+} from "../../services/validation.services";
+import {
+  TITLE_MAX_LENGTH,
+  TITLE_MIN_LENGTH,
+  DESCRIPTION_MAX_LENGTH,
+  DESCRIPTION_MIN_LENGTH,
+  CONTENT_MAX_LENGTH,
+  CONTENT_MIN_LENGTH,
+} from "../../common/constants";
 
 export function NewPost() {
   const { userData } = useContext(AuthContext);
@@ -19,12 +31,10 @@ export function NewPost() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if the user is signed in when the component mounts
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
     });
 
-    // Unsubscribe from the listener when the component unmounts
     return () => unsubscribe();
   }, []);
 
@@ -47,7 +57,6 @@ export function NewPost() {
   const handleSubmit = async () => {
     try {
       if (!currentUser) {
-        // If no user is logged in, redirect to the signup page
         navigate("/sign-up");
         return;
       }
@@ -57,19 +66,19 @@ export function NewPost() {
       if (!isValidPostTitle(title)) {
         validationErrors.title = `Title must be between ${TITLE_MIN_LENGTH} and ${TITLE_MAX_LENGTH} characters.`;
       }
-  
+
       if (!isValidPostContent(content)) {
         validationErrors.content = `Content must be between ${CONTENT_MIN_LENGTH} and ${CONTENT_MAX_LENGTH} characters.`;
       }
 
-      if (!isValidDescription(description)){
+      if (!isValidDescription(description)) {
         validationErrors.description = `Description must be between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters.`;
       }
-  
+
       if (!isValidTagInput(tags)) {
         validationErrors.tags = `Invalid tags. Tags should be split by space and cannot start with symbols.`;
       }
-  
+
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
         return;
@@ -87,7 +96,7 @@ export function NewPost() {
         title: title,
         content: content,
         description: description,
-        tags: uniqueTagsArray, // Convert comma-separated tags to an array
+        tags: uniqueTagsArray,
         date: new Date().toISOString(),
         likes: 0,
         userUID: currentUser.uid,
@@ -102,7 +111,6 @@ export function NewPost() {
         await db.set(`tags/${tag}/${postId}`, true);
       }
 
-      // Redirect to the home page after submitting the new post
       navigate("/");
     } catch (error) {
       console.log(error.message);
@@ -111,7 +119,11 @@ export function NewPost() {
   };
 
   if (userData?.isBlock) {
-    return <Heading size="lg" textAlign="center" marginTop="20rem">Blocked users are not allowed to create posts.</Heading>
+    return (
+      <Heading size="lg" textAlign="center" marginTop="20rem">
+        Blocked users are not allowed to create posts.
+      </Heading>
+    );
   }
 
   return (
@@ -136,7 +148,9 @@ export function NewPost() {
             value={description}
             onChange={handleDescriptionChange}
           />
-          {errors.description && <div className="error-message">{errors.description}</div>}
+          {errors.description && (
+            <div className="error-message">{errors.description}</div>
+          )}
         </div>
         <div className="Content-container">
           <label>Content:</label>
@@ -146,7 +160,9 @@ export function NewPost() {
             value={content}
             onChange={handleContentChange}
           />
-          {errors.content && <div className="error-message">{errors.content}</div>}
+          {errors.content && (
+            <div className="error-message">{errors.content}</div>
+          )}
         </div>
         <div className="tag-container">
           <label>Tags:</label>

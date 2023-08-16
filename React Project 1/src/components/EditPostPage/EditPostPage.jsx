@@ -6,10 +6,10 @@ import {
   FormLabel,
   Heading,
   Input,
-  Textarea
-} from "@chakra-ui/react"
-import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+  Textarea,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   CONTENT_MAX_LENGTH,
   CONTENT_MIN_LENGTH,
@@ -17,89 +17,88 @@ import {
   DESCRIPTION_MIN_LENGTH,
   TITLE_MAX_LENGTH,
   TITLE_MIN_LENGTH,
-} from "../../common/constants"
-import { db } from "../../services/database-services"
+} from "../../common/constants";
+import { db } from "../../services/database-services";
 import {
   isValidDescription,
   isValidPostContent,
   isValidPostTitle,
   isValidTagInput,
-} from "../../services/validation.services"
-import "./EditPostPage.css"
+} from "../../services/validation.services";
+import "./EditPostPage.css";
 
 export function EditPostPage() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const [editedTitle, setEditedTitle] = useState("")
-  const [editedDescription, setEditedDescription] = useState("")
-  const [editedTags, setEditedTags] = useState("")
-  const [editedContent, setEditedContent] = useState("")
-  const [oldTags, setOldTags] = useState([])
-  const [errors, setErrors] = useState({})
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
+  const [editedTags, setEditedTags] = useState("");
+  const [editedContent, setEditedContent] = useState("");
+  const [oldTags, setOldTags] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    // Fetch the post data based on the ID from the route parameter
     const fetchPost = async () => {
       try {
-        const postData = await db.get(`posts/${id}`)
-        const oldTags = postData.tags
+        const postData = await db.get(`posts/${id}`);
+        const oldTags = postData.tags;
 
-        setEditedTitle(postData.title)
-        setEditedDescription(postData.description)
-        setEditedTags(postData.tags.join(" ")) // Convert tags array to a string
-        setEditedContent(postData.content)
-        setOldTags(oldTags)
+        setEditedTitle(postData.title);
+        setEditedDescription(postData.description);
+        setEditedTags(postData.tags.join(" "));
+        setEditedContent(postData.content);
+        setOldTags(oldTags);
       } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
       }
-    }
+    };
 
-    fetchPost()
-  }, [id])
+    fetchPost();
+  }, [id]);
 
-  const handleTitleChange = e => {
-    setEditedTitle(e.target.value)
-  }
+  const handleTitleChange = (e) => {
+    setEditedTitle(e.target.value);
+  };
 
-  const handleDescriptionChange = e => {
-    setEditedDescription(e.target.value)
-  }
+  const handleDescriptionChange = (e) => {
+    setEditedDescription(e.target.value);
+  };
 
-  const handleTagsChange = e => {
-    setEditedTags(e.target.value)
-  }
+  const handleTagsChange = (e) => {
+    setEditedTags(e.target.value);
+  };
 
-  const handleContentChange = e => {
-    setEditedContent(e.target.value)
-  }
+  const handleContentChange = (e) => {
+    setEditedContent(e.target.value);
+  };
 
   const handleSubmit = async () => {
     try {
-      const validationErrors = {}
+      const validationErrors = {};
 
       if (!isValidPostTitle(editedTitle)) {
-        validationErrors.title = `Title must be between ${TITLE_MIN_LENGTH} and ${TITLE_MAX_LENGTH} characters.`
+        validationErrors.title = `Title must be between ${TITLE_MIN_LENGTH} and ${TITLE_MAX_LENGTH} characters.`;
       }
 
       if (!isValidPostContent(editedContent)) {
-        validationErrors.content = `Content must be between ${CONTENT_MIN_LENGTH} and ${CONTENT_MAX_LENGTH} characters.`
+        validationErrors.content = `Content must be between ${CONTENT_MIN_LENGTH} and ${CONTENT_MAX_LENGTH} characters.`;
       }
 
       if (!isValidDescription(editedDescription)) {
-        validationErrors.description = `Description must be between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters.`
+        validationErrors.description = `Description must be between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters.`;
       }
 
       if (!isValidTagInput(editedTags)) {
-        validationErrors.tags = `Invalid tags. Tags should be split by space and cannot start with symbols.`
+        validationErrors.tags = `Invalid tags. Tags should be split by space and cannot start with symbols.`;
       }
 
       if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors)
-        return
+        setErrors(validationErrors);
+        return;
       }
 
-      const updatedTagsArray = editedTags.split(" ").map(tag => tag.trim())
-      const uniqueUpdatedTagsArray = Array.from(new Set(updatedTagsArray))
+      const updatedTagsArray = editedTags.split(" ").map((tag) => tag.trim());
+      const uniqueUpdatedTagsArray = Array.from(new Set(updatedTagsArray));
 
       // Update the post with the edited title, description, tags, and content
       await db.update(`posts/${id}`, {
@@ -107,41 +106,39 @@ export function EditPostPage() {
         description: editedDescription,
         tags: uniqueUpdatedTagsArray,
         content: editedContent,
-      })
+      });
 
       // Remove old tags from tags in database
       for (const tag of oldTags) {
-        await db.remove(`tags/${tag}/${id}`)
+        await db.remove(`tags/${tag}/${id}`);
       }
 
       // Add new tags in tags in database
       for (const tag of uniqueUpdatedTagsArray) {
-        await db.set(`tags/${tag}/${id}`, true)
+        await db.set(`tags/${tag}/${id}`, true);
       }
 
-      // Redirect back to the post page after editing
-      navigate(`/post-list/${id}`)
+      navigate(`/post-list/${id}`);
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-  }
+  };
 
   const handleDelete = async () => {
     try {
       // Remove the post from the database
-      await db.remove(`posts/${id}`)
+      await db.remove(`posts/${id}`);
 
       // Remove the post from tags in the database
       for (const tag of oldTags) {
-        await db.remove(`tags/${tag}/${id}`)
+        await db.remove(`tags/${tag}/${id}`);
       }
 
-      // Redirect back to the post list page after deleting
-      navigate("/")
+      navigate("/");
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-  }
+  };
 
   return (
     <Flex
@@ -163,8 +160,14 @@ export function EditPostPage() {
       </FormControl>
       <FormControl>
         <FormLabel>Description</FormLabel>
-        <Input type="text" value={editedDescription} onChange={handleDescriptionChange} />
-        {errors.description && <div style={{ color: "red" }}>{errors.description}</div>}
+        <Input
+          type="text"
+          value={editedDescription}
+          onChange={handleDescriptionChange}
+        />
+        {errors.description && (
+          <div style={{ color: "red" }}>{errors.description}</div>
+        )}
       </FormControl>
       <FormControl>
         <FormLabel>Tags</FormLabel>
@@ -186,5 +189,5 @@ export function EditPostPage() {
         <Button onClick={handleDelete}>Delete Post</Button>
       </ButtonGroup>
     </Flex>
-  )
+  );
 }

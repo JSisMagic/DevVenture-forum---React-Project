@@ -42,7 +42,7 @@ export function PostPage() {
         setReplies(postData.replies || []);
         setLikes(postData.likes || 0);
         setLikedBy(postData.likedBy || []);
-        setTagsArray(postData.tags || [])
+        setTagsArray(postData.tags || []);
       } catch (error) {
         console.log(error.message);
       }
@@ -72,13 +72,10 @@ export function PostPage() {
             userUID: userUID,
           };
 
-          // Update the post with the new reply
           await db.update(`posts/${id}`, { replies: [...replies, newReply] });
 
-          // Update the local state with the new reply
           setReplies([...replies, newReply]);
 
-          // Clear the reply input
           setReply("");
         } else {
           navigate("/sign-up");
@@ -104,7 +101,7 @@ export function PostPage() {
       const currentUserUID = user.uid;
 
       // Check if the user has already liked the post
-      const userLiked = likedBy.includes(currentUserUID); // Replace with the appropriate value
+      const userLiked = likedBy.includes(currentUserUID);
 
       if (userLiked) {
         // User has already liked, so remove the like
@@ -118,7 +115,6 @@ export function PostPage() {
           likes: prevPost.likes - 1,
         }));
 
-        // Update the likes count in the database
         await db.update(`posts/${id}`, {
           likes: likes - 1,
           likedBy: updatedLikedBy,
@@ -132,14 +128,12 @@ export function PostPage() {
         const updatedLikedBy = [...likedBy, currentUserUID];
         setLikedBy(updatedLikedBy);
 
-        // Increment the likes count in the state and local state
         setLikes((prevLikes) => prevLikes + 1);
         setPost((prevPost) => ({
           ...prevPost,
           likes: prevPost.likes + 1,
         }));
 
-        // Update the likes count and likedBy array in the database
         await db.update(`posts/${id}`, {
           likes: likes + 1,
           likedBy: updatedLikedBy,
@@ -156,18 +150,13 @@ export function PostPage() {
 
   const handleDeleteComment = async (commentIndex) => {
     try {
-      // Check if the comment index is valid
       if (commentIndex >= 0 && commentIndex < replies.length) {
-        // Clone the current replies array
         const updatedReplies = [...replies];
 
-        // Remove the comment from the cloned array
         updatedReplies.splice(commentIndex, 1);
 
-        // Update the post's replies in the database
         await db.update(`posts/${id}`, { replies: updatedReplies });
 
-        // Update the local state with the updated replies
         setReplies(updatedReplies);
 
         console.log("Comment deleted successfully.");
@@ -186,16 +175,12 @@ export function PostPage() {
 
   const handleSaveEdit = async (index) => {
     try {
-      // Clone the current replies array
       const updatedReplies = [...replies];
 
-      // Update the content of the edited reply
       updatedReplies[index].content = editedReplyContent;
 
-      // Update the post's replies in the database
       await db.update(`posts/${id}`, { replies: updatedReplies });
 
-      // Update the local state with the updated replies
       setReplies(updatedReplies);
 
       // Reset editing state
@@ -231,15 +216,17 @@ export function PostPage() {
         <Flex alignItems="center" justifyContent="space-between">
           <div className="tags-contaner">
             <Flex alignItems="center">
-              <Heading size="md" paddingRight={"15px"}>Tags:</Heading>
-              <PostTags tags={tagsArray} fontSize="md"/>
-              </Flex>
+              <Heading size="md" paddingRight={"15px"}>
+                Tags:
+              </Heading>
+              <PostTags tags={tagsArray} fontSize="md" />
+            </Flex>
           </div>
-        <div className="viw-button-count">
-          <Button colorScheme="teal" onClick={() => handleLike(post.id)}>
-            Like ({post.likes})
-          </Button>
-        </div>
+          <div className="viw-button-count">
+            <Button colorScheme="teal" onClick={() => handleLike(post.id)}>
+              Like ({post.likes})
+            </Button>
+          </div>
         </Flex>
         <Heading size="md">Replies:</Heading>
         <ul>

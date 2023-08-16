@@ -1,5 +1,5 @@
-import { set, ref, get, push, remove, update } from 'firebase/database';
-import { database } from '../config/firebase-config.js';
+import { set, ref, get, push, remove, update } from "firebase/database";
+import { database } from "../config/firebase-config.js";
 
 export const db = {
   async set(path, data) {
@@ -7,7 +7,7 @@ export const db = {
       const reference = ref(database, path);
 
       await set(reference, data);
-      console.log('Data set successfully.');
+      console.log("Data set successfully.");
     } catch (error) {
       console.log(error.message);
     }
@@ -27,7 +27,7 @@ export const db = {
       if (snapshot.exists()) {
         return snapshot.val();
       } else {
-        console.log('No data available.');
+        console.log("No data available.");
         return null;
       }
     } catch (error) {
@@ -40,7 +40,7 @@ export const db = {
       const reference = ref(database, path);
       const key = (await push(reference, data)).key;
 
-      console.log('Data pushed successfully.');
+      console.log("Data pushed successfully.");
       return key;
     } catch (error) {
       console.log(error.message);
@@ -52,7 +52,7 @@ export const db = {
       const reference = ref(database, path);
 
       await remove(reference);
-      console.log('Data removed successfully.');
+      console.log("Data removed successfully.");
     } catch (error) {
       console.log(error.message);
     }
@@ -64,7 +64,7 @@ export const db = {
 
       await update(reference, newData);
 
-      console.log('Data updated successfully.');
+      console.log("Data updated successfully.");
     } catch (error) {
       console.log(error.message);
     }

@@ -1,31 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../../services/database-services";
-import { Link } from "react-router-dom/dist";
-import { GlassContainer } from "../GlassContainer/GlassContainer";
 import "./TagSearchResults.css";
-import {
-  Box,
-  Heading,
-  Text,
-  Button,
-  HStack,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Badge,
-  Icon,
-} from "@chakra-ui/react";
-import { FaThumbsUp } from "react-icons/fa";
-import { ChatIcon } from "@chakra-ui/icons";
-import { auth } from "../../config/firebase-config";
-import { useNavigate } from "react-router-dom";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { useLikePost } from "../PostList/UseLikePost";
-import { VStack, Spacer } from "@chakra-ui/react";
-import { Avatar } from "@chakra-ui/react";
+import { Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import Post from "../Post/Post";
 import { Flex } from "@chakra-ui/react";
 
@@ -35,11 +13,7 @@ export function TagSearchResults() {
   const [sortOption, setSortOption] = useState("tags");
   const [sortedPosts, setSortedPosts] = useState([]);
 
-  const navigate = useNavigate();
-  const user = auth.currentUser;
   const searchTags = term.toLowerCase().split(" ");
-
-  const { handleLike } = useLikePost();
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -131,18 +105,6 @@ export function TagSearchResults() {
     setSortOption(option);
   };
 
-  const PostTags = ({ tags }) => {
-    return (
-      <Box>
-        {tags.map((tag, index) => (
-          <Badge key={index} colorScheme="teal" mr="2">
-            {tag}
-          </Badge>
-        ))}
-      </Box>
-    );
-  };
-
   return (
     <div>
       <h3>Search Results for Term: {term}</h3>
@@ -150,43 +112,48 @@ export function TagSearchResults() {
         <p>No posts found for this tag.</p>
       ) : (
         <ul>
-                    <Flex
-        direction="column"
-        alignItems="flex-start"
-        position="relative"
-        opacity={"0.8"}
-        color={"white"}
-      >
-          <Menu>
-            <MenuButton as={Button} mb="30px" ml={"439px"}>
-              Sort By: {sortOption}
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={() => handleSort("newest")}>Newest</MenuItem>
-              <MenuItem onClick={() => handleSort("oldest")}>Oldest</MenuItem>
-              <MenuItem onClick={() => handleSort("mostLiked")}>
-                Most Liked
-              </MenuItem>
-              <MenuItem onClick={() => handleSort("leastLiked")}>
-                Least Liked
-              </MenuItem>
-              <MenuItem onClick={() => handleSort("mostCommented")}>
-                Most Commented{" "}
-              </MenuItem>
-              <MenuItem onClick={() => handleSort("leastCommented")}>
-                Least Commented
-              </MenuItem>
-              <MenuItem onClick={() => handleSort("tags")}>Tag</MenuItem>
-            </MenuList>
-          </Menu>
+          <Flex
+            direction="column"
+            alignItems="flex-start"
+            position="relative"
+            opacity={"0.8"}
+            color={"white"}
+          >
+            <Menu>
+              <MenuButton as={Button} mb="30px" ml={"439px"}>
+                Sort By: {sortOption}
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={() => handleSort("newest")}>Newest</MenuItem>
+                <MenuItem onClick={() => handleSort("oldest")}>Oldest</MenuItem>
+                <MenuItem onClick={() => handleSort("mostLiked")}>
+                  Most Liked
+                </MenuItem>
+                <MenuItem onClick={() => handleSort("leastLiked")}>
+                  Least Liked
+                </MenuItem>
+                <MenuItem onClick={() => handleSort("mostCommented")}>
+                  Most Commented{" "}
+                </MenuItem>
+                <MenuItem onClick={() => handleSort("leastCommented")}>
+                  Least Commented
+                </MenuItem>
+                <MenuItem onClick={() => handleSort("tags")}>Tag</MenuItem>
+              </MenuList>
+            </Menu>
           </Flex>
           <Flex justifyContent="center" alignItems={"start"} mb="23px">
-        <VStack spacing="13px" alignItems={"center"} width="60%">
-          {sortedPosts.map((post) => (
-            <Post key={post.id} post={post} posts={filteredResults} setPosts={setFilteredResults} />
-          ))}
-        </VStack>
-      </Flex>
+            <VStack spacing="13px" alignItems={"center"} width="60%">
+              {sortedPosts.map((post) => (
+                <Post
+                  key={post.id}
+                  post={post}
+                  posts={filteredResults}
+                  setPosts={setFilteredResults}
+                />
+              ))}
+            </VStack>
+          </Flex>
         </ul>
       )}
     </div>

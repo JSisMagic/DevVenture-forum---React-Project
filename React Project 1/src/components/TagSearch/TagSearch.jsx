@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { InputGroup, Input, InputRightElement, IconButton } from '@chakra-ui/react';
-import { SearchIcon, CloseIcon } from '@chakra-ui/icons';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  InputGroup,
+  Input,
+  InputRightElement,
+  IconButton,
+} from "@chakra-ui/react";
+import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
 
 export function TagSearch() {
-  const [searchTag, setSearchTag] = useState('');
+  const [searchTag, setSearchTag] = useState("");
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleSearchIconClick = () => {
     setIsSearchVisible(!isSearchVisible);
     if (!isSearchVisible) {
-      setSearchTag('');
+      setSearchTag("");
     }
   };
 
@@ -20,9 +25,9 @@ export function TagSearch() {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       navigate(`/searched-tag/${searchTag}`);
-      setSearchTag('')
+      setSearchTag("");
     }
   };
 
@@ -41,12 +46,12 @@ export function TagSearch() {
         <InputRightElement>
           <IconButton
             icon={isSearchVisible ? <CloseIcon /> : <SearchIcon />}
-            onClick={isSearchVisible ? handleClearSearch : handleSearchIconClick}
+            onClick={
+              isSearchVisible ? handleClearSearch : handleSearchIconClick
+            }
           />
         </InputRightElement>
       </InputGroup>
     </div>
   );
 }
-
-
