@@ -13,7 +13,7 @@ import Post from "../Post/Post";
 
 export function PostList() {
   const [posts, setPosts] = useState([]);
-  const [sortOption, setSortOption] = useState("newest");
+  const [sortOption, setSortOption] = useState("Newest");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -39,28 +39,28 @@ export function PostList() {
     let sortedPosts = [...posts];
 
     switch (sortOption) {
-      case "newest":
+      case "Newest":
         sortedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
         break;
-      case "oldest":
+      case "Oldest":
         sortedPosts.sort((a, b) => new Date(a.date) - new Date(b.date));
         break;
-      case "mostLiked":
+      case "Most Liked":
         sortedPosts.sort(
           (a, b) => b.likes - a.likes || new Date(b.date) - new Date(a.date)
         );
         break;
-      case "leastLiked":
+      case "Least Liked":
         sortedPosts.sort(
           (a, b) => a.likes - b.likes || new Date(b.date) - new Date(a.date)
         );
         break;
-      case "mostCommented":
+      case "Most Commented":
         sortedPosts.sort(
           (a, b) => (b.replies?.length || 0) - (a.replies?.length || 0)
         );
         break;
-      case "leastCommented":
+      case "Least Commented":
         sortedPosts.sort(
           (a, b) => (a.replies?.length || 0) - (b.replies?.length || 0)
         );
@@ -84,6 +84,9 @@ export function PostList() {
       color={"white"}
       width="60%"
       gap={5}
+      position="relative" 
+      zIndex={2} 
+      backdropFilter="blur(7px)" 
     >
       <Menu>
         <MenuButton as={Button}>Sort By: {sortOption}</MenuButton>
@@ -92,7 +95,7 @@ export function PostList() {
             backdropFilter="blur(36px)"
             bg="rgba(44,72,84, 0.1)"
             _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-            onClick={() => handleSort("newest")}
+            onClick={() => handleSort("Newest")}
           >
             Newest
           </MenuItem>
@@ -100,7 +103,7 @@ export function PostList() {
             backdropFilter="blur(36px)"
             bg="rgba(44,72,84, 0.1)"
             _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-            onClick={() => handleSort("oldest")}
+            onClick={() => handleSort("Oldest")}
           >
             Oldest
           </MenuItem>
@@ -108,7 +111,7 @@ export function PostList() {
             backdropFilter="blur(36px)"
             bg="rgba(44,72,84, 0.1)"
             _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-            onClick={() => handleSort("mostLiked")}
+            onClick={() => handleSort("Most Liked")}
           >
             Most Liked
           </MenuItem>
@@ -116,7 +119,7 @@ export function PostList() {
             backdropFilter="blur(36px)"
             bg="rgba(44,72,84, 0.1)"
             _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-            onClick={() => handleSort("leastLiked")}
+            onClick={() => handleSort("Least Liked")}
           >
             Least Liked
           </MenuItem>
@@ -124,7 +127,7 @@ export function PostList() {
             backdropFilter="blur(36px)"
             bg="rgba(44,72,84, 0.1)"
             _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-            onClick={() => handleSort("mostCommented")}
+            onClick={() => handleSort("Most Commented")}
           >
             Most Commented
           </MenuItem>
@@ -132,7 +135,7 @@ export function PostList() {
             backdropFilter="blur(36px)"
             bg="rgba(44,72,84, 0.1)"
             _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-            onClick={() => handleSort("leastCommented")}
+            onClick={() => handleSort("Least Commented")}
           >
             Least Commented
           </MenuItem>

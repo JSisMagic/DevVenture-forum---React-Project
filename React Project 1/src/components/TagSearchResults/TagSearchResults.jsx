@@ -10,7 +10,7 @@ import { Flex } from "@chakra-ui/react";
 export function TagSearchResults() {
   const { tag: term } = useParams();
   const [filteredResults, setFilteredResults] = useState([]);
-  const [sortOption, setSortOption] = useState("tags");
+  const [sortOption, setSortOption] = useState("Tag");
   const [sortedPosts, setSortedPosts] = useState([]);
 
   const searchTags = term.toLowerCase().split(" ");
@@ -18,7 +18,7 @@ export function TagSearchResults() {
   useEffect(() => {
     const handleSearch = async () => {
       try {
-        setSortOption("tags");
+        setSortOption("Tag");
 
         const allPosts = await db.get("posts");
 
@@ -48,33 +48,33 @@ export function TagSearchResults() {
     let sortedPostsCopy = [...filteredResults];
 
     switch (sortOption) {
-      case "newest":
+      case "Newest":
         sortedPostsCopy.sort((a, b) => new Date(b.date) - new Date(a.date));
         break;
-      case "oldest":
+      case "Oldest":
         sortedPostsCopy.sort((a, b) => new Date(a.date) - new Date(b.date));
         break;
-      case "mostLiked":
+      case "Most Liked":
         sortedPostsCopy.sort(
           (a, b) => b.likes - a.likes || new Date(b.date) - new Date(a.date)
         );
         break;
-      case "leastLiked":
+      case "Least Liked":
         sortedPostsCopy.sort(
           (a, b) => a.likes - b.likes || new Date(b.date) - new Date(a.date)
         );
         break;
-      case "mostCommented":
+      case "Most Commented":
         sortedPostsCopy.sort(
           (a, b) => (b.replies?.length || 0) - (a.replies?.length || 0)
         );
         break;
-      case "leastCommented":
+      case "Least Commented":
         sortedPostsCopy.sort(
           (a, b) => (a.replies?.length || 0) - (b.replies?.length || 0)
         );
         break;
-      case "tags":
+      case "Tag":
         sortedPostsCopy.sort((a, b) => {
           const tagA = a.tags.find((tag) =>
             searchTags.includes(tag.toLowerCase())
@@ -132,7 +132,7 @@ export function TagSearchResults() {
                   backdropFilter="blur(36px)"
                   bg="rgba(44,72,84, 0.1)"
                   _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-                  onClick={() => handleSort("newest")}
+                  onClick={() => handleSort("Newest")}
                 >
                   Newest
                 </MenuItem>
@@ -140,7 +140,7 @@ export function TagSearchResults() {
                   backdropFilter="blur(36px)"
                   bg="rgba(44,72,84, 0.1)"
                   _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-                  onClick={() => handleSort("oldest")}
+                  onClick={() => handleSort("Oldest")}
                 >
                   Oldest
                 </MenuItem>
@@ -148,7 +148,7 @@ export function TagSearchResults() {
                   backdropFilter="blur(36px)"
                   bg="rgba(44,72,84, 0.1)"
                   _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-                  onClick={() => handleSort("mostLiked")}
+                  onClick={() => handleSort("Most Liked")}
                 >
                   Most Liked
                 </MenuItem>
@@ -156,7 +156,7 @@ export function TagSearchResults() {
                   backdropFilter="blur(36px)"
                   bg="rgba(44,72,84, 0.1)"
                   _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-                  onClick={() => handleSort("leastLiked")}
+                  onClick={() => handleSort("Least Liked")}
                 >
                   Least Liked
                 </MenuItem>
@@ -164,7 +164,7 @@ export function TagSearchResults() {
                   backdropFilter="blur(36px)"
                   bg="rgba(44,72,84, 0.1)"
                   _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-                  onClick={() => handleSort("mostCommented")}
+                  onClick={() => handleSort("Most Commented")}
                 >
                   Most Commented{" "}
                 </MenuItem>
@@ -172,7 +172,7 @@ export function TagSearchResults() {
                   backdropFilter="blur(36px)"
                   bg="rgba(44,72,84, 0.1)"
                   _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-                  onClick={() => handleSort("leastCommented")}
+                  onClick={() => handleSort("Least Commented")}
                 >
                   Least Commented
                 </MenuItem>
@@ -180,7 +180,7 @@ export function TagSearchResults() {
                   backdropFilter="blur(36px)"
                   bg="rgba(44,72,84, 0.1)"
                   _hover={{ bg: "rgba(255,255,255, 0.1)" }}
-                  onClick={() => handleSort("tags")}
+                  onClick={() => handleSort("Tag")}
                 >
                   Tag
                 </MenuItem>
