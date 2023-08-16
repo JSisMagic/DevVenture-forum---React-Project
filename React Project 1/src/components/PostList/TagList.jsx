@@ -35,7 +35,7 @@ export const TagList = () => {
         fontSize="xl"
         fontWeight="bold"
         mb={6}
-        boxShadow="0 1rem 3rem rgba(0, 0, 0, 0.8)"
+        boxShadow="0 1rem 3rem rgba(0, 0, 0, 0.4)"
         bg={" rgba(255, 255, 255, 0.1)"}
         cursor={"none"}
       >
