@@ -62,8 +62,16 @@ const Post = ({ post, posts, setPosts }) => {
       <HStack justifyContent="space-between" alignItems="center" width="100%">
         <HStack spacing="5px" alignItems="center">
           <Avatar src={authorData?.imageURL} />
-          <Text fontSize="sm" color="blue.500">
-            Posted by: {post.user}
+          <Text fontSize="sm" color={"blue.500"}>
+            Posted by:{" "}
+            <Link
+              to={`/member/${post.userUID}`}
+              style={{
+                textDecoration: "underline",
+              }}
+            >
+              {post.user}
+            </Link>
           </Text>
         </HStack>
         <HStack spacing={2}>
