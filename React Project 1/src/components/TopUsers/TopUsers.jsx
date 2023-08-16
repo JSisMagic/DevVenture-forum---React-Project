@@ -13,6 +13,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 const TopUsers = () => {
   const { userData } = useContext(AuthContext);
@@ -44,6 +45,7 @@ const TopUsers = () => {
       users.sort((a, b) => calculateRating(b) - calculateRating(a)).slice(0, 10)
     );
   }, [users, posts]);
+
   return (
     sortedUsers.length > 0 && (
       <TableContainer mt={10} bg="rgba(255,255,255,0.05)" borderRadius="md">
@@ -62,7 +64,9 @@ const TopUsers = () => {
             {sortedUsers.map((user) => (
               <Tr key={user.username}>
                 <Td>
-                  <Avatar size="sm" src={user.imageURL} />
+                  <Link to={`/member/${user.uid}`}>
+                    <Avatar size="sm" src={user.imageURL} />
+                  </Link>
                 </Td>
                 <Td>{user.username}</Td>
                 <Td>{user.rating}</Td>
