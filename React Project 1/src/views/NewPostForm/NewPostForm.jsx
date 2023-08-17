@@ -134,7 +134,7 @@ export function NewPost() {
           <label>Title:</label>
           <input
             type="text"
-            placeholder="Enter your PostName"
+            placeholder="Enter your post title"
             value={title}
             onChange={handleTitleChange}
           />
@@ -144,7 +144,7 @@ export function NewPost() {
           <label>Description:</label>
           <input
             type="text"
-            placeholder="Enter your PostName"
+            placeholder="Enter your post name"
             value={description}
             onChange={handleDescriptionChange}
           />
@@ -155,7 +155,7 @@ export function NewPost() {
         <div className="Content-container">
           <label>Content:</label>
           <textarea
-            placeholder="Begin to create"
+            placeholder="Write your content here"
             className="tex-container"
             value={content}
             onChange={handleContentChange}
