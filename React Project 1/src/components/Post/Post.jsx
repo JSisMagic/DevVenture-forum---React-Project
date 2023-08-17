@@ -28,6 +28,7 @@ const Post = ({ post, posts, setPosts }) => {
       background="rgba(255,255,255, 0.05)"
       padding="2rem"
       marginInline="auto"
+      minWidth="100%"
       borderRadius="md"
       gap={2}
     >
